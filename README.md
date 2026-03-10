@@ -75,7 +75,6 @@ After Claude Code is installed:
 - [Configuration & Storage](#configuration--storage)
 - [Development](#development)
 - [Contributing](#contributing)
-- [License](#license)
 
 ---
 
@@ -845,9 +844,6 @@ Contributions are welcome. Please submit a Pull Request.
 4. Push to the branch
 5. Open a Pull Request
 
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
