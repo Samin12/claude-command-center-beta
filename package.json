@@ -1,6 +1,6 @@
 {
   "name": "claude-command-center-beta",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "private": true,
   "main": "electron/dist/main.js",
   "scripts": {
