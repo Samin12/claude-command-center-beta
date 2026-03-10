@@ -1,0 +1,1128 @@
+{
+  "npcs": [
+    {
+      "id": "NPC_Earl",
+      "path": "/pokemon/pnj/NPC_Earl.png"
+    },
+    {
+      "id": "NPC_Kurt",
+      "path": "/pokemon/pnj/NPC_Kurt.png"
+    },
+    {
+      "id": "NPC_MidageMan",
+      "path": "/pokemon/pnj/NPC_MidageMan.png"
+    },
+    {
+      "id": "NPC_MidageWoman",
+      "path": "/pokemon/pnj/NPC_MidageWoman.png"
+    },
+    {
+      "id": "NPC_Nurse",
+      "path": "/pokemon/pnj/NPC_Nurse.png"
+    },
+    {
+      "id": "NPC_NurseBow",
+      "path": "/pokemon/pnj/NPC_NurseBow.png"
+    },
+    {
+      "id": "NPC_Schoolboy",
+      "path": "/pokemon/pnj/NPC_Schoolboy.png"
+    },
+    {
+      "id": "NPC_Shopkeeper",
+      "path": "/pokemon/pnj/NPC_Shopkeeper.png"
+    },
+    {
+      "id": "NPC_Shopkeeper2",
+      "path": "/pokemon/pnj/NPC_Shopkeeper2.png"
+    },
+    {
+      "id": "NPC_YoungMan",
+      "path": "/pokemon/pnj/NPC_YoungMan.png"
+    },
+    {
+      "id": "NPC_YoungWoman",
+      "path": "/pokemon/pnj/NPC_YoungWoman.png"
+    },
+    {
+      "id": "anime-blaine-in-disguise",
+      "path": "/pokemon/pnj/anime-blaine-in-disguise.png"
+    },
+    {
+      "id": "anime-brock",
+      "path": "/pokemon/pnj/anime-brock.png"
+    },
+    {
+      "id": "anime-brockfather",
+      "path": "/pokemon/pnj/anime-brockfather.png"
+    },
+    {
+      "id": "anime-bruno",
+      "path": "/pokemon/pnj/anime-bruno.png"
+    },
+    {
+      "id": "anime-butch",
+      "path": "/pokemon/pnj/anime-butch.png"
+    },
+    {
+      "id": "anime-cassidy",
+      "path": "/pokemon/pnj/anime-cassidy.png"
+    },
+    {
+      "id": "anime-delia-ketchum",
+      "path": "/pokemon/pnj/anime-delia-ketchum.png"
+    },
+    {
+      "id": "anime-gary-oak",
+      "path": "/pokemon/pnj/anime-gary-oak.png"
+    },
+    {
+      "id": "anime-james",
+      "path": "/pokemon/pnj/anime-james.png"
+    },
+    {
+      "id": "anime-jessie",
+      "path": "/pokemon/pnj/anime-jessie.png"
+    },
+    {
+      "id": "anime-lorelei",
+      "path": "/pokemon/pnj/anime-lorelei.png"
+    },
+    {
+      "id": "anime-meowth",
+      "path": "/pokemon/pnj/anime-meowth.png"
+    },
+    {
+      "id": "anime-misty",
+      "path": "/pokemon/pnj/anime-misty.png"
+    },
+    {
+      "id": "anime-npc-01",
+      "path": "/pokemon/pnj/anime-npc-01.png"
+    },
+    {
+      "id": "anime-npc-02",
+      "path": "/pokemon/pnj/anime-npc-02.png"
+    },
+    {
+      "id": "anime-npc-03",
+      "path": "/pokemon/pnj/anime-npc-03.png"
+    },
+    {
+      "id": "anime-npc-04",
+      "path": "/pokemon/pnj/anime-npc-04.png"
+    },
+    {
+      "id": "anime-npc-05",
+      "path": "/pokemon/pnj/anime-npc-05.png"
+    },
+    {
+      "id": "anime-npc-06",
+      "path": "/pokemon/pnj/anime-npc-06.png"
+    },
+    {
+      "id": "anime-npc-07",
+      "path": "/pokemon/pnj/anime-npc-07.png"
+    },
+    {
+      "id": "anime-npc-08",
+      "path": "/pokemon/pnj/anime-npc-08.png"
+    },
+    {
+      "id": "anime-npc-09",
+      "path": "/pokemon/pnj/anime-npc-09.png"
+    },
+    {
+      "id": "anime-npc-10",
+      "path": "/pokemon/pnj/anime-npc-10.png"
+    },
+    {
+      "id": "anime-npc-11",
+      "path": "/pokemon/pnj/anime-npc-11.png"
+    },
+    {
+      "id": "anime-npc-12",
+      "path": "/pokemon/pnj/anime-npc-12.png"
+    },
+    {
+      "id": "anime-npc-13",
+      "path": "/pokemon/pnj/anime-npc-13.png"
+    },
+    {
+      "id": "anime-npc-14",
+      "path": "/pokemon/pnj/anime-npc-14.png"
+    },
+    {
+      "id": "anime-npc-15",
+      "path": "/pokemon/pnj/anime-npc-15.png"
+    },
+    {
+      "id": "anime-npc-16",
+      "path": "/pokemon/pnj/anime-npc-16.png"
+    },
+    {
+      "id": "anime-npc-17",
+      "path": "/pokemon/pnj/anime-npc-17.png"
+    },
+    {
+      "id": "anime-npc-18",
+      "path": "/pokemon/pnj/anime-npc-18.png"
+    },
+    {
+      "id": "anime-npc-19",
+      "path": "/pokemon/pnj/anime-npc-19.png"
+    },
+    {
+      "id": "anime-npc-20",
+      "path": "/pokemon/pnj/anime-npc-20.png"
+    },
+    {
+      "id": "anime-npc-21",
+      "path": "/pokemon/pnj/anime-npc-21.png"
+    },
+    {
+      "id": "anime-npc-22",
+      "path": "/pokemon/pnj/anime-npc-22.png"
+    },
+    {
+      "id": "anime-npc-23",
+      "path": "/pokemon/pnj/anime-npc-23.png"
+    },
+    {
+      "id": "anime-npc-24",
+      "path": "/pokemon/pnj/anime-npc-24.png"
+    },
+    {
+      "id": "anime-npc-25",
+      "path": "/pokemon/pnj/anime-npc-25.png"
+    },
+    {
+      "id": "anime-npc-26",
+      "path": "/pokemon/pnj/anime-npc-26.png"
+    },
+    {
+      "id": "anime-npc-27",
+      "path": "/pokemon/pnj/anime-npc-27.png"
+    },
+    {
+      "id": "anime-npc-28",
+      "path": "/pokemon/pnj/anime-npc-28.png"
+    },
+    {
+      "id": "anime-npc-29",
+      "path": "/pokemon/pnj/anime-npc-29.png"
+    },
+    {
+      "id": "anime-npc-30",
+      "path": "/pokemon/pnj/anime-npc-30.png"
+    },
+    {
+      "id": "anime-npc-31",
+      "path": "/pokemon/pnj/anime-npc-31.png"
+    },
+    {
+      "id": "anime-npc-32",
+      "path": "/pokemon/pnj/anime-npc-32.png"
+    },
+    {
+      "id": "anime-npc-33",
+      "path": "/pokemon/pnj/anime-npc-33.png"
+    },
+    {
+      "id": "anime-npc-34",
+      "path": "/pokemon/pnj/anime-npc-34.png"
+    },
+    {
+      "id": "anime-npc-35",
+      "path": "/pokemon/pnj/anime-npc-35.png"
+    },
+    {
+      "id": "anime-npc-36",
+      "path": "/pokemon/pnj/anime-npc-36.png"
+    },
+    {
+      "id": "anime-npc-37",
+      "path": "/pokemon/pnj/anime-npc-37.png"
+    },
+    {
+      "id": "anime-npc-38",
+      "path": "/pokemon/pnj/anime-npc-38.png"
+    },
+    {
+      "id": "anime-npc-39",
+      "path": "/pokemon/pnj/anime-npc-39.png"
+    },
+    {
+      "id": "anime-npc-40",
+      "path": "/pokemon/pnj/anime-npc-40.png"
+    },
+    {
+      "id": "anime-npc-41",
+      "path": "/pokemon/pnj/anime-npc-41.png"
+    },
+    {
+      "id": "anime-npc-42",
+      "path": "/pokemon/pnj/anime-npc-42.png"
+    },
+    {
+      "id": "anime-npc-43",
+      "path": "/pokemon/pnj/anime-npc-43.png"
+    },
+    {
+      "id": "anime-npc-44",
+      "path": "/pokemon/pnj/anime-npc-44.png"
+    },
+    {
+      "id": "anime-npc-45",
+      "path": "/pokemon/pnj/anime-npc-45.png"
+    },
+    {
+      "id": "anime-npc-46",
+      "path": "/pokemon/pnj/anime-npc-46.png"
+    },
+    {
+      "id": "anime-npc-47",
+      "path": "/pokemon/pnj/anime-npc-47.png"
+    },
+    {
+      "id": "anime-officer-jenny",
+      "path": "/pokemon/pnj/anime-officer-jenny.png"
+    },
+    {
+      "id": "anime-prof-ivy",
+      "path": "/pokemon/pnj/anime-prof-ivy.png"
+    },
+    {
+      "id": "anime-sabrina",
+      "path": "/pokemon/pnj/anime-sabrina.png"
+    },
+    {
+      "id": "anime-salesman",
+      "path": "/pokemon/pnj/anime-salesman.png"
+    },
+    {
+      "id": "anime-samuel-oak",
+      "path": "/pokemon/pnj/anime-samuel-oak.png"
+    },
+    {
+      "id": "anime-samurai",
+      "path": "/pokemon/pnj/anime-samurai.png"
+    },
+    {
+      "id": "anime-tracy",
+      "path": "/pokemon/pnj/anime-tracy.png"
+    },
+    {
+      "id": "boy",
+      "path": "/pokemon/pnj/boy.png"
+    },
+    {
+      "id": "coinbase-brian",
+      "path": "/pokemon/pnj/coinbase-brian.png"
+    },
+    {
+      "id": "draco",
+      "path": "/pokemon/pnj/draco.png"
+    },
+    {
+      "id": "explorer",
+      "path": "/pokemon/pnj/explorer.png"
+    },
+    {
+      "id": "gay",
+      "path": "/pokemon/pnj/gay.png"
+    },
+    {
+      "id": "girld",
+      "path": "/pokemon/pnj/girld.png"
+    },
+    {
+      "id": "leader",
+      "path": "/pokemon/pnj/leader.png"
+    },
+    {
+      "id": "npc-prof-elm",
+      "path": "/pokemon/pnj/npc-prof-elm.png"
+    },
+    {
+      "id": "officier",
+      "path": "/pokemon/pnj/officier.png"
+    },
+    {
+      "id": "prof",
+      "path": "/pokemon/pnj/prof.png"
+    },
+    {
+      "id": "rocker",
+      "path": "/pokemon/pnj/rocker.png"
+    },
+    {
+      "id": "sailor",
+      "path": "/pokemon/pnj/sailor.png"
+    },
+    {
+      "id": "trainer_ACETRAINERSNOW_M",
+      "path": "/pokemon/pnj/trainer_ACETRAINERSNOW_M.png"
+    },
+    {
+      "id": "trainer_ACETRAINER_F",
+      "path": "/pokemon/pnj/trainer_ACETRAINER_F.png"
+    },
+    {
+      "id": "trainer_ACETRAINER_M",
+      "path": "/pokemon/pnj/trainer_ACETRAINER_M.png"
+    },
+    {
+      "id": "trainer_BEAUTY",
+      "path": "/pokemon/pnj/trainer_BEAUTY.png"
+    },
+    {
+      "id": "trainer_BIKER",
+      "path": "/pokemon/pnj/trainer_BIKER.png"
+    },
+    {
+      "id": "trainer_BLACKBELT",
+      "path": "/pokemon/pnj/trainer_BLACKBELT.png"
+    },
+    {
+      "id": "trainer_BREEDER_F",
+      "path": "/pokemon/pnj/trainer_BREEDER_F.png"
+    },
+    {
+      "id": "trainer_BUGCATCHER",
+      "path": "/pokemon/pnj/trainer_BUGCATCHER.png"
+    },
+    {
+      "id": "trainer_BURGLAR",
+      "path": "/pokemon/pnj/trainer_BURGLAR.png"
+    },
+    {
+      "id": "trainer_CAMPER",
+      "path": "/pokemon/pnj/trainer_CAMPER.png"
+    },
+    {
+      "id": "trainer_COWGIRL",
+      "path": "/pokemon/pnj/trainer_COWGIRL.png"
+    },
+    {
+      "id": "trainer_CYNTHIA",
+      "path": "/pokemon/pnj/trainer_CYNTHIA.png"
+    },
+    {
+      "id": "trainer_DPBATTLEGIRL",
+      "path": "/pokemon/pnj/trainer_DPBATTLEGIRL.png"
+    },
+    {
+      "id": "trainer_FIREBREATHER",
+      "path": "/pokemon/pnj/trainer_FIREBREATHER.png"
+    },
+    {
+      "id": "trainer_FISHERMAN",
+      "path": "/pokemon/pnj/trainer_FISHERMAN.png"
+    },
+    {
+      "id": "trainer_GENTLEMAN",
+      "path": "/pokemon/pnj/trainer_GENTLEMAN.png"
+    },
+    {
+      "id": "trainer_GUITARIST",
+      "path": "/pokemon/pnj/trainer_GUITARIST.png"
+    },
+    {
+      "id": "trainer_HIKER",
+      "path": "/pokemon/pnj/trainer_HIKER.png"
+    },
+    {
+      "id": "trainer_HILBERT",
+      "path": "/pokemon/pnj/trainer_HILBERT.png"
+    },
+    {
+      "id": "trainer_HILDA",
+      "path": "/pokemon/pnj/trainer_HILDA.png"
+    },
+    {
+      "id": "trainer_JUGGLER",
+      "path": "/pokemon/pnj/trainer_JUGGLER.png"
+    },
+    {
+      "id": "trainer_LASS",
+      "path": "/pokemon/pnj/trainer_LASS.png"
+    },
+    {
+      "id": "trainer_MEDIUM",
+      "path": "/pokemon/pnj/trainer_MEDIUM.png"
+    },
+    {
+      "id": "trainer_OFFICER",
+      "path": "/pokemon/pnj/trainer_OFFICER.png"
+    },
+    {
+      "id": "trainer_PICNICKER",
+      "path": "/pokemon/pnj/trainer_PICNICKER.png"
+    },
+    {
+      "id": "trainer_POKEMANIAC",
+      "path": "/pokemon/pnj/trainer_POKEMANIAC.png"
+    },
+    {
+      "id": "trainer_PSYCHIC_M",
+      "path": "/pokemon/pnj/trainer_PSYCHIC_M.png"
+    },
+    {
+      "id": "trainer_RANCHER",
+      "path": "/pokemon/pnj/trainer_RANCHER.png"
+    },
+    {
+      "id": "trainer_RANGER_F",
+      "path": "/pokemon/pnj/trainer_RANGER_F.png"
+    },
+    {
+      "id": "trainer_RANGER_M",
+      "path": "/pokemon/pnj/trainer_RANGER_M.png"
+    },
+    {
+      "id": "trainer_RUINMANIAC",
+      "path": "/pokemon/pnj/trainer_RUINMANIAC.png"
+    },
+    {
+      "id": "trainer_SAGE",
+      "path": "/pokemon/pnj/trainer_SAGE.png"
+    },
+    {
+      "id": "trainer_SAILOR",
+      "path": "/pokemon/pnj/trainer_SAILOR.png"
+    },
+    {
+      "id": "trainer_SCIENTIST",
+      "path": "/pokemon/pnj/trainer_SCIENTIST.png"
+    },
+    {
+      "id": "trainer_SILVER",
+      "path": "/pokemon/pnj/trainer_SILVER.png"
+    },
+    {
+      "id": "trainer_SOCIALITE",
+      "path": "/pokemon/pnj/trainer_SOCIALITE.png"
+    },
+    {
+      "id": "trainer_SUPERNERD",
+      "path": "/pokemon/pnj/trainer_SUPERNERD.png"
+    },
+    {
+      "id": "trainer_SWIMMER2_F",
+      "path": "/pokemon/pnj/trainer_SWIMMER2_F.png"
+    },
+    {
+      "id": "trainer_SWIMMER2_M",
+      "path": "/pokemon/pnj/trainer_SWIMMER2_M.png"
+    },
+    {
+      "id": "trainer_SWIMMER_F",
+      "path": "/pokemon/pnj/trainer_SWIMMER_F.png"
+    },
+    {
+      "id": "trainer_SWIMMER_M",
+      "path": "/pokemon/pnj/trainer_SWIMMER_M.png"
+    },
+    {
+      "id": "trainer_TUBER_F",
+      "path": "/pokemon/pnj/trainer_TUBER_F.png"
+    },
+    {
+      "id": "trainer_TUBER_M",
+      "path": "/pokemon/pnj/trainer_TUBER_M.png"
+    },
+    {
+      "id": "trainer_TWINS",
+      "path": "/pokemon/pnj/trainer_TWINS.png"
+    },
+    {
+      "id": "trainer_WORKER",
+      "path": "/pokemon/pnj/trainer_WORKER.png"
+    },
+    {
+      "id": "trainer_WORKER2",
+      "path": "/pokemon/pnj/trainer_WORKER2.png"
+    },
+    {
+      "id": "trainer_YOUNGSTER",
+      "path": "/pokemon/pnj/trainer_YOUNGSTER.png"
+    },
+    {
+      "id": "twin",
+      "path": "/pokemon/pnj/twin.png"
+    },
+    {
+      "id": "vibe-coder",
+      "path": "/pokemon/pnj/vibe-coder.png"
+    },
+    {
+      "id": "vide-coder-2",
+      "path": "/pokemon/pnj/vide-coder-2.png"
+    },
+    {
+      "id": "vide-coder-battle",
+      "path": "/pokemon/pnj/vide-coder-battle.png"
+    }
+  ],
+  "buildings": [
+    {
+      "id": "house",
+      "path": "/pokemon/house/house.png"
+    },
+    {
+      "id": "settings",
+      "path": "/pokemon/house/settings.png"
+    },
+    {
+      "id": "sprite_1",
+      "path": "/pokemon/house/sprite_1.png"
+    },
+    {
+      "id": "sprite_10",
+      "path": "/pokemon/house/sprite_10.png"
+    },
+    {
+      "id": "sprite_104",
+      "path": "/pokemon/house/sprite_104.png"
+    },
+    {
+      "id": "sprite_10a",
+      "path": "/pokemon/house/sprite_10a.png"
+    },
+    {
+      "id": "sprite_11",
+      "path": "/pokemon/house/sprite_11.png"
+    },
+    {
+      "id": "sprite_112",
+      "path": "/pokemon/house/sprite_112.png"
+    },
+    {
+      "id": "sprite_113",
+      "path": "/pokemon/house/sprite_113.png"
+    },
+    {
+      "id": "sprite_117",
+      "path": "/pokemon/house/sprite_117.png"
+    },
+    {
+      "id": "sprite_11b",
+      "path": "/pokemon/house/sprite_11b.png"
+    },
+    {
+      "id": "sprite_12",
+      "path": "/pokemon/house/sprite_12.png"
+    },
+    {
+      "id": "sprite_121",
+      "path": "/pokemon/house/sprite_121.png"
+    },
+    {
+      "id": "sprite_13",
+      "path": "/pokemon/house/sprite_13.png"
+    },
+    {
+      "id": "sprite_132",
+      "path": "/pokemon/house/sprite_132.png"
+    },
+    {
+      "id": "sprite_134",
+      "path": "/pokemon/house/sprite_134.png"
+    },
+    {
+      "id": "sprite_136",
+      "path": "/pokemon/house/sprite_136.png"
+    },
+    {
+      "id": "sprite_14",
+      "path": "/pokemon/house/sprite_14.png"
+    },
+    {
+      "id": "sprite_141",
+      "path": "/pokemon/house/sprite_141.png"
+    },
+    {
+      "id": "sprite_145",
+      "path": "/pokemon/house/sprite_145.png"
+    },
+    {
+      "id": "sprite_15",
+      "path": "/pokemon/house/sprite_15.png"
+    },
+    {
+      "id": "sprite_154",
+      "path": "/pokemon/house/sprite_154.png"
+    },
+    {
+      "id": "sprite_155",
+      "path": "/pokemon/house/sprite_155.png"
+    },
+    {
+      "id": "sprite_15a",
+      "path": "/pokemon/house/sprite_15a.png"
+    },
+    {
+      "id": "sprite_16",
+      "path": "/pokemon/house/sprite_16.png"
+    },
+    {
+      "id": "sprite_161",
+      "path": "/pokemon/house/sprite_161.png"
+    },
+    {
+      "id": "sprite_162",
+      "path": "/pokemon/house/sprite_162.png"
+    },
+    {
+      "id": "sprite_163",
+      "path": "/pokemon/house/sprite_163.png"
+    },
+    {
+      "id": "sprite_164",
+      "path": "/pokemon/house/sprite_164.png"
+    },
+    {
+      "id": "sprite_165",
+      "path": "/pokemon/house/sprite_165.png"
+    },
+    {
+      "id": "sprite_168",
+      "path": "/pokemon/house/sprite_168.png"
+    },
+    {
+      "id": "sprite_16a",
+      "path": "/pokemon/house/sprite_16a.png"
+    },
+    {
+      "id": "sprite_17",
+      "path": "/pokemon/house/sprite_17.png"
+    },
+    {
+      "id": "sprite_173",
+      "path": "/pokemon/house/sprite_173.png"
+    },
+    {
+      "id": "sprite_174",
+      "path": "/pokemon/house/sprite_174.png"
+    },
+    {
+      "id": "sprite_175",
+      "path": "/pokemon/house/sprite_175.png"
+    },
+    {
+      "id": "sprite_177",
+      "path": "/pokemon/house/sprite_177.png"
+    },
+    {
+      "id": "sprite_178",
+      "path": "/pokemon/house/sprite_178.png"
+    },
+    {
+      "id": "sprite_179",
+      "path": "/pokemon/house/sprite_179.png"
+    },
+    {
+      "id": "sprite_17a",
+      "path": "/pokemon/house/sprite_17a.png"
+    },
+    {
+      "id": "sprite_18",
+      "path": "/pokemon/house/sprite_18.png"
+    },
+    {
+      "id": "sprite_181",
+      "path": "/pokemon/house/sprite_181.png"
+    },
+    {
+      "id": "sprite_183",
+      "path": "/pokemon/house/sprite_183.png"
+    },
+    {
+      "id": "sprite_187",
+      "path": "/pokemon/house/sprite_187.png"
+    },
+    {
+      "id": "sprite_18b",
+      "path": "/pokemon/house/sprite_18b.png"
+    },
+    {
+      "id": "sprite_19",
+      "path": "/pokemon/house/sprite_19.png"
+    },
+    {
+      "id": "sprite_193",
+      "path": "/pokemon/house/sprite_193.png"
+    },
+    {
+      "id": "sprite_19a",
+      "path": "/pokemon/house/sprite_19a.png"
+    },
+    {
+      "id": "sprite_20",
+      "path": "/pokemon/house/sprite_20.png"
+    },
+    {
+      "id": "sprite_20a",
+      "path": "/pokemon/house/sprite_20a.png"
+    },
+    {
+      "id": "sprite_211",
+      "path": "/pokemon/house/sprite_211.png"
+    },
+    {
+      "id": "sprite_212",
+      "path": "/pokemon/house/sprite_212.png"
+    },
+    {
+      "id": "sprite_21a",
+      "path": "/pokemon/house/sprite_21a.png"
+    },
+    {
+      "id": "sprite_22",
+      "path": "/pokemon/house/sprite_22.png"
+    },
+    {
+      "id": "sprite_223",
+      "path": "/pokemon/house/sprite_223.png"
+    },
+    {
+      "id": "sprite_226",
+      "path": "/pokemon/house/sprite_226.png"
+    },
+    {
+      "id": "sprite_23",
+      "path": "/pokemon/house/sprite_23.png"
+    },
+    {
+      "id": "sprite_230",
+      "path": "/pokemon/house/sprite_230.png"
+    },
+    {
+      "id": "sprite_231",
+      "path": "/pokemon/house/sprite_231.png"
+    },
+    {
+      "id": "sprite_24",
+      "path": "/pokemon/house/sprite_24.png"
+    },
+    {
+      "id": "sprite_242",
+      "path": "/pokemon/house/sprite_242.png"
+    },
+    {
+      "id": "sprite_243",
+      "path": "/pokemon/house/sprite_243.png"
+    },
+    {
+      "id": "sprite_247",
+      "path": "/pokemon/house/sprite_247.png"
+    },
+    {
+      "id": "sprite_25",
+      "path": "/pokemon/house/sprite_25.png"
+    },
+    {
+      "id": "sprite_258",
+      "path": "/pokemon/house/sprite_258.png"
+    },
+    {
+      "id": "sprite_262",
+      "path": "/pokemon/house/sprite_262.png"
+    },
+    {
+      "id": "sprite_263",
+      "path": "/pokemon/house/sprite_263.png"
+    },
+    {
+      "id": "sprite_269",
+      "path": "/pokemon/house/sprite_269.png"
+    },
+    {
+      "id": "sprite_27",
+      "path": "/pokemon/house/sprite_27.png"
+    },
+    {
+      "id": "sprite_28",
+      "path": "/pokemon/house/sprite_28.png"
+    },
+    {
+      "id": "sprite_29",
+      "path": "/pokemon/house/sprite_29.png"
+    },
+    {
+      "id": "sprite_2a",
+      "path": "/pokemon/house/sprite_2a.png"
+    },
+    {
+      "id": "sprite_3",
+      "path": "/pokemon/house/sprite_3.png"
+    },
+    {
+      "id": "sprite_30",
+      "path": "/pokemon/house/sprite_30.png"
+    },
+    {
+      "id": "sprite_33",
+      "path": "/pokemon/house/sprite_33.png"
+    },
+    {
+      "id": "sprite_34",
+      "path": "/pokemon/house/sprite_34.png"
+    },
+    {
+      "id": "sprite_36",
+      "path": "/pokemon/house/sprite_36.png"
+    },
+    {
+      "id": "sprite_37",
+      "path": "/pokemon/house/sprite_37.png"
+    },
+    {
+      "id": "sprite_39",
+      "path": "/pokemon/house/sprite_39.png"
+    },
+    {
+      "id": "sprite_3b",
+      "path": "/pokemon/house/sprite_3b.png"
+    },
+    {
+      "id": "sprite_4",
+      "path": "/pokemon/house/sprite_4.png"
+    },
+    {
+      "id": "sprite_40",
+      "path": "/pokemon/house/sprite_40.png"
+    },
+    {
+      "id": "sprite_42",
+      "path": "/pokemon/house/sprite_42.png"
+    },
+    {
+      "id": "sprite_45",
+      "path": "/pokemon/house/sprite_45.png"
+    },
+    {
+      "id": "sprite_46",
+      "path": "/pokemon/house/sprite_46.png"
+    },
+    {
+      "id": "sprite_47",
+      "path": "/pokemon/house/sprite_47.png"
+    },
+    {
+      "id": "sprite_48",
+      "path": "/pokemon/house/sprite_48.png"
+    },
+    {
+      "id": "sprite_49a",
+      "path": "/pokemon/house/sprite_49a.png"
+    },
+    {
+      "id": "sprite_4b",
+      "path": "/pokemon/house/sprite_4b.png"
+    },
+    {
+      "id": "sprite_5",
+      "path": "/pokemon/house/sprite_5.png"
+    },
+    {
+      "id": "sprite_50",
+      "path": "/pokemon/house/sprite_50.png"
+    },
+    {
+      "id": "sprite_51",
+      "path": "/pokemon/house/sprite_51.png"
+    },
+    {
+      "id": "sprite_56",
+      "path": "/pokemon/house/sprite_56.png"
+    },
+    {
+      "id": "sprite_57",
+      "path": "/pokemon/house/sprite_57.png"
+    },
+    {
+      "id": "sprite_5a",
+      "path": "/pokemon/house/sprite_5a.png"
+    },
+    {
+      "id": "sprite_6",
+      "path": "/pokemon/house/sprite_6.png"
+    },
+    {
+      "id": "sprite_61",
+      "path": "/pokemon/house/sprite_61.png"
+    },
+    {
+      "id": "sprite_63",
+      "path": "/pokemon/house/sprite_63.png"
+    },
+    {
+      "id": "sprite_68",
+      "path": "/pokemon/house/sprite_68.png"
+    },
+    {
+      "id": "sprite_69",
+      "path": "/pokemon/house/sprite_69.png"
+    },
+    {
+      "id": "sprite_6a",
+      "path": "/pokemon/house/sprite_6a.png"
+    },
+    {
+      "id": "sprite_6b",
+      "path": "/pokemon/house/sprite_6b.png"
+    },
+    {
+      "id": "sprite_7",
+      "path": "/pokemon/house/sprite_7.png"
+    },
+    {
+      "id": "sprite_70",
+      "path": "/pokemon/house/sprite_70.png"
+    },
+    {
+      "id": "sprite_74",
+      "path": "/pokemon/house/sprite_74.png"
+    },
+    {
+      "id": "sprite_75",
+      "path": "/pokemon/house/sprite_75.png"
+    },
+    {
+      "id": "sprite_76a",
+      "path": "/pokemon/house/sprite_76a.png"
+    },
+    {
+      "id": "sprite_77",
+      "path": "/pokemon/house/sprite_77.png"
+    },
+    {
+      "id": "sprite_8",
+      "path": "/pokemon/house/sprite_8.png"
+    },
+    {
+      "id": "sprite_86",
+      "path": "/pokemon/house/sprite_86.png"
+    },
+    {
+      "id": "sprite_88",
+      "path": "/pokemon/house/sprite_88.png"
+    },
+    {
+      "id": "sprite_8a",
+      "path": "/pokemon/house/sprite_8a.png"
+    },
+    {
+      "id": "sprite_9",
+      "path": "/pokemon/house/sprite_9.png"
+    },
+    {
+      "id": "sprite_90",
+      "path": "/pokemon/house/sprite_90.png"
+    },
+    {
+      "id": "sprite_91",
+      "path": "/pokemon/house/sprite_91.png"
+    },
+    {
+      "id": "sprite_95",
+      "path": "/pokemon/house/sprite_95.png"
+    },
+    {
+      "id": "sprite_9a",
+      "path": "/pokemon/house/sprite_9a.png"
+    },
+    {
+      "id": "stone",
+      "path": "/pokemon/house/stone.png"
+    },
+    {
+      "id": "vercel",
+      "path": "/pokemon/house/vercel.png"
+    }
+  ],
+  "interiors": [
+    {
+      "id": "sprite_10b",
+      "path": "/pokemon/interior/sprite_10b.png"
+    },
+    {
+      "id": "sprite_11c",
+      "path": "/pokemon/interior/sprite_11c.png"
+    },
+    {
+      "id": "sprite_22a",
+      "path": "/pokemon/interior/sprite_22a.png"
+    },
+    {
+      "id": "sprite_23a",
+      "path": "/pokemon/interior/sprite_23a.png"
+    },
+    {
+      "id": "sprite_3",
+      "path": "/pokemon/interior/sprite_3.png"
+    },
+    {
+      "id": "sprite_3e",
+      "path": "/pokemon/interior/sprite_3e.png"
+    },
+    {
+      "id": "sprite_3f",
+      "path": "/pokemon/interior/sprite_3f.png"
+    },
+    {
+      "id": "sprite_4d",
+      "path": "/pokemon/interior/sprite_4d.png"
+    },
+    {
+      "id": "sprite_4e",
+      "path": "/pokemon/interior/sprite_4e.png"
+    },
+    {
+      "id": "sprite_5c",
+      "path": "/pokemon/interior/sprite_5c.png"
+    },
+    {
+      "id": "sprite_5d",
+      "path": "/pokemon/interior/sprite_5d.png"
+    },
+    {
+      "id": "sprite_6c",
+      "path": "/pokemon/interior/sprite_6c.png"
+    },
+    {
+      "id": "sprite_6d",
+      "path": "/pokemon/interior/sprite_6d.png"
+    },
+    {
+      "id": "sprite_7",
+      "path": "/pokemon/interior/sprite_7.png"
+    },
+    {
+      "id": "sprite_7a",
+      "path": "/pokemon/interior/sprite_7a.png"
+    },
+    {
+      "id": "sprite_7c",
+      "path": "/pokemon/interior/sprite_7c.png"
+    },
+    {
+      "id": "sprite_7d",
+      "path": "/pokemon/interior/sprite_7d.png"
+    },
+    {
+      "id": "sprite_8b",
+      "path": "/pokemon/interior/sprite_8b.png"
+    },
+    {
+      "id": "sprite_8c",
+      "path": "/pokemon/interior/sprite_8c.png"
+    },
+    {
+      "id": "sprite_9b",
+      "path": "/pokemon/interior/sprite_9b.png"
+    }
+  ]
+}

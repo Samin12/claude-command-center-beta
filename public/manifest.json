@@ -1,0 +1,28 @@
+{
+  "name": "Claude Command Center",
+  "short_name": "CCC",
+  "description": "Manage and monitor your AI Agents in real-time",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F0E8D5",
+  "theme_color": "#3D9B94",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer-tools", "productivity"],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

@@ -1,0 +1,635 @@
+/* Google Fonts - DM Serif Display for retro headings */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist Sans';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-mono/GeistMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-mono/GeistMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* ============================================
+   DOROTHY — WARM RETRO LIGHT THEME
+   ============================================
+
+   Philosophy:
+   - Warm cream/beige surfaces (1960s print aesthetic)
+   - Vibrant teal & copper accent palette
+   - Dark brown text for contrast
+   - Generous rounded corners for retro charm
+   - Matches the Claude Command Center landing page design
+
+   ============================================ */
+
+:root {
+  /* Surfaces - Warm cream/beige */
+  --background: #F0E8D5;
+  --foreground: #2C2418;
+  --card: #FAF4EA;
+  --card-foreground: #2C2418;
+  --popover: #FAF4EA;
+  --popover-foreground: #2C2418;
+
+  /* Primary - Vibrant Teal (from the swirls) */
+  --primary: #3D9B94;
+  --primary-foreground: #FAF4EA;
+
+  /* Secondary - Slightly darker cream */
+  --secondary: #E8DEC8;
+  --secondary-foreground: #2C2418;
+
+  /* Muted - Warm tan */
+  --muted: #E8DEC8;
+  --muted-foreground: #7A6E58;
+
+  /* Accent - Copper/Orange (Claude Command Center's hair) */
+  --accent: #CD7F4A;
+  --accent-foreground: #FAF4EA;
+
+  /* Destructive - Reddish Brown */
+  --destructive: #B85440;
+
+  /* Borders & inputs */
+  --border: #D5CAB4;
+  --input: #FAF4EA;
+  --ring: #3D9B94;
+
+  /* Legacy variables for backwards compatibility */
+  --bg-primary: #F0E8D5;
+  --bg-secondary: #FAF4EA;
+  --bg-tertiary: #E8DEC8;
+  --bg-elevated: #FFFFFF;
+  --border-primary: #D5CAB4;
+  --border-accent: #C4B89A;
+  --text-primary: #2C2418;
+  --text-secondary: #7A6E58;
+  --text-muted: #9A8E78;
+
+  /* Status colors - Claude Command Center palette */
+  --success: #4A8B50;
+  --success-muted: rgba(74, 139, 80, 0.12);
+  --warning: #CD7F4A;
+  --warning-muted: rgba(205, 127, 74, 0.12);
+  --danger: #B85440;
+  --danger-muted: rgba(184, 84, 64, 0.12);
+  --info: #3D9B94;
+  --info-muted: rgba(61, 155, 148, 0.12);
+
+  /* Accent colors - Claude Command Center palette */
+  --accent-blue: #3D9B94;
+  --accent-blue-dim: #348680;
+  --accent-green: #4A8B50;
+  --accent-green-dim: #3D7542;
+  --accent-amber: #CD7F4A;
+  --accent-amber-dim: #B86E3C;
+  --accent-red: #B85440;
+  --accent-red-dim: #9E4536;
+  --accent-purple: #8B6B9B;
+  --accent-purple-dim: #765A85;
+  --accent-cyan: #3D9B94;
+  --accent-cyan-dim: #348680;
+
+  /* Charts - Claude Command Center spectrum */
+  --chart-1: #3D9B94;
+  --chart-2: #CD7F4A;
+  --chart-3: #4A8B50;
+  --chart-4: #B85440;
+  --chart-5: #2C2418;
+}
+
+/* ============================================
+   DOROTHY — DARK THEME OVERRIDES
+   ============================================ */
+.dark {
+  /* Surfaces - Deep warm grays */
+  --background: #1A1714;
+  --foreground: #E8DEC8;
+  --card: #242019;
+  --card-foreground: #E8DEC8;
+  --popover: #242019;
+  --popover-foreground: #E8DEC8;
+
+  /* Primary - Teal stays vibrant, slightly brighter for dark bg */
+  --primary: #4DB8B0;
+  --primary-foreground: #1A1714;
+
+  /* Secondary - Darker warm tone */
+  --secondary: #2E2922;
+  --secondary-foreground: #E8DEC8;
+
+  /* Muted - Dark warm tone */
+  --muted: #2E2922;
+  --muted-foreground: #9A8E78;
+
+  /* Accent - Copper stays warm */
+  --accent: #CD7F4A;
+  --accent-foreground: #1A1714;
+
+  /* Destructive - Slightly brighter for dark bg */
+  --destructive: #D4634D;
+
+  /* Borders & inputs */
+  --border: #3A342B;
+  --input: #2E2922;
+  --ring: #4DB8B0;
+
+  /* Legacy variables */
+  --bg-primary: #1A1714;
+  --bg-secondary: #242019;
+  --bg-tertiary: #2E2922;
+  --bg-elevated: #302B23;
+  --border-primary: #3A342B;
+  --border-accent: #4A4237;
+  --text-primary: #E8DEC8;
+  --text-secondary: #9A8E78;
+  --text-muted: #7A6E58;
+
+  /* Status colors - Same hues, adjusted for dark bg */
+  --success: #5AAF62;
+  --success-muted: rgba(90, 175, 98, 0.15);
+  --warning: #CD7F4A;
+  --warning-muted: rgba(205, 127, 74, 0.15);
+  --danger: #D4634D;
+  --danger-muted: rgba(212, 99, 77, 0.15);
+  --info: #4DB8B0;
+  --info-muted: rgba(77, 184, 176, 0.15);
+
+  /* Accent colors */
+  --accent-blue: #4DB8B0;
+  --accent-blue-dim: #3D9B94;
+  --accent-green: #5AAF62;
+  --accent-green-dim: #4A8B50;
+  --accent-amber: #CD7F4A;
+  --accent-amber-dim: #B86E3C;
+  --accent-red: #D4634D;
+  --accent-red-dim: #B85440;
+  --accent-purple: #A080B2;
+  --accent-purple-dim: #8B6B9B;
+  --accent-cyan: #4DB8B0;
+  --accent-cyan-dim: #3D9B94;
+
+  /* Charts - Same spectrum (already vibrant) */
+  --chart-1: #4DB8B0;
+  --chart-2: #CD7F4A;
+  --chart-3: #5AAF62;
+  --chart-4: #D4634D;
+  --chart-5: #E8DEC8;
+}
+
+/* Dark mode scrollbar overrides */
+.dark * {
+  scrollbar-color: #4A4237 #2E2922;
+}
+.dark *::-webkit-scrollbar-track {
+  background: #2E2922;
+}
+.dark *::-webkit-scrollbar-thumb {
+  background: #4A4237;
+}
+.dark *::-webkit-scrollbar-thumb:hover {
+  background: #4DB8B0;
+}
+.dark *::-webkit-scrollbar-corner {
+  background: #2E2922;
+}
+.dark .xterm-viewport::-webkit-scrollbar-thumb {
+  background: #4A4237;
+}
+
+@theme inline {
+  /* Radius - Generous retro rounding */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Core colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Legacy color mappings */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border-primary: var(--border-primary);
+  --color-border-accent: var(--border-accent);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-cyan-dim: var(--accent-cyan-dim);
+  --color-accent-green: var(--accent-green);
+  --color-accent-green-dim: var(--accent-green-dim);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-amber-dim: var(--accent-amber-dim);
+  --color-accent-red: var(--accent-red);
+  --color-accent-red-dim: var(--accent-red-dim);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-dim: var(--accent-purple-dim);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-blue-dim: var(--accent-blue-dim);
+
+  /* Override Tailwind cyan scale → Claude Command Center vibrant teal */
+  --color-cyan-50: #f0faf9;
+  --color-cyan-100: #d0eeeb;
+  --color-cyan-200: #a0ddd8;
+  --color-cyan-300: #6dc8c0;
+  --color-cyan-400: #3D9B94;
+  --color-cyan-500: #348680;
+  --color-cyan-600: #2B706B;
+  --color-cyan-700: #235B57;
+  --color-cyan-800: #1C4845;
+  --color-cyan-900: #153634;
+  --color-cyan-950: #0C2120;
+
+  /* Typography */
+  --font-sans: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "ss02", "cv01";
+    letter-spacing: 0.01em;
+  }
+  /* Tabular nums for all tables and monospace elements */
+  td, th, code, pre {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Headings - retro serif display font */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  h1 {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  /* Remove default focus outlines in favor of our custom styling */
+  *:focus {
+    outline: none;
+  }
+  *:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================
+   DOROTHY SHAPE OVERRIDES
+   Force rounded corners globally — overrides
+   the 174 hardcoded rounded-none classes
+   ============================================ */
+
+/* Override rounded-none on cards, panels, modals */
+.rounded-none:not(.xterm *):not([class*="xterm"]):not(canvas) {
+  border-radius: 14px !important;
+}
+
+/* Force rounded on all border-having containers */
+[class*="border"][class*="bg-card"],
+[class*="border"][class*="bg-secondary"],
+[class*="border"][class*="bg-bg-"] {
+  border-radius: 14px;
+}
+
+/* Buttons - match card rounding */
+button, [role="button"] {
+  border-radius: 14px;
+}
+
+/* Inputs - generous rounding */
+input, textarea, select {
+  border-radius: 10px;
+}
+
+/* ============================================
+   SCROLLBAR STYLING - Professional Squared
+   ============================================ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #C4B89A #E8DEC8;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #E8DEC8;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #C4B89A;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #3D9B94;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #E8DEC8;
+}
+
+/* ============================================
+   UTILITY CLASSES - Minimal & Professional
+   ============================================ */
+@layer utilities {
+  /* Text utilities for status */
+  .text-success {
+    color: var(--success);
+    font-weight: 600;
+  }
+  .text-warning {
+    color: var(--warning);
+    font-weight: 600;
+  }
+  .text-danger {
+    color: var(--danger);
+    font-weight: 600;
+  }
+
+  /* Card hover effect - clean border transition */
+  .card-hover {
+    transition: all 0.2s ease;
+    border: 1px solid var(--border);
+  }
+  .card-hover:hover {
+    border-color: rgba(61, 155, 148, 0.4);
+    box-shadow: 0 2px 12px rgba(44, 36, 24, 0.08);
+  }
+
+  /* Subtle color touches - colored bottom borders */
+  .card-accent {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(61, 155, 148, 0.2);
+  }
+  .card-accent:hover {
+    border-bottom-color: rgba(61, 155, 148, 0.4);
+  }
+
+  .card-success {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+  }
+  .card-success:hover {
+    border-bottom-color: rgba(34, 197, 94, 0.4);
+  }
+
+  .card-warning {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(234, 179, 8, 0.2);
+  }
+  .card-warning:hover {
+    border-bottom-color: rgba(234, 179, 8, 0.4);
+  }
+
+  .card-danger {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+  }
+  .card-danger:hover {
+    border-bottom-color: rgba(239, 68, 68, 0.4);
+  }
+
+  /* Elevated shadow - soft */
+  .shadow-elevated {
+    box-shadow: 0 2px 8px rgba(44, 36, 24, 0.08);
+  }
+
+  /* Minimal hover effects */
+  .hover-lift {
+    transition: all 0.2s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(44, 36, 24, 0.1);
+  }
+
+  .hover-scale {
+    transition: transform 0.2s ease;
+  }
+  .hover-scale:hover {
+    transform: scale(1.01);
+  }
+
+  .hover-border-accent {
+    transition: all 0.2s ease;
+  }
+  .hover-border-accent:hover {
+    border-color: var(--primary);
+  }
+}
+
+/* ============================================
+   ANIMATIONS - Smooth & Beautiful
+   ============================================ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Selection styling - teal highlight */
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Button base */
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: 20px;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #348680;
+}
+
+/* Input styling */
+input, textarea, select {
+  background: var(--input);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 14px;
+  border-radius: 10px;
+  transition: border-color 0.15s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(61, 155, 148, 0.25);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, textarea, select {
+  transition: all 0.15s ease;
+}
+
+/* ============================================
+   REACT-GRID-LAYOUT OVERRIDES
+   ============================================ */
+.react-grid-item.react-grid-placeholder {
+  background: rgba(61, 155, 148, 0.08) !important;
+  border: 1px solid rgba(61, 155, 148, 0.2) !important;
+  border-radius: 14px !important;
+  opacity: 1 !important;
+}
+
+.react-grid-item > .react-resizable-handle::after {
+  border-color: rgba(61, 155, 148, 0.3) !important;
+}
+
+.react-grid-item > .react-resizable-handle:hover::after {
+  border-color: rgba(61, 155, 148, 0.6) !important;
+}
+
+.terminal-drag-handle {
+  cursor: grab;
+}
+
+.terminal-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* ============================================
+   WINDOW DRAG REGIONS (macOS titleBarStyle: hiddenInset)
+   ============================================ */
+.window-drag {
+  -webkit-app-region: drag;
+}
+
+.window-no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ============================================
+   XTERM TERMINAL SIZING
+   ============================================ */
+/* Let xterm + FitAddon manage their own dimensions.
+   Only ensure the viewport scrollbar matches our theme. */
+.xterm-viewport::-webkit-scrollbar {
+  width: 6px;
+}
+.xterm-viewport::-webkit-scrollbar-thumb {
+  background: #5A4E42;
+}
