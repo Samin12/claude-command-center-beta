@@ -18,6 +18,7 @@ import {
   Sun,
   Archive,
   Brain,
+  CircleHelp,
 } from 'lucide-react';
 
 // Custom icon component for Pallet Town using the pokemon logo
@@ -50,6 +51,7 @@ interface SidebarProps {
 export default function Sidebar({ isMobile = false }: SidebarProps) {
   const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebar, mobileMenuOpen, setMobileMenuOpen, darkMode, toggleDarkMode, vaultUnreadCount } = useStore();
+  const helpUrl = 'https://www.skool.com/claude';
 
   // For mobile, sidebar is always expanded (240px) when open
   const sidebarWidth = isMobile ? 240 : (sidebarCollapsed ? 72 : 240);
@@ -60,6 +62,19 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
     if (isMobile) {
       setMobileMenuOpen(false);
     }
+  };
+
+  const openHelp = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (window.electronAPI?.updates?.openExternal) {
+      void window.electronAPI.updates.openExternal(helpUrl);
+      return;
+    }
+
+    window.open(helpUrl, '_blank', 'noopener,noreferrer');
   };
 
   // Desktop sidebar
@@ -143,6 +158,15 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
 
         {/* Settings & Collapse */}
         <div className="border-t border-border">
+          <button
+            type="button"
+            onClick={openHelp}
+            title="Need Help?"
+            className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+          >
+            <CircleHelp className="w-5 h-5" />
+            {showLabels && <span className="text-sm">Need Help?</span>}
+          </button>
           <Link
             href="/settings"
             className={`
@@ -251,6 +275,17 @@ export default function Sidebar({ isMobile = false }: SidebarProps) {
 
           {/* Settings & Theme Toggle */}
           <div className="border-t border-border">
+            <button
+              type="button"
+              onClick={() => {
+                openHelp();
+                handleNavClick();
+              }}
+              className="w-full flex items-center gap-3 px-5 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            >
+              <CircleHelp className="w-5 h-5" />
+              <span className="text-sm">Need Help?</span>
+            </button>
             <Link
               href="/settings"
               onClick={handleNavClick}

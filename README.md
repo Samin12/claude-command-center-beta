@@ -546,6 +546,16 @@ Download the latest release from [GitHub Releases](https://github.com/Samin12/cl
 
 > **macOS:** If "app is damaged", run `xattr -cr /Applications/Samins Command Center.app`
 
+### Fastest macOS Install
+
+```bash
+git clone https://github.com/Samin12/claude-command-center-beta.git
+cd claude-command-center-beta
+npm run electron:install:mac
+```
+
+That command installs dependencies, builds the local Electron bundle, copies `Samins Command Center.app` into `/Applications` when possible, and opens it automatically.
+
 ### Build from Source
 
 ```bash
@@ -555,6 +565,7 @@ npm install
 npx @electron/rebuild        # Rebuild native modules for Electron
 npm run electron:dev          # Development mode
 npm run electron:build        # Production build (DMG)
+npm run electron:build:local  # Unsigned local .app bundle
 ```
 
 Output in `release/`:
