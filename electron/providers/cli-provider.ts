@@ -118,7 +118,7 @@ export interface CLIProvider {
   /** Base path for project memory directories */
   getMemoryBasePath(): string;
 
-  /** Get the Claude Command Center --add-dir equivalent flag for this provider */
+  /** Get the Samins Command Center --add-dir equivalent flag for this provider */
   getAddDirFlag(): string;
 
   /** Generate the shell script content for scheduled tasks */

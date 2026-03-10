@@ -7,5 +7,5 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #5337 | 11:26 AM | 🔵 | Claude Command Center Agent Manager Architecture Review | ~460 |
+| #5337 | 11:26 AM | 🔵 | Samins Command Center Agent Manager Architecture Review | ~460 |
 </claude-mem-context>

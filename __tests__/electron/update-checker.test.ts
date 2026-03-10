@@ -177,7 +177,7 @@ describe('update-checker', () => {
           html_url: 'https://github.com/Samin12/claude-command-center-beta/releases/tag/v2.0.0',
           body: 'Release notes here',
           assets: [
-            { name: 'Claude Command Center-2.0.0.dmg', browser_download_url: 'https://github.com/.../Claude Command Center-2.0.0.dmg' },
+            { name: 'Samins Command Center-2.0.0.dmg', browser_download_url: 'https://github.com/.../Samins Command Center-2.0.0.dmg' },
           ],
         }),
       });
@@ -207,7 +207,7 @@ describe('update-checker', () => {
           html_url: 'https://github.com/Samin12/claude-command-center-beta/releases/tag/v2.0.0',
           body: 'Big update',
           assets: [
-            { name: 'Claude Command Center-2.0.0.dmg', browser_download_url: 'https://example.com/Claude Command Center-2.0.0.dmg' },
+            { name: 'Samins Command Center-2.0.0.dmg', browser_download_url: 'https://example.com/Samins Command Center-2.0.0.dmg' },
           ],
         }),
       });
@@ -218,7 +218,7 @@ describe('update-checker', () => {
         currentVersion: '1.2.1',
         latestVersion: '2.0.0',
         hasUpdate: true,
-        downloadUrl: 'https://example.com/Claude Command Center-2.0.0.dmg',
+        downloadUrl: 'https://example.com/Samins Command Center-2.0.0.dmg',
         releaseUrl: 'https://github.com/Samin12/claude-command-center-beta/releases/tag/v2.0.0',
       }));
     });
@@ -370,8 +370,8 @@ describe('update-checker', () => {
           html_url: 'https://github.com/releases/v2.0.0',
           body: '',
           assets: [
-            { name: 'Claude Command Center-2.0.0.zip', browser_download_url: 'https://example.com/Claude Command Center-2.0.0.zip' },
-            { name: 'Claude Command Center-2.0.0.dmg', browser_download_url: 'https://example.com/Claude Command Center-2.0.0.dmg' },
+            { name: 'Samins Command Center-2.0.0.zip', browser_download_url: 'https://example.com/Samins Command Center-2.0.0.zip' },
+            { name: 'Samins Command Center-2.0.0.dmg', browser_download_url: 'https://example.com/Samins Command Center-2.0.0.dmg' },
           ],
         }),
       });
@@ -379,7 +379,7 @@ describe('update-checker', () => {
       await checkForUpdates();
 
       expect(win.webContents.send).toHaveBeenCalledWith('app:update-available', expect.objectContaining({
-        downloadUrl: 'https://example.com/Claude Command Center-2.0.0.dmg',
+        downloadUrl: 'https://example.com/Samins Command Center-2.0.0.dmg',
       }));
     });
 
@@ -394,7 +394,7 @@ describe('update-checker', () => {
           html_url: 'https://github.com/releases/v2.0.0',
           body: '',
           assets: [
-            { name: 'Claude Command Center-2.0.0.zip', browser_download_url: 'https://example.com/Claude Command Center-2.0.0.zip' },
+            { name: 'Samins Command Center-2.0.0.zip', browser_download_url: 'https://example.com/Samins Command Center-2.0.0.zip' },
           ],
         }),
       });
@@ -402,7 +402,7 @@ describe('update-checker', () => {
       await checkForUpdates();
 
       expect(win.webContents.send).toHaveBeenCalledWith('app:update-available', expect.objectContaining({
-        downloadUrl: 'https://example.com/Claude Command Center-2.0.0.zip',
+        downloadUrl: 'https://example.com/Samins Command Center-2.0.0.zip',
       }));
     });
 

@@ -26,7 +26,7 @@ export function ensureDataDir() {
 
 /**
  * Write the app CLAUDE.md to ~/.claude-command-center/CLAUDE.md so all agents spawned from
- * Claude Command Center can load it via --add-dir ~/.claude-command-center with
+ * Samins Command Center can load it via --add-dir ~/.claude-command-center with
  * CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1.
  *
  * First tries to read the live CLAUDE.md from the app source directory.
@@ -54,7 +54,7 @@ export function ensureCommandCenterClaudeMd(): void {
 
     // Fallback: write essential agent instructions
     if (!content) {
-      content = `# Claude Command Center Agent Instructions
+      content = `# Samins Command Center Agent Instructions
 
 ## Memory
 
@@ -81,7 +81,7 @@ Use auto memory (\`~/.claude/projects/.../memory/\`) actively on every project:
 
     fs.writeFileSync(dest, content, 'utf-8');
   } catch (err) {
-    console.warn('Failed to write Claude Command Center CLAUDE.md:', err);
+    console.warn('Failed to write Samins Command Center CLAUDE.md:', err);
   }
 }
 

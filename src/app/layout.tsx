@@ -3,13 +3,13 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
 export const metadata: Metadata = {
-  title: "Claude Command Center | Agent Control Center",
+  title: "Samins Command Center | Agent Control Center",
   description: "Manage and monitor your coding agents, projects, and tasks in real-time",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Claude Command Center",
+    title: "Samins Command Center",
   },
   formatDetection: {
     telephone: false,
@@ -21,7 +21,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#3D9B94",
+  themeColor: "#c77454",
   viewportFit: "cover",
 };
 

@@ -37,7 +37,7 @@ export default function Home() {
       <nav className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2.5">
           <img src="/claude-command-center/mark.png" alt="" width={32} height={32} className="w-10 h-10 rounded-2xl" />
-          <img src="/claude-command-center/wordmark.png" alt="Claude Command Center" width={200} height={48} className="w-[180px] h-auto object-contain" />
+          <img src="/claude-command-center/wordmark.png" alt="Samins Command Center" width={200} height={48} className="w-[180px] h-auto object-contain" />
         </a>
         <div className="hidden md:flex items-center gap-8 text-[13px] text-brown-light">
           <a href="#features" className="hover:text-brown transition-colors">Features</a>
@@ -75,7 +75,7 @@ export default function Home() {
 
             <p className="text-brown-light text-[15px] leading-relaxed mb-8 max-w-md mx-auto lg:mx-0">
               AI agents are powerful but they can quickly become overwhelming.<br />
-              Claude Command Center is here to keep everything under control.
+              Samins Command Center is here to keep everything under control.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start">
@@ -101,7 +101,7 @@ export default function Home() {
           <div className="relative shrink-0">
             <Image
               src="/0.png"
-              alt="Claude Command Center dashboard"
+              alt="Samins Command Center dashboard"
               width={960}
               height={600}
               className="rounded-2xl w-[360px] md:w-[680px] h-auto object-cover drop-shadow-lg"
@@ -155,7 +155,7 @@ export default function Home() {
           <p className="font-display italic text-teal text-base mb-2">Multi-provider</p>
           <h2 className="font-display text-4xl md:text-5xl">Works with your favorite AI</h2>
           <p className="text-brown-light text-[15px] mt-4 max-w-lg mx-auto">
-            Claude Command Center supports multiple AI coding agents. Run them side-by-side, mix and match per project.
+            Samins Command Center supports multiple AI coding agents. Run them side-by-side, mix and match per project.
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <p className="font-display italic text-teal text-base mb-2">See it in action</p>
-            <h2 className="font-display text-4xl md:text-5xl">A peek inside Claude Command Center</h2>
+            <h2 className="font-display text-4xl md:text-5xl">A peek inside Samins Command Center</h2>
           </div>
 
           {/* Main screenshot */}
@@ -200,9 +200,9 @@ export default function Home() {
               <div className="w-2.5 h-2.5 rounded-full bg-rust/50" />
               <div className="w-2.5 h-2.5 rounded-full bg-mustard/50" />
               <div className="w-2.5 h-2.5 rounded-full bg-teal/50" />
-              <span className="text-[10px] text-brown-light/60 ml-2">Claude Command Center</span>
+              <span className="text-[10px] text-brown-light/60 ml-2">Samins Command Center</span>
             </div>
-            <Image src="/0.png" alt="Claude Command Center Dashboard" width={960} height={600} className="w-full h-auto" />
+            <Image src="/0.png" alt="Samins Command Center Dashboard" width={960} height={600} className="w-full h-auto" />
           </div>
         </div>
       </section>
@@ -211,7 +211,7 @@ export default function Home() {
       <section className="max-w-3xl mx-auto px-6 py-20 md:py-24 text-center">
         <div className="w-12 h-px bg-teal mx-auto mb-8" />
         <blockquote className="font-display italic text-2xl md:text-3xl leading-snug mb-6">
-          &ldquo;Claude Command Center makes managing AI agents a breeze!&rdquo;
+          &ldquo;Samins Command Center makes managing AI agents a breeze!&rdquo;
         </blockquote>
         <p className="text-sm text-brown-light">— A Happy Developer</p>
         <div className="w-12 h-px bg-teal mx-auto mt-8" />
@@ -220,9 +220,9 @@ export default function Home() {
       {/* ───────── DOWNLOAD CTA ───────── */}
       <section id="download" className="bg-teal text-white py-20 md:py-24 px-6">
         <div className="max-w-2xl mx-auto text-center">
-          <Image src="/claude-command-center/mark.png" alt="Claude Command Center" width={64} height={64} className="w-16 h-16 mx-auto rounded-2xl mb-6 ring-4 ring-white/20 object-cover" />
+          <Image src="/claude-command-center/mark.png" alt="Samins Command Center" width={64} height={64} className="w-16 h-16 mx-auto rounded-2xl mb-6 ring-4 ring-white/20 object-cover" />
 
-          <h2 className="font-display text-3xl md:text-5xl mb-3">Ready to meet Claude Command Center?</h2>
+          <h2 className="font-display text-3xl md:text-5xl mb-3">Ready to meet Samins Command Center?</h2>
           <p className="text-white/70 text-[15px] mb-8 max-w-md mx-auto">
             Free, open source, no account needed. Download and start managing your AI agents today.
           </p>
@@ -249,7 +249,7 @@ export default function Home() {
       <footer className="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-warm">
         <div className="flex items-center gap-2">
           <img src="/claude-command-center/mark.png" alt="" width={20} height={20} className="w-5 h-5 rounded-xl object-cover" />
-          <img src="/claude-command-center/wordmark.png" alt="Claude Command Center" width={160} height={32} className="w-32 h-auto object-contain opacity-60" />
+          <img src="/claude-command-center/wordmark.png" alt="Samins Command Center" width={160} height={32} className="w-32 h-auto object-contain opacity-60" />
         </div>
         <div className="flex items-center gap-6 text-[12px] text-brown-light">
           <a href="https://skool.com/clawd" target="_blank" rel="noopener noreferrer" className="hover:text-brown transition-colors">Skool</a>

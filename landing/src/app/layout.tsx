@@ -3,12 +3,12 @@ import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Claude Command Center Beta",
+  title: "Samins Command Center",
   description: "A retro-inspired desktop app to manage, monitor, and orchestrate your AI coding agents.",
-  keywords: ["Claude Command Center", "Claude", "Codex", "Gemini", "AI", "Agent", "Manager", "Claude Code"],
+  keywords: ["Samins Command Center", "Claude", "Codex", "Gemini", "AI", "Agent", "Manager", "Claude Code"],
   icons: { icon: "/claude-command-center/favicon-32.png", apple: "/claude-command-center/icon-192.png" },
   openGraph: {
-    title: "Claude Command Center Beta",
+    title: "Samins Command Center",
     description: "A retro-inspired desktop app to manage and orchestrate your AI coding agents.",
     type: "website",
   },

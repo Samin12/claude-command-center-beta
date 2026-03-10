@@ -43,7 +43,7 @@ function resolveLogPath(taskId: string): string {
     } catch { /* use default */ }
   }
 
-  // Also check the Claude Command Center plist format.
+  // Also check the Samins Command Center plist format.
   const commandCenterPlistPath = path.join(os.homedir(), 'Library', 'LaunchAgents', `com.claude-command-center.scheduler.${taskId}.plist`);
   if (fs.existsSync(commandCenterPlistPath)) {
     try {

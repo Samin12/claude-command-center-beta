@@ -212,7 +212,7 @@ export async function handleSlackCommand(
 
   if (lowerText === 'help' || lowerText === '') {
     await say(
-      `:crown: *Claude Command Center Bot*\n\n` +
+      `:crown: *Samins Command Center Bot*\n\n` +
         `*Commands:*\n` +
         `• \`status\` - Show all agents status\n` +
         `• \`agents\` - List agents with details\n` +
@@ -522,7 +522,7 @@ export async function sendToSuperAgentFromSlack(
 
   if (!superAgent) {
     await say(
-      ':crown: No Super Agent found.\n\nCreate one in Claude Command Center first, or use `start <agent> <task>` to start a specific agent.'
+      ':crown: No Super Agent found.\n\nCreate one in Samins Command Center first, or use `start <agent> <task>` to start a specific agent.'
     );
     return;
   }

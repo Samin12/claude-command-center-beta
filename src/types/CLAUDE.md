@@ -14,5 +14,5 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #5336 | 11:26 AM | 🔵 | Claude Command Center Agent System Type Definitions | ~401 |
+| #5336 | 11:26 AM | 🔵 | Samins Command Center Agent System Type Definitions | ~401 |
 </claude-mem-context>

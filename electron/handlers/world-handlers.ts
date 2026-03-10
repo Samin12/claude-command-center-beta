@@ -294,7 +294,7 @@ export function registerWorldHandlers(deps: WorldHandlerDependencies): void {
       const result = await dialog.showSaveDialog(win, {
         title: 'Export World',
         defaultPath: `${safeName}.claude-command-center-world`,
-        filters: [{ name: 'Claude Command Center World', extensions: ['claude-command-center-world'] }],
+        filters: [{ name: 'Samins Command Center World', extensions: ['claude-command-center-world'] }],
       });
 
       if (result.canceled || !result.filePath) {
@@ -316,7 +316,7 @@ export function registerWorldHandlers(deps: WorldHandlerDependencies): void {
 
       const result = await dialog.showOpenDialog(win, {
         title: 'Import World',
-        filters: [{ name: 'Claude Command Center World', extensions: ['claude-command-center-world'] }],
+        filters: [{ name: 'Samins Command Center World', extensions: ['claude-command-center-world'] }],
         properties: ['openFile'],
       });
 

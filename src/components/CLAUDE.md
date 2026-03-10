@@ -14,5 +14,5 @@
 
 | ID | Time | T | Title | Read |
 |----|------|---|-------|------|
-| #4142 | 4:57 PM | 🔵 | Claude Command Center Client Layout Structure and Global State Management | ~219 |
+| #4142 | 4:57 PM | 🔵 | Samins Command Center Client Layout Structure and Global State Management | ~219 |
 </claude-mem-context>

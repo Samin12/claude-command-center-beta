@@ -251,7 +251,7 @@
   --color-accent-blue: var(--accent-blue);
   --color-accent-blue-dim: var(--accent-blue-dim);
 
-  /* Override Tailwind cyan scale → Claude Command Center vibrant teal */
+  /* Override Tailwind cyan scale → Samins Command Center vibrant teal */
   --color-cyan-50: #f0faf9;
   --color-cyan-100: #d0eeeb;
   --color-cyan-200: #a0ddd8;

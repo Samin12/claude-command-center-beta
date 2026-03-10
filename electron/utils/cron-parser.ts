@@ -1,5 +1,5 @@
 /**
- * Cron parsing utilities for Claude Command Center scheduler.
+ * Cron parsing utilities for Samins Command Center scheduler.
  * Handles conversion between cron expressions and launchd StartCalendarInterval entries.
  */
 

@@ -1,11 +1,11 @@
 {
-  "name": "Claude Command Center",
+  "name": "Samins Command Center",
   "short_name": "CCC",
   "description": "Manage and monitor your AI Agents in real-time",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F0E8D5",
-  "theme_color": "#3D9B94",
+  "background_color": "#F5EEE6",
+  "theme_color": "#C77454",
   "orientation": "any",
   "icons": [
     {

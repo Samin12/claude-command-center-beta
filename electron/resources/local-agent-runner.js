@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Local Agent Runner — Claude Command Center
+ * Local Agent Runner — Samins Command Center
  *
  * Standalone Node.js script (no npm dependencies) that provides an interactive
  * chat REPL against Tasmania's OpenAI-compatible /v1/chat/completions endpoint.
@@ -54,7 +54,7 @@ function parseArgs(argv) {
 function buildSystemPrompt(projectPath) {
   const parts = [
     'You are a helpful AI assistant running locally via Tasmania.',
-    'You are part of Claude Command Center, an agent management platform.',
+    'You are part of Samins Command Center, an agent management platform.',
     'Provide clear, concise answers. When discussing code, be specific about file paths and line numbers.',
   ];
 
@@ -237,7 +237,7 @@ async function main() {
 
   // Banner
   console.log('');
-  console.log(colorize(CYAN + BOLD, '  Claude Command Center Local Agent'));
+  console.log(colorize(CYAN + BOLD, '  Samins Command Center Local Agent'));
   console.log(colorize(DIM, `  Model: ${args.model || 'default'}`));
   console.log(colorize(DIM, `  Endpoint: ${args.endpoint}`));
   if (args.project) {

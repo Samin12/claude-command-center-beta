@@ -65,7 +65,7 @@ export class GeminiProvider implements CLIProvider {
       }
     }
 
-    // Include Claude Command Center directory
+    // Include Samins Command Center directory
     command += ` --include-directories '${os.homedir()}/.claude-command-center'`;
 
     // Prompt with skills directive

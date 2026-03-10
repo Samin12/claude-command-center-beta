@@ -30,9 +30,9 @@ export function createWindow() {
     height: 1000,
     minWidth: 1200,
     minHeight: 800,
-    title: 'Claude Command Center',
+    title: 'Samins Command Center',
     titleBarStyle: 'hiddenInset',
-    backgroundColor: '#F0E8D5',
+    backgroundColor: '#F5EEE6',
     webPreferences: {
       preload: path.join(__dirname, '..', 'preload.js'),
       contextIsolation: true,

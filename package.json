@@ -21,7 +21,7 @@
   },
   "build": {
     "appId": "com.saminyasar.claudecommandcenterbeta",
-    "productName": "Claude Command Center",
+    "productName": "Samins Command Center",
     "publish": {
       "provider": "github",
       "owner": "Samin12",
@@ -120,7 +120,7 @@
       ]
     },
     "dmg": {
-      "title": "Claude Command Center",
+      "title": "Samins Command Center",
       "contents": [
         {
           "x": 130,

@@ -253,7 +253,7 @@ function getApiKey(): string {
   } catch {
     // Ignore
   }
-  throw new Error('SocialData API key not configured. Please add your API key in Claude Command Center Settings > SocialData.');
+  throw new Error('SocialData API key not configured. Please add your API key in Samins Command Center Settings > SocialData.');
 }
 
 describe('mcp-socialdata', () => {

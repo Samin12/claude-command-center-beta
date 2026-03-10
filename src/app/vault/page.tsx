@@ -32,8 +32,8 @@ export default function VaultPage() {
             }
           `}
         >
-          <img src="/command-center-mark.png" alt="Claude Command Center" className="w-4 h-4 object-contain" />
-          Claude Command Center Vault
+          <img src="/command-center-mark.png" alt="Samins Command Center" className="w-4 h-4 object-contain" />
+          Samins Command Center Vault
         </button>
         <button
           onClick={() => setActiveTab('obsidian')}

@@ -274,13 +274,13 @@ const StepTools = React.memo(function StepTools({
         </div>
 
         <div className="rounded-lg border border-border-primary bg-secondary/30 p-3 space-y-2">
-          {/* Claude Command Center Vault — always selected */}
+          {/* Samins Command Center Vault — always selected */}
           <div className="flex items-center gap-3 p-2">
             <div className="w-5 h-5 rounded border bg-purple-500 border-purple-500 flex items-center justify-center shrink-0">
               <Check className="w-3 h-3 text-white" />
             </div>
-            <img src="/command-center-mark.png" alt="Claude Command Center" className="w-4 h-4 object-contain shrink-0" />
-            <span className="text-sm">Claude Command Center Vault</span>
+            <img src="/command-center-mark.png" alt="Samins Command Center" className="w-4 h-4 object-contain shrink-0" />
+            <span className="text-sm">Samins Command Center Vault</span>
             <span className="text-[10px] text-text-muted ml-auto">Always included</span>
           </div>
 
