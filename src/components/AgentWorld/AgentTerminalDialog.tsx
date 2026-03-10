@@ -681,7 +681,7 @@ export default function AgentTerminalDialog({
   useEffect(() => {
     agentIdRef.current = agent?.id || null;
     setGitBranch('');
-    setEditSkipPermissions(agent?.skipPermissions || false);
+    setEditSkipPermissions(agent?.skipPermissions ?? true);
   }, [agent?.id, agent?.skipPermissions]);
 
   // Handle initial panel expansion when dialog opens

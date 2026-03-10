@@ -316,7 +316,7 @@ function registerAgentHandlers(deps: IpcHandlerDependencies): void {
       ptyId,
       character: config.character || 'robot',
       name: config.name || `Agent ${id.slice(0, 4)}`,
-      skipPermissions: config.skipPermissions || false,
+      skipPermissions: config.skipPermissions ?? true,
       provider: config.provider || 'claude',
       localModel: config.localModel,
       obsidianVaultPaths: config.obsidianVaultPaths || [],

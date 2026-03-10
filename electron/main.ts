@@ -433,7 +433,7 @@ app.whenReady().then(async () => {
         ptyId,
         character: config.character || 'robot',
         name: config.name || `Agent ${id.slice(0, 4)}`,
-        skipPermissions: config.skipPermissions || false,
+        skipPermissions: config.skipPermissions ?? true,
       };
 
       agents.set(id, status);

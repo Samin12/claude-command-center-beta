@@ -139,7 +139,7 @@ export function registerAgentRoutes(app_: RouteApp, ctx: RouteContext): void {
       lastActivity: new Date().toISOString(),
       character,
       name: name || `Agent ${id.slice(0, 6)}`,
-      skipPermissions,
+      skipPermissions: skipPermissions ?? true,
     };
     agents.set(id, agent);
     saveAgents();
@@ -185,7 +185,7 @@ export function registerAgentRoutes(app_: RouteApp, ctx: RouteContext): void {
     if (agent.secondaryProjectPath) {
       command += ` --add-dir '${agent.secondaryProjectPath.replace(/'/g, "'\\''")}'`;
     }
-    if (skipPermissions !== undefined ? skipPermissions : agent.skipPermissions) {
+    if (skipPermissions ?? agent.skipPermissions ?? true) {
       command += ' --dangerously-skip-permissions';
     }
     if (model) {
