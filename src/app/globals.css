@@ -46,171 +46,139 @@
 }
 
 /* ============================================
-   DOROTHY — WARM RETRO LIGHT THEME
-   ============================================
-
-   Philosophy:
-   - Warm cream/beige surfaces (1960s print aesthetic)
-   - Vibrant teal & copper accent palette
-   - Dark brown text for contrast
-   - Generous rounded corners for retro charm
-   - Matches the Claude Command Center landing page design
-
+   SAMINS COMMAND CENTER — TERRACOTTA LIGHT THEME
    ============================================ */
 
 :root {
-  /* Surfaces - Warm cream/beige */
-  --background: #F0E8D5;
-  --foreground: #2C2418;
-  --card: #FAF4EA;
-  --card-foreground: #2C2418;
-  --popover: #FAF4EA;
-  --popover-foreground: #2C2418;
+  --background: #f5eee6;
+  --foreground: #33251d;
+  --card: #fbf6ef;
+  --card-foreground: #33251d;
+  --popover: #fbf6ef;
+  --popover-foreground: #33251d;
 
-  /* Primary - Vibrant Teal (from the swirls) */
-  --primary: #3D9B94;
-  --primary-foreground: #FAF4EA;
+  --primary: #c77454;
+  --primary-foreground: #fff8f2;
 
-  /* Secondary - Slightly darker cream */
-  --secondary: #E8DEC8;
-  --secondary-foreground: #2C2418;
+  --secondary: #efe2d3;
+  --secondary-foreground: #33251d;
 
-  /* Muted - Warm tan */
-  --muted: #E8DEC8;
-  --muted-foreground: #7A6E58;
+  --muted: #eadccf;
+  --muted-foreground: #806756;
 
-  /* Accent - Copper/Orange (Claude Command Center's hair) */
-  --accent: #CD7F4A;
-  --accent-foreground: #FAF4EA;
+  --accent: #ddb89e;
+  --accent-foreground: #33251d;
 
-  /* Destructive - Reddish Brown */
-  --destructive: #B85440;
+  --destructive: #b85c45;
 
   /* Borders & inputs */
-  --border: #D5CAB4;
-  --input: #FAF4EA;
-  --ring: #3D9B94;
+  --border: #dcccbc;
+  --input: #fffaf3;
+  --ring: #c77454;
 
   /* Legacy variables for backwards compatibility */
-  --bg-primary: #F0E8D5;
-  --bg-secondary: #FAF4EA;
-  --bg-tertiary: #E8DEC8;
-  --bg-elevated: #FFFFFF;
-  --border-primary: #D5CAB4;
-  --border-accent: #C4B89A;
-  --text-primary: #2C2418;
-  --text-secondary: #7A6E58;
-  --text-muted: #9A8E78;
+  --bg-primary: #f5eee6;
+  --bg-secondary: #fbf6ef;
+  --bg-tertiary: #efe2d3;
+  --bg-elevated: #fffaf3;
+  --border-primary: #dcccbc;
+  --border-accent: #cdb8a4;
+  --text-primary: #33251d;
+  --text-secondary: #806756;
+  --text-muted: #9d8575;
 
-  /* Status colors - Claude Command Center palette */
-  --success: #4A8B50;
-  --success-muted: rgba(74, 139, 80, 0.12);
-  --warning: #CD7F4A;
-  --warning-muted: rgba(205, 127, 74, 0.12);
-  --danger: #B85440;
-  --danger-muted: rgba(184, 84, 64, 0.12);
-  --info: #3D9B94;
-  --info-muted: rgba(61, 155, 148, 0.12);
+  --success: #94715d;
+  --success-muted: rgba(148, 113, 93, 0.12);
+  --warning: #c77454;
+  --warning-muted: rgba(199, 116, 84, 0.12);
+  --danger: #b85c45;
+  --danger-muted: rgba(184, 92, 69, 0.12);
+  --info: #b88868;
+  --info-muted: rgba(184, 136, 104, 0.12);
 
-  /* Accent colors - Claude Command Center palette */
-  --accent-blue: #3D9B94;
-  --accent-blue-dim: #348680;
-  --accent-green: #4A8B50;
-  --accent-green-dim: #3D7542;
-  --accent-amber: #CD7F4A;
-  --accent-amber-dim: #B86E3C;
-  --accent-red: #B85440;
-  --accent-red-dim: #9E4536;
-  --accent-purple: #8B6B9B;
-  --accent-purple-dim: #765A85;
-  --accent-cyan: #3D9B94;
-  --accent-cyan-dim: #348680;
+  --accent-blue: #b88868;
+  --accent-blue-dim: #a97657;
+  --accent-green: #94715d;
+  --accent-green-dim: #7c5c4b;
+  --accent-amber: #ddb89e;
+  --accent-amber-dim: #cca387;
+  --accent-red: #c77454;
+  --accent-red-dim: #b46446;
+  --accent-purple: #9f7c70;
+  --accent-purple-dim: #866356;
+  --accent-cyan: #c99074;
+  --accent-cyan-dim: #b97d62;
 
-  /* Charts - Claude Command Center spectrum */
-  --chart-1: #3D9B94;
-  --chart-2: #CD7F4A;
-  --chart-3: #4A8B50;
-  --chart-4: #B85440;
-  --chart-5: #2C2418;
+  --chart-1: #c77454;
+  --chart-2: #ddb89e;
+  --chart-3: #94715d;
+  --chart-4: #b85c45;
+  --chart-5: #33251d;
 }
 
-/* ============================================
-   DOROTHY — DARK THEME OVERRIDES
-   ============================================ */
 .dark {
-  /* Surfaces - Deep warm grays */
-  --background: #1A1714;
-  --foreground: #E8DEC8;
-  --card: #242019;
-  --card-foreground: #E8DEC8;
-  --popover: #242019;
-  --popover-foreground: #E8DEC8;
+  --background: #241a16;
+  --foreground: #f1e5d8;
+  --card: #2d221d;
+  --card-foreground: #f1e5d8;
+  --popover: #2d221d;
+  --popover-foreground: #f1e5d8;
 
-  /* Primary - Teal stays vibrant, slightly brighter for dark bg */
-  --primary: #4DB8B0;
-  --primary-foreground: #1A1714;
+  --primary: #d48766;
+  --primary-foreground: #1f1511;
 
-  /* Secondary - Darker warm tone */
-  --secondary: #2E2922;
-  --secondary-foreground: #E8DEC8;
+  --secondary: #382a23;
+  --secondary-foreground: #f1e5d8;
 
-  /* Muted - Dark warm tone */
-  --muted: #2E2922;
-  --muted-foreground: #9A8E78;
+  --muted: #382a23;
+  --muted-foreground: #b79f8f;
 
-  /* Accent - Copper stays warm */
-  --accent: #CD7F4A;
-  --accent-foreground: #1A1714;
+  --accent: #a87b65;
+  --accent-foreground: #f8efe6;
 
-  /* Destructive - Slightly brighter for dark bg */
-  --destructive: #D4634D;
+  --destructive: #ce745a;
 
-  /* Borders & inputs */
-  --border: #3A342B;
-  --input: #2E2922;
-  --ring: #4DB8B0;
+  --border: #47362f;
+  --input: #382a23;
+  --ring: #d48766;
 
-  /* Legacy variables */
-  --bg-primary: #1A1714;
-  --bg-secondary: #242019;
-  --bg-tertiary: #2E2922;
-  --bg-elevated: #302B23;
-  --border-primary: #3A342B;
-  --border-accent: #4A4237;
-  --text-primary: #E8DEC8;
-  --text-secondary: #9A8E78;
-  --text-muted: #7A6E58;
+  --bg-primary: #241a16;
+  --bg-secondary: #2d221d;
+  --bg-tertiary: #382a23;
+  --bg-elevated: #43322b;
+  --border-primary: #47362f;
+  --border-accent: #5c473d;
+  --text-primary: #f1e5d8;
+  --text-secondary: #b79f8f;
+  --text-muted: #987d6e;
 
-  /* Status colors - Same hues, adjusted for dark bg */
-  --success: #5AAF62;
-  --success-muted: rgba(90, 175, 98, 0.15);
-  --warning: #CD7F4A;
-  --warning-muted: rgba(205, 127, 74, 0.15);
-  --danger: #D4634D;
-  --danger-muted: rgba(212, 99, 77, 0.15);
-  --info: #4DB8B0;
-  --info-muted: rgba(77, 184, 176, 0.15);
+  --success: #ab846e;
+  --success-muted: rgba(171, 132, 110, 0.15);
+  --warning: #d48766;
+  --warning-muted: rgba(212, 135, 102, 0.15);
+  --danger: #ce745a;
+  --danger-muted: rgba(206, 116, 90, 0.15);
+  --info: #c79a7e;
+  --info-muted: rgba(199, 154, 126, 0.15);
 
-  /* Accent colors */
-  --accent-blue: #4DB8B0;
-  --accent-blue-dim: #3D9B94;
-  --accent-green: #5AAF62;
-  --accent-green-dim: #4A8B50;
-  --accent-amber: #CD7F4A;
-  --accent-amber-dim: #B86E3C;
-  --accent-red: #D4634D;
-  --accent-red-dim: #B85440;
-  --accent-purple: #A080B2;
-  --accent-purple-dim: #8B6B9B;
-  --accent-cyan: #4DB8B0;
-  --accent-cyan-dim: #3D9B94;
+  --accent-blue: #c79a7e;
+  --accent-blue-dim: #ad8269;
+  --accent-green: #ab846e;
+  --accent-green-dim: #8f6c58;
+  --accent-amber: #ddb89e;
+  --accent-amber-dim: #cda489;
+  --accent-red: #d48766;
+  --accent-red-dim: #c17052;
+  --accent-purple: #a37d70;
+  --accent-purple-dim: #866356;
+  --accent-cyan: #d29a7d;
+  --accent-cyan-dim: #bb8164;
 
-  /* Charts - Same spectrum (already vibrant) */
-  --chart-1: #4DB8B0;
-  --chart-2: #CD7F4A;
-  --chart-3: #5AAF62;
-  --chart-4: #D4634D;
-  --chart-5: #E8DEC8;
+  --chart-1: #d48766;
+  --chart-2: #ddb89e;
+  --chart-3: #ab846e;
+  --chart-4: #ce745a;
+  --chart-5: #f1e5d8;
 }
 
 /* Dark mode scrollbar overrides */

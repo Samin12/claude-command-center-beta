@@ -196,9 +196,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         </button>
         <div className="flex items-center gap-2 ml-2">
           <div className="w-8 h-8 rounded-lg overflow-hidden shrink-0">
-            <img src="/command-center-mark.png" alt="Claude Command Center" className="w-full h-full object-cover" />
+            <img src="/command-center-mark.png" alt="Samins Command Center" className="w-full h-full object-cover" />
           </div>
-          <span className="text-base font-semibold tracking-wide text-foreground" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>Claude Command Center</span>
+          <span className="text-base font-semibold tracking-wide text-foreground" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>Samins Command Center</span>
         </div>
       </div>
 
@@ -249,12 +249,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0">
-                  <img src="/command-center-mark.png" alt="Claude Command Center" className="w-full h-full object-cover" />
+                  <img src="/command-center-mark.png" alt="Samins Command Center" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-foreground">Update Available</h3>
                   <p className="text-sm text-muted-foreground">
-                    Claude Command Center {updateInfo.latestVersion} is ready
+                    Samins Command Center {updateInfo.latestVersion} is ready
                   </p>
                 </div>
               </div>

@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-cream: #FAF4EA;
-  --color-cream-dark: #EDE5D5;
-  --color-teal: #3D9B94;
-  --color-teal-dark: #2D7A74;
-  --color-teal-light: #E8F4F2;
-  --color-mustard: #D4A03C;
-  --color-rust: #C06840;
-  --color-brown: #3A2E24;
-  --color-brown-light: #7A6E60;
-  --color-warm: #DDD3C0;
+  --color-cream: #fbf6ef;
+  --color-cream-dark: #efe4d7;
+  --color-teal: #c77454;
+  --color-teal-dark: #b26244;
+  --color-teal-light: #f4e5d8;
+  --color-mustard: #ddb89e;
+  --color-rust: #bb6c4c;
+  --color-brown: #33251d;
+  --color-brown-light: #806756;
+  --color-warm: #dcccbc;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 19.2px; }
 
 body {
-  background: #FAF4EA;
-  color: #3A2E24;
+  background: #fbf6ef;
+  color: #33251d;
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -38,13 +38,13 @@ body {
 
 /* Geometric circle decoration */
 .circle-deco {
-  border: 2px solid #3D9B94;
+  border: 2px solid #c77454;
   border-radius: 50%;
   opacity: 0.15;
   pointer-events: none;
 }
 
-::selection { background: rgba(61,155,148,0.2); }
+::selection { background: rgba(199,116,84,0.18); }
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #FAF4EA; }
-::-webkit-scrollbar-thumb { background: #DDD3C0; border-radius: 3px; }
+::-webkit-scrollbar-track { background: #fbf6ef; }
+::-webkit-scrollbar-thumb { background: #dcccbc; border-radius: 3px; }
