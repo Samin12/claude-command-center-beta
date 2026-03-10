@@ -12,6 +12,10 @@ import type {
   HookConfig,
 } from './cli-provider';
 
+function shellQuote(value: string): string {
+  return `'${value.replace(/'/g, "'\\''")}'`;
+}
+
 export class ClaudeProvider implements CLIProvider {
   readonly id = 'claude' as const;
   readonly displayName = 'Claude Code';
@@ -197,8 +201,9 @@ export class ClaudeProvider implements CLIProvider {
     type HookEntry = { matcher?: string; hooks: Array<{ type: string; command: string; timeout?: number }> };
 
     for (const { type, file, matcher } of hookFiles) {
-      const commandPath = path.join(hooksDir, file);
-      if (!fs.existsSync(commandPath)) continue;
+      const hookPath = path.join(hooksDir, file);
+      if (!fs.existsSync(hookPath)) continue;
+      const commandPath = shellQuote(hookPath);
 
       const existing: HookEntry[] = settings.hooks![type] || [];
       const entryIndex = existing.findIndex((h: HookEntry) =>

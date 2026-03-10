@@ -12,6 +12,10 @@ import type {
   HookConfig,
 } from './cli-provider';
 
+function shellQuote(value: string): string {
+  return `'${value.replace(/'/g, "'\\''")}'`;
+}
+
 export class GeminiProvider implements CLIProvider {
   readonly id = 'gemini' as const;
   readonly displayName = 'Gemini CLI';
@@ -183,8 +187,9 @@ export class GeminiProvider implements CLIProvider {
     type HookEntry = { matcher?: string; hooks: Array<{ type: string; command: string; timeout?: number }> };
 
     for (const { type, file, matcher } of hookFiles) {
-      const commandPath = path.join(geminiHooksDir, file);
-      if (!fs.existsSync(commandPath)) continue;
+      const hookPath = path.join(geminiHooksDir, file);
+      if (!fs.existsSync(hookPath)) continue;
+      const commandPath = shellQuote(hookPath);
 
       const existing: HookEntry[] = settings.hooks![type] || [];
       const entryIndex = existing.findIndex((h: HookEntry) =>
