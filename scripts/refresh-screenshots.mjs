@@ -80,32 +80,32 @@ async function createBrandBanner() {
     <svg width="1464" height="768" viewBox="0 0 1464 768" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#0f766e"/>
-          <stop offset="100%" stop-color="#14532d"/>
+          <stop offset="0%" stop-color="#f5eee6"/>
+          <stop offset="100%" stop-color="#eadfd2"/>
         </linearGradient>
-        <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#f4d35e" stop-opacity="0.85"/>
-          <stop offset="100%" stop-color="#fde68a" stop-opacity="0.35"/>
+        <linearGradient id="terracotta" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#d79b7d"/>
+          <stop offset="100%" stop-color="#bb6c4c"/>
         </linearGradient>
       </defs>
       <rect width="1464" height="768" fill="url(#bg)"/>
-      <circle cx="1080" cy="180" r="340" fill="none" stroke="url(#ring)" stroke-width="42" opacity="0.55"/>
-      <circle cx="1080" cy="180" r="250" fill="none" stroke="#f8fafc" stroke-width="6" opacity="0.35"/>
-      <circle cx="240" cy="640" r="420" fill="none" stroke="#f4d35e" stroke-width="38" opacity="0.35"/>
-      <circle cx="240" cy="640" r="320" fill="none" stroke="#d9f99d" stroke-width="30" opacity="0.3"/>
-      <rect x="112" y="116" width="540" height="536" rx="48" fill="rgba(12, 74, 110, 0.22)" stroke="rgba(248,250,252,0.18)" stroke-width="2"/>
-      <rect x="170" y="198" width="420" height="260" rx="34" fill="rgba(3, 105, 161, 0.18)" stroke="rgba(248,250,252,0.20)" stroke-width="2"/>
-      <rect x="205" y="248" width="345" height="24" rx="12" fill="rgba(248,250,252,0.20)"/>
-      <rect x="205" y="304" width="282" height="20" rx="10" fill="rgba(248,250,252,0.22)"/>
-      <rect x="205" y="350" width="310" height="20" rx="10" fill="rgba(248,250,252,0.22)"/>
-      <rect x="205" y="396" width="236" height="20" rx="10" fill="rgba(248,250,252,0.22)"/>
-      <rect x="170" y="494" width="420" height="90" rx="26" fill="#f4d35e"/>
-      <text x="380" y="556" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="72" fill="#082f49" letter-spacing="8">CLAUDE</text>
-      <text x="750" y="270" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="96" fill="#ecfeff" letter-spacing="10">CLAUDE</text>
-      <text x="750" y="380" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="108" fill="#0f172a" letter-spacing="8">COMMAND</text>
-      <text x="750" y="490" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="108" fill="#0f172a" letter-spacing="8">CENTER</text>
-      <rect x="752" y="532" width="412" height="18" rx="9" fill="#f4d35e"/>
-      <text x="752" y="606" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="30" fill="rgba(248,250,252,0.82)" letter-spacing="2">AI AGENTS, ORCHESTRATED CLEANLY</text>
+      <circle cx="1130" cy="162" r="316" fill="none" stroke="rgba(199,116,84,0.22)" stroke-width="42"/>
+      <circle cx="1130" cy="162" r="228" fill="none" stroke="rgba(221,184,158,0.45)" stroke-width="6"/>
+      <circle cx="176" cy="664" r="356" fill="none" stroke="rgba(199,116,84,0.18)" stroke-width="34"/>
+      <circle cx="176" cy="664" r="276" fill="none" stroke="rgba(221,184,158,0.30)" stroke-width="26"/>
+      <rect x="106" y="126" width="526" height="500" rx="42" fill="rgba(199,116,84,0.07)" stroke="rgba(143,91,70,0.18)" stroke-width="2"/>
+      <rect x="168" y="208" width="400" height="230" rx="32" fill="rgba(251,246,239,0.65)" stroke="rgba(143,91,70,0.16)" stroke-width="2"/>
+      <rect x="205" y="256" width="346" height="24" rx="12" fill="rgba(143,91,70,0.14)"/>
+      <rect x="205" y="314" width="286" height="20" rx="10" fill="rgba(143,91,70,0.12)"/>
+      <rect x="205" y="360" width="314" height="20" rx="10" fill="rgba(143,91,70,0.12)"/>
+      <rect x="205" y="406" width="238" height="20" rx="10" fill="rgba(143,91,70,0.12)"/>
+      <rect x="170" y="492" width="420" height="90" rx="26" fill="url(#terracotta)"/>
+      <text x="380" y="557" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="80" fill="#f6efe5">S</text>
+      <text x="748" y="236" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="88" fill="#c77454" letter-spacing="6">SAMINS</text>
+      <text x="748" y="350" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="112" fill="#33251d" letter-spacing="5">COMMAND</text>
+      <text x="748" y="468" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="112" fill="#33251d" letter-spacing="5">CENTER</text>
+      <rect x="752" y="520" width="474" height="18" rx="9" fill="#bb6c4c"/>
+      <text x="752" y="598" font-family="Arial, Helvetica, sans-serif" font-weight="600" font-size="28" fill="#806756" letter-spacing="2">MULTI-AGENT WORKSPACE, TERRACOTTA EDITION</text>
     </svg>
   `;
 
