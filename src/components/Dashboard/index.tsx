@@ -22,6 +22,7 @@ import {
 import { useClaude } from '@/hooks/useClaude';
 import { useElectronAgents } from '@/hooks/useElectron';
 import StatsCard from './StatsCard';
+import SetupChecklist from './SetupChecklist';
 import dynamic from 'next/dynamic';
 
 // Dynamically import CanvasView to avoid SSR issues
@@ -324,6 +325,12 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <SetupChecklist
+        projectCount={projects.length}
+        historyCount={history.length}
+        hasStats={Boolean(stats)}
+      />
 
       {/* 3D World View */}
       {viewMode === 'world' && (

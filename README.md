@@ -1,10 +1,50 @@
 # Samins Command Center
 
-![Samins Command Center](screenshots/background-2.png)
-
 A beautiful desktop app to orchestrate your [Claude Code](https://claude.ai/code) ,[Codex](https://chatgpt.com/codex), [Gemini](https://geminicli.com/) and local agents. Deploy, monitor, and debug — all from one delightful interface. Free and open source.
 
+[![Download macOS DMG](https://img.shields.io/badge/Download-macOS%20DMG-cb7c58?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
+[![Download Windows Installer](https://img.shields.io/badge/Download-Windows%20Installer-2f6fed?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-win-x64.exe)
+[![All Releases](https://img.shields.io/badge/View-All%20Releases-111827?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest)
+
+macOS users: click the `Download macOS DMG` button above.
+
+![Samins Command Center](screenshots/background-2.png)
+
 ![Samins Command Center Dashboard](screenshots/0.png)
+
+## Installation
+
+### Easiest Install
+
+1. Download the desktop app:
+   - macOS (Apple Silicon): [Download the DMG](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
+   - Windows (x64): [Download the installer](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-win-x64.exe)
+2. Install it:
+   - macOS: open the DMG and drag `Samins Command Center.app` into `Applications`
+   - Windows: open the `.exe` installer and follow the prompts
+3. Open the app.
+
+If Claude Code is already installed on that computer, the app is ready to use.
+
+If Claude Code is not installed yet, install it once from Anthropic's setup guide:
+- [Set up Claude Code](https://docs.anthropic.com/en/docs/claude-code/getting-started)
+
+After Claude Code is installed:
+- open any project folder in Terminal
+- run `claude` once
+- come back to Samins Command Center and your projects/history/usage will appear automatically
+
+### First-Launch Notes
+
+- Samins Command Center reads local Claude Code data from `~/.claude`
+- No extra setup is required just to browse local projects, sessions, history, and usage
+- GitHub CLI is only needed if you want GitHub-based automations
+
+### First-Launch Troubleshooting
+
+- macOS: if Gatekeeper blocks first launch because the app is unsigned, right-click the app and choose `Open` once
+- macOS fallback: run `xattr -cr /Applications/Samins\ Command\ Center.app`
+- Windows: if SmartScreen warns, choose `More info` and then `Run anyway`
 
 ## Table of Contents
 
@@ -530,19 +570,6 @@ MCP server for persistent document management. See [Vault](#vault) for full tool
 MCP server for Twitter/X data via the SocialData API. See [SocialData (Twitter/X)](#socialdata-twitterx) for full tool reference.
 
 ---
-
-## Installation
-
-1. Download the desktop app:
-   - macOS (Apple Silicon): [Download the DMG](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
-   - Windows (x64): [Download the installer](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-win-x64.exe)
-2. Install it:
-   - macOS: open the DMG and drag `Samins Command Center.app` into `Applications`
-   - Windows: open the `.exe` installer and follow the prompts
-3. Launch the app:
-   - macOS: if Gatekeeper blocks first launch because the app is unsigned, right-click the app and choose `Open` once
-   - macOS fallback: run `xattr -cr /Applications/Samins\ Command\ Center.app`
-   - Windows: if SmartScreen warns, choose `More info` and then `Run anyway`
 
 ### Build From Source Prerequisites
 
