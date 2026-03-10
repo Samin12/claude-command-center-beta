@@ -25,14 +25,14 @@ jobs:
           - os: macos-14
             label: macOS arm64
             artifact_name: macos-arm64
-            build_command: npm run electron:release:mac -- --arm64
+            build_command: npm run electron:release:mac -- --arm64 --publish never
             artifact_paths: |
               release/*.dmg
               release/*.zip
           - os: windows-latest
             label: Windows x64
             artifact_name: windows-x64
-            build_command: npm run electron:release:win -- --x64
+            build_command: npm run electron:release:win -- --x64 --publish never
             artifact_paths: |
               release/*.exe
               release/*.zip
