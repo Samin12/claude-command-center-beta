@@ -45,7 +45,7 @@ export default function Home() {
           <a href="#download" className="hover:text-brown transition-colors">Download</a>
         </div>
         <div className="flex items-center gap-3">
-          <a href="https://skool.com/clawd" target="_blank" rel="noopener noreferrer" className="text-brown-light hover:text-brown transition-colors">
+          <a href="https://www.skool.com/claude" target="_blank" rel="noopener noreferrer" className="text-brown-light hover:text-brown transition-colors">
             <GraduationCap className="w-[18px] h-[18px]" />
           </a>
           <a href="https://github.com/Samin12/claude-command-center-beta" target="_blank" rel="noopener noreferrer" className="text-brown-light hover:text-brown transition-colors">
@@ -252,7 +252,7 @@ export default function Home() {
           <img src="/claude-command-center/wordmark.png" alt="Samins Command Center" width={160} height={32} className="w-32 h-auto object-contain opacity-60" />
         </div>
         <div className="flex items-center gap-6 text-[12px] text-brown-light">
-          <a href="https://skool.com/clawd" target="_blank" rel="noopener noreferrer" className="hover:text-brown transition-colors">Skool</a>
+          <a href="https://www.skool.com/claude" target="_blank" rel="noopener noreferrer" className="hover:text-brown transition-colors">Skool</a>
           <a href="https://github.com/Samin12/claude-command-center-beta" target="_blank" rel="noopener noreferrer" className="hover:text-brown transition-colors">GitHub</a>
           <a href="https://github.com/Samin12/claude-command-center-beta/issues" target="_blank" rel="noopener noreferrer" className="hover:text-brown transition-colors">Issues</a>
           <a href="https://skills.sh" target="_blank" rel="noopener noreferrer" className="hover:text-brown transition-colors">skills.sh</a>

@@ -19,12 +19,12 @@ export default function PalletTownPage() {
             Community Link
           </div>
           <a
-            href="https://skool.com/clawd"
+            href="https://www.skool.com/claude"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.22em] text-emerald-100 transition hover:border-emerald-300 hover:bg-emerald-300/20"
           >
-            Join CLAWD
+            Join Claude
           </a>
         </div>
       </div>

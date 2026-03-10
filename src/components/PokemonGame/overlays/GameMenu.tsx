@@ -19,9 +19,9 @@ export default function GameMenu({ onClose, onSettings }: GameMenuProps) {
       action: () => router.push(b.route),
     })),
     {
-      label: 'JOIN CLAWD',
+      label: 'JOIN CLAUDE',
       action: () => {
-        const url = 'https://skool.com/clawd';
+        const url = 'https://www.skool.com/claude';
         if (window.electronAPI?.updates?.openExternal) {
           window.electronAPI.updates.openExternal(url);
         } else {
