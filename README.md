@@ -1,13 +1,6 @@
 # Samins Command Center
 
-A beautiful desktop app to orchestrate your [Claude Code](https://claude.ai/code) ,[Codex](https://chatgpt.com/codex), [Gemini](https://geminicli.com/) and local agents. Deploy, monitor, and debug — all from one delightful interface. Free and open source.
-
-[![One-Command macOS Install](https://img.shields.io/badge/One--Command-macOS%20Install-cb7c58?style=for-the-badge&logo=apple&logoColor=white)](#installation)
-[![Manual DMG](https://img.shields.io/badge/Manual-macOS%20DMG-8b5e49?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
-[![Windows Builds](https://img.shields.io/badge/Windows-Builds%20on%20Releases-2f6fed?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases)
-[![All Releases](https://img.shields.io/badge/View-All%20Releases-111827?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest)
-
-Best free install for macOS: ask Claude Code to run the installer command below for you.
+A beautiful desktop app to orchestrate your [Claude Code](https://claude.ai/code) ,[Codex](https://chatgpt.com/codex), [Gemini](https://geminicli.com/) and local agents. Deploy, monitor, and debug — all from one delightful interface. Open source.
 
 ![Samins Command Center](screenshots/background-2.png)
 
@@ -15,7 +8,7 @@ Best free install for macOS: ask Claude Code to run the installer command below 
 
 ## Installation
 
-### Best Free macOS Install
+### macOS Install
 
 Ask Claude Code:
 
@@ -36,15 +29,9 @@ What this does:
 - removes quarantine flags
 - opens the app
 
-### Manual Install
+### Windows Install
 
-1. Download the desktop app:
-   - macOS (Apple Silicon): [Download the DMG](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
-   - Windows: check the [Releases page](https://github.com/Samin12/claude-command-center-beta/releases) for the current installer
-2. Install it:
-   - macOS: open the DMG and drag `Samins Command Center.app` into `Applications`
-   - Windows: open the `.exe` installer and follow the prompts
-3. Open the app.
+Check the [Releases page](https://github.com/Samin12/claude-command-center-beta/releases) for the current installer.
 
 If Claude Code is already installed on that computer, the app is ready to use.
 
@@ -61,12 +48,12 @@ After Claude Code is installed:
 - Samins Command Center reads local Claude Code data from `~/.claude`
 - No extra setup is required just to browse local projects, sessions, history, and usage
 - GitHub CLI is only needed if you want GitHub-based automations
-- The Terminal installer above is the easiest free macOS path because the app is not Apple-notarized
+- The Terminal installer above is the easiest macOS path because the app is not Apple-notarized
 
 ### First-Launch Troubleshooting
 
 - macOS: if you used the Terminal installer, you should not need extra steps
-- macOS manual DMG fallback: run `xattr -cr /Applications/Samins\ Command\ Center.app`
+- macOS fallback: run `xattr -cr /Applications/Samins\ Command\ Center.app`
 - Windows: if SmartScreen warns, choose `More info` and then `Run anyway`
 
 ## Table of Contents
