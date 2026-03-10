@@ -47,11 +47,21 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python build tooling
+        run: python -m pip install --upgrade pip setuptools
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build desktop artifacts
         run: ${{ matrix.build_command }}
+        env:
+          PYTHON: python
 
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4
