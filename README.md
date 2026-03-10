@@ -3,7 +3,7 @@
 A beautiful desktop app to orchestrate your [Claude Code](https://claude.ai/code) ,[Codex](https://chatgpt.com/codex), [Gemini](https://geminicli.com/) and local agents. Deploy, monitor, and debug — all from one delightful interface. Free and open source.
 
 [![Download macOS DMG](https://img.shields.io/badge/Download-macOS%20DMG-cb7c58?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
-[![Download Windows Installer](https://img.shields.io/badge/Download-Windows%20Installer-2f6fed?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-win-x64.exe)
+[![Windows Builds](https://img.shields.io/badge/Windows-Builds%20on%20Releases-2f6fed?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases)
 [![All Releases](https://img.shields.io/badge/View-All%20Releases-111827?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Samin12/claude-command-center-beta/releases/latest)
 
 macOS users: click the `Download macOS DMG` button above.
@@ -18,7 +18,7 @@ macOS users: click the `Download macOS DMG` button above.
 
 1. Download the desktop app:
    - macOS (Apple Silicon): [Download the DMG](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
-   - Windows (x64): [Download the installer](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-win-x64.exe)
+   - Windows: check the [Releases page](https://github.com/Samin12/claude-command-center-beta/releases) for the current installer
 2. Install it:
    - macOS: open the DMG and drag `Samins Command Center.app` into `Applications`
    - Windows: open the `.exe` installer and follow the prompts
