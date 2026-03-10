@@ -533,18 +533,23 @@ MCP server for Twitter/X data via the SocialData API. See [SocialData (Twitter/X
 
 ## Installation
 
-### Prerequisites
+1. Download the desktop app:
+   - macOS (Apple Silicon): [Download the DMG](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-mac-arm64.dmg)
+   - Windows (x64): [Download the installer](https://github.com/Samin12/claude-command-center-beta/releases/latest/download/Samins-Command-Center-win-x64.exe)
+2. Install it:
+   - macOS: open the DMG and drag `Samins Command Center.app` into `Applications`
+   - Windows: open the `.exe` installer and follow the prompts
+3. Launch the app:
+   - macOS: if Gatekeeper blocks first launch because the app is unsigned, right-click the app and choose `Open` once
+   - macOS fallback: run `xattr -cr /Applications/Samins\ Command\ Center.app`
+   - Windows: if SmartScreen warns, choose `More info` and then `Run anyway`
+
+### Build From Source Prerequisites
 
 - **Node.js** 18+
 - **npm** or yarn
 - **Claude Code CLI**: `npm install -g @anthropic-ai/claude-code`
 - **GitHub CLI** (`gh`) — required for GitHub automations
-
-### Download
-
-Download the latest release from [GitHub Releases](https://github.com/Samin12/claude-command-center-beta/releases).
-
-> **macOS:** If "app is damaged", run `xattr -cr /Applications/Samins Command Center.app`
 
 ### Fastest macOS Install
 
@@ -566,6 +571,7 @@ npx @electron/rebuild        # Rebuild native modules for Electron
 npm run electron:dev          # Development mode
 npm run electron:build        # Production build (DMG)
 npm run electron:build:local  # Unsigned local .app bundle
+npm run electron:release:win  # Windows installer build
 ```
 
 Output in `release/`:
