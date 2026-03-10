@@ -24,7 +24,13 @@ function run(command, args, options = {}) {
     cwd: options.cwd ?? rootDir,
     stdio: 'inherit',
     env: { ...process.env, ...options.env },
+    shell: process.platform === 'win32',
   });
+
+  if (result.error) {
+    console.error(`Failed to run ${command}:`, result.error);
+    process.exit(1);
+  }
 
   if (result.status !== 0) {
     process.exit(result.status ?? 1);
