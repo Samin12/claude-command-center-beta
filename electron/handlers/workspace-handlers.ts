@@ -1,4 +1,5 @@
 import { ipcMain, shell } from 'electron';
+import * as path from 'path';
 import type { AppSettings } from '../types';
 import {
   buildWorkspaceTree,
@@ -112,6 +113,22 @@ export function registerWorkspaceHandlers(deps: WorkspaceHandlerDeps): void {
       return { success: true };
     } catch (error) {
       return { success: false, error: error instanceof Error ? error.message : 'Failed to reveal path' };
+    }
+  });
+
+  ipcMain.handle('workspace:openInVsCode', async (_event, targetPath: string) => {
+    try {
+      const approved = resolveApprovedWorkspacePath(targetPath, getAppSettings());
+      if (!approved) return { success: false, error: 'Access denied' };
+
+      const normalizedPath = approved.resolvedPath.endsWith(path.sep)
+        ? approved.resolvedPath
+        : `${approved.resolvedPath}${path.sep}`;
+      const projectUri = `vscode://file${encodeURI(normalizedPath)}`;
+      await shell.openExternal(projectUri);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to open project in VS Code' };
     }
   });
 }

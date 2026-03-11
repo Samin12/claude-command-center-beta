@@ -84,6 +84,11 @@ export interface WorkspaceFile extends WorkspaceFileMeta {
   content?: string;
 }
 
+export interface WorkspaceActionResult {
+  success: boolean;
+  error?: string;
+}
+
 export interface AppSettings {
   notificationsEnabled: boolean;
   notifyOnWaiting: boolean;

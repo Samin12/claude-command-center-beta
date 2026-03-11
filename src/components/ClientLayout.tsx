@@ -5,6 +5,7 @@ import Sidebar from './Sidebar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Download, ExternalLink, RotateCw, Loader2 } from 'lucide-react';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
@@ -61,6 +62,7 @@ function loadVaultReadDocs(): Set<string> {
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const { sidebarCollapsed, mobileMenuOpen, setMobileMenuOpen, darkMode, setDarkMode, setVaultUnreadCount } = useStore();
   const isMobile = useIsMobile();
+  const pathname = usePathname();
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
   const [updateDismissed, setUpdateDismissed] = useState(false);
   const [updateFlowState, setUpdateFlowState] = useState<UpdateFlowState>('available');
@@ -179,6 +181,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   }, [isMobile, mobileMenuOpen, setMobileMenuOpen]);
 
   const mainMarginLeft = isMobile ? 0 : (sidebarCollapsed ? 72 : 240);
+  const isWorkspaceRoute = pathname === '/workspace' || pathname.startsWith('/workspace/');
 
   return (
     <div className="min-h-screen bg-bg-primary relative">
@@ -224,7 +227,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         initial={false}
         animate={{ marginLeft: mainMarginLeft }}
         transition={{ duration: 0.2, ease: 'easeInOut' }}
-        className="min-h-screen pt-16 lg:pt-0 p-4 lg:p-6 pb-6"
+        className={isWorkspaceRoute
+          ? 'min-h-screen h-screen pt-14 lg:pt-0 p-0 overflow-hidden'
+          : 'min-h-screen pt-16 lg:pt-0 p-4 lg:p-6 pb-6'}
       >
         {children}
       </motion.main>

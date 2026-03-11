@@ -134,6 +134,11 @@ export interface WorkspaceFile extends WorkspaceFileMeta {
   content?: string;
 }
 
+export interface WorkspaceActionResult {
+  success: boolean;
+  error?: string;
+}
+
 export interface ImportPreview {
   name: string;
   description: string;
@@ -279,6 +284,7 @@ export interface ElectronAPI {
     getFileMeta: (filePath: string) => Promise<{ file?: WorkspaceFileMeta; error?: string }>;
     openPath: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
     revealPath: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
+    openInVsCode: (targetPath: string) => Promise<WorkspaceActionResult>;
   };
 
   // Claude data

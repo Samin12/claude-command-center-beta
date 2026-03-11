@@ -10,6 +10,7 @@ import type {
   WorkspaceNode,
   WorkspaceFile,
   WorkspaceFileMeta,
+  WorkspaceActionResult,
 } from '@/types/electron';
 
 // Check if we're running in Electron
@@ -381,6 +382,13 @@ export function useElectronWorkspace() {
     return window.electronAPI!.workspace!.revealPath(targetPath);
   }, []);
 
+  const openInVsCode = useCallback(async (targetPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.openInVsCode(targetPath) as Promise<WorkspaceActionResult>;
+  }, []);
+
   useEffect(() => {
     fetchRoots();
   }, [fetchRoots]);
@@ -397,6 +405,7 @@ export function useElectronWorkspace() {
     getFileMeta,
     openPath,
     revealPath,
+    openInVsCode,
     refresh: fetchRoots,
   };
 }

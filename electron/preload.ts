@@ -191,6 +191,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.invoke('workspace:openPath', targetPath),
     revealPath: (targetPath: string) =>
       ipcRenderer.invoke('workspace:revealPath', targetPath),
+    openInVsCode: (targetPath: string) =>
+      ipcRenderer.invoke('workspace:openInVsCode', targetPath),
   },
 
   // Claude data

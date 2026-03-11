@@ -104,12 +104,12 @@ export default function FileExplorer({
             type="button"
             onClick={() => togglePath(node.path)}
             className={`flex w-full items-center gap-2 rounded-xl border border-transparent px-2 py-1.5 text-left text-sm transition ${
-              isSelected ? 'border-emerald-400/15 bg-emerald-400/8 text-white' : 'text-white/58 hover:bg-white/[0.045] hover:text-white/90'
+              isSelected ? 'border-primary/20 bg-primary/8 text-foreground' : 'text-text-secondary hover:bg-secondary hover:text-foreground'
             }`}
             style={{ paddingLeft: `${depth * 14 + 10}px` }}
           >
             {isExpanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-            {isExpanded ? <FolderOpen className="h-4 w-4 text-emerald-300/90" /> : <Folder className="h-4 w-4 text-emerald-300/90" />}
+            {isExpanded ? <FolderOpen className="h-4 w-4 text-primary" /> : <Folder className="h-4 w-4 text-primary" />}
             <span className="truncate">{node.name}</span>
           </button>
           {isExpanded && (node.children || []).map((child) => renderNode(child, depth + 1))}
@@ -125,45 +125,45 @@ export default function FileExplorer({
         onClick={() => onSelectFile(node.path)}
         className={`flex w-full items-center gap-2 rounded-xl border px-2 py-1.5 text-left text-sm transition ${
           isSelected
-            ? 'border-emerald-400/20 bg-emerald-400/10 text-white shadow-[0_0_0_1px_rgba(16,185,129,0.05)]'
-            : 'border-transparent text-white/58 hover:border-white/8 hover:bg-white/[0.045] hover:text-white/90'
+            ? 'border-primary/20 bg-primary/10 text-foreground shadow-sm'
+            : 'border-transparent text-text-secondary hover:border-primary/10 hover:bg-secondary hover:text-foreground'
         }`}
         style={{ paddingLeft: `${depth * 14 + 30}px` }}
       >
-        <Icon className={`h-4 w-4 shrink-0 ${isSelected ? 'text-emerald-200' : 'text-white/40'}`} />
+        <Icon className={`h-4 w-4 shrink-0 ${isSelected ? 'text-primary' : 'text-text-muted'}`} />
         <span className="truncate">{node.name}</span>
-        {isDirty && <span className="ml-auto h-2 w-2 rounded-full bg-amber-500" />}
+        {isDirty && <span className="ml-auto h-2 w-2 rounded-full bg-primary" />}
       </button>
     );
   };
 
   return (
-    <div className="flex h-full flex-col rounded-[24px] border border-white/10 bg-[#0d1218]/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-      <div className="border-b border-white/8 px-4 py-4">
+    <div className="flex h-full flex-col rounded-[24px] border border-border-primary bg-card shadow-sm">
+      <div className="border-b border-border-primary px-4 py-4">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-white/38">Files</h2>
-          <span className="text-xs text-white/35">{tree.length} root items</span>
+          <h2 className="text-sm font-semibold uppercase tracking-[0.22em] text-text-muted">Files</h2>
+          <span className="text-xs text-text-muted">{tree.length} root items</span>
         </div>
-        <label className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white/80">
-          <Search className="h-4 w-4 text-white/35" />
+        <label className="flex items-center gap-2 rounded-2xl border border-border-primary bg-input px-3 py-2 text-sm text-foreground">
+          <Search className="h-4 w-4 text-text-muted" />
           <input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Filter filenames…"
-            className="w-full bg-transparent outline-none placeholder:text-white/28"
+            className="w-full bg-transparent outline-none placeholder:text-text-muted"
           />
         </label>
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto p-3">
         {loading ? (
-          <div className="flex h-full items-center justify-center text-white/38">
+          <div className="flex h-full items-center justify-center text-text-muted">
             <Loader2 className="h-5 w-5 animate-spin" />
           </div>
         ) : filteredTree.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-6 text-center text-sm text-white/45">
+          <div className="rounded-2xl border border-dashed border-border-primary bg-bg-secondary p-6 text-center text-sm text-text-secondary">
             No files match this project or filter.
           </div>
         ) : (

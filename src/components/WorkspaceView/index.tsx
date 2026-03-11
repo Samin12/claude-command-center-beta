@@ -8,7 +8,7 @@ import ProjectSwitcher from './ProjectSwitcher';
 import FileExplorer from './FileExplorer';
 import EditorPane from './EditorPane';
 import TerminalDock from './TerminalDock';
-import { getProjectName } from './utils';
+import { getProjectName, pickInitialWorkspaceFilePath } from './utils';
 import { useWorkspaceTerminalManager } from './useWorkspaceTerminalManager';
 
 function confirmDiscardChanges(): boolean {
@@ -26,6 +26,7 @@ export default function WorkspaceView() {
     writeFile,
     openPath,
     revealPath,
+    openInVsCode,
     refresh: refreshRoots,
   } = useElectronWorkspace();
   const terminalManager = useWorkspaceTerminalManager();
@@ -101,6 +102,13 @@ export default function WorkspaceView() {
       setFileLoading(false);
     }
   }, [activeFilePath, isDirty, readFile]);
+
+  useEffect(() => {
+    if (!selectedRootPath || treeLoading || fileLoading || activeFilePath) return;
+    const initialFilePath = pickInitialWorkspaceFilePath(tree);
+    if (!initialFilePath) return;
+    void openFile(initialFilePath);
+  }, [activeFilePath, fileLoading, openFile, selectedRootPath, tree, treeLoading]);
 
   const saveActiveFile = useCallback(async () => {
     if (!activeFile?.writable || !activeFilePath || !isDirty) return;
@@ -238,21 +246,19 @@ export default function WorkspaceView() {
 
   if (!isElectron()) {
     return (
-      <div className="relative flex h-[calc(100vh-6rem)] items-center justify-center overflow-hidden rounded-[30px] border border-white/10 bg-[#090b10] p-8 text-white">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.16),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent_46%)]" />
-        <div className="relative max-w-md text-center">
-          <AlertCircle className="mx-auto mb-4 h-10 w-10 text-white/45" />
+      <div className="flex h-full min-h-0 items-center justify-center bg-bg-primary p-8">
+        <div className="max-w-md rounded-[28px] border border-border-primary bg-card p-8 text-center shadow-sm">
+          <AlertCircle className="mx-auto mb-4 h-10 w-10 text-text-muted" />
           <h1 className="text-xl font-semibold">Workspace is only available in the desktop app.</h1>
-          <p className="mt-2 text-sm text-white/55">Dorothy needs Electron access for local projects, rich previews, and the Claude Code terminal dock.</p>
+          <p className="mt-2 text-sm text-text-secondary">Dorothy needs Electron access for local projects, rich previews, and the Claude Code terminal dock.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative flex h-[calc(100vh-5rem)] min-h-[720px] flex-col gap-3 overflow-hidden rounded-[30px] border border-white/10 bg-[#090b10] p-3 text-white shadow-[0_30px_80px_rgba(0,0,0,0.45)]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.15),transparent_28%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.14),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.03),transparent_48%)]" />
-      <div className="relative flex min-h-0 flex-1 flex-col gap-3">
+    <div className="relative flex h-full min-h-0 flex-col gap-4 overflow-hidden bg-[radial-gradient(circle_at_top_left,var(--warning-muted),transparent_28%),radial-gradient(circle_at_top_right,var(--success-muted),transparent_24%),linear-gradient(180deg,var(--bg-secondary),var(--bg-primary))] px-4 py-3 text-foreground lg:px-6 lg:py-5">
+      <div className="flex min-h-0 flex-1 flex-col gap-4">
         <ProjectSwitcher
           roots={roots}
           selectedRootPath={selectedRootPath}
@@ -261,19 +267,23 @@ export default function WorkspaceView() {
           onSelect={handleSelectRoot}
           onAddFolder={handleAddFolder}
           onRemoveRoot={handleRemoveRoot}
+          onOpenInVsCode={() => {
+            if (!selectedRootPath) return;
+            void openInVsCode(selectedRootPath);
+          }}
         />
 
         {error && (
-          <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+          <div className="rounded-2xl border border-destructive/20 bg-destructive/8 px-4 py-3 text-sm text-destructive">
             {error}
           </div>
         )}
 
-        <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_380px] gap-3">
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_380px]">
           <div className="min-h-0">
             {fileLoading ? (
-              <div className="flex h-full items-center justify-center rounded-[24px] border border-white/10 bg-[#0d1218]/95">
-                <Loader2 className="h-6 w-6 animate-spin text-white/45" />
+              <div className="flex h-full items-center justify-center rounded-[24px] border border-border-primary bg-card">
+                <Loader2 className="h-6 w-6 animate-spin text-text-muted" />
               </div>
             ) : (
               <EditorPane
@@ -311,7 +321,7 @@ export default function WorkspaceView() {
           </div>
         </div>
 
-        <div className={`transition-[height] duration-200 ${terminalExpanded ? 'h-[34vh]' : 'h-[17vh]'}`}>
+        <div className={`transition-[height] duration-200 ${terminalExpanded ? 'h-[40vh]' : 'h-[26vh] lg:h-[24vh]'}`}>
           <TerminalDock
             projectPath={selectedRootPath}
             projectName={projectName}

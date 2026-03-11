@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { ChevronDown, ChevronUp, ExternalLink, Play, Square, Trash2 } from 'lucide-react';
 import { getTerminalTheme } from '@/components/AgentWorld/constants';
 import { useXtermTerminal } from '@/hooks/useXtermTerminal';
+import { useStore } from '@/store';
 import type { WorkspaceTerminalSession } from './useWorkspaceTerminalManager';
 
 interface TerminalDockProps {
@@ -35,12 +36,13 @@ export default function TerminalDock({
   onSendInput,
   onOpenExternal,
 }: TerminalDockProps) {
+  const { darkMode } = useStore();
   const renderedProjectRef = useRef<string | null>(null);
   const renderedOutputRef = useRef('');
   const showingPlaceholderRef = useRef(false);
 
-  const { terminalRef, isReady, write, clear, focus, getSize } = useXtermTerminal(true, {
-    theme: getTerminalTheme('dark'),
+  const { terminalRef, isReady, write, clear, focus, fit, getSize } = useXtermTerminal(true, {
+    theme: getTerminalTheme(darkMode ? 'dark' : 'light'),
     fontSize: 12,
     onData: (data) => {
       if (!projectPath) return;
@@ -51,6 +53,16 @@ export default function TerminalDock({
       onResize(cols, rows);
     },
   });
+
+  useEffect(() => {
+    if (!isReady) return;
+    const timers = [
+      window.setTimeout(() => fit(), 10),
+      window.setTimeout(() => fit(), 120),
+      window.setTimeout(() => fit(), 260),
+    ];
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [expanded, fit, isReady, projectPath, session?.ptyId, darkMode]);
 
   useEffect(() => {
     if (!isReady) return;
@@ -112,14 +124,14 @@ export default function TerminalDock({
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-[24px] border border-white/10 bg-[#0d1218]/95 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-      <div className="flex items-center justify-between border-b border-white/8 px-4 py-3">
+    <div className="flex h-full flex-col overflow-hidden rounded-[24px] border border-border-primary bg-card shadow-sm">
+      <div className="flex items-center justify-between border-b border-border-primary px-4 py-3">
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/35">Claude Code Dock</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-text-muted">Claude Code Dock</h3>
           <div className="flex items-center gap-2">
-            <p className="text-sm text-white">{projectPath ? projectName : 'No project selected'}</p>
+            <p className="text-sm text-foreground">{projectPath ? projectName : 'No project selected'}</p>
             <span className={`rounded-full px-2 py-0.5 text-[10px] uppercase tracking-[0.16em] ${
-              session?.ptyId ? 'bg-emerald-400/12 text-emerald-100' : 'bg-white/[0.05] text-white/40'
+              session?.ptyId ? 'bg-accent-cyan/15 text-accent-cyan' : 'bg-bg-secondary text-text-muted'
             }`}>
               {session?.ptyId ? 'live' : session?.status || 'idle'}
             </span>
@@ -127,27 +139,31 @@ export default function TerminalDock({
         </div>
 
         <div className="flex items-center gap-2">
-          <button type="button" onClick={handleStart} disabled={!projectPath} className="inline-flex items-center gap-1.5 rounded-2xl border border-emerald-400/25 bg-emerald-400/14 px-3 py-2 text-xs font-medium text-emerald-50 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-50">
+          <button type="button" onClick={handleStart} disabled={!projectPath} className="inline-flex items-center gap-1.5 rounded-2xl bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
             <Play className="h-3.5 w-3.5" />
             Start Claude Code
           </button>
-          <button type="button" onClick={onStop} disabled={!session?.ptyId} className="rounded-2xl border border-white/10 bg-black/20 p-2 text-white/45 transition hover:text-white/85 disabled:cursor-not-allowed disabled:opacity-50" title="Stop terminal">
+          <button type="button" onClick={onStop} disabled={!session?.ptyId} className="rounded-2xl border border-border-primary bg-bg-secondary p-2 text-text-secondary transition hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50" title="Stop terminal">
             <Square className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onClear} disabled={!projectPath} className="rounded-2xl border border-white/10 bg-black/20 p-2 text-white/45 transition hover:text-white/85 disabled:cursor-not-allowed disabled:opacity-50" title="Clear visible output">
+          <button type="button" onClick={onClear} disabled={!projectPath} className="rounded-2xl border border-border-primary bg-bg-secondary p-2 text-text-secondary transition hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50" title="Clear visible output">
             <Trash2 className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onOpenExternal} disabled={!projectPath} className="rounded-2xl border border-white/10 bg-black/20 p-2 text-white/45 transition hover:text-white/85 disabled:cursor-not-allowed disabled:opacity-50" title="Open in Terminal">
+          <button type="button" onClick={onOpenExternal} disabled={!projectPath} className="rounded-2xl border border-border-primary bg-bg-secondary p-2 text-text-secondary transition hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50" title="Open in Terminal">
             <ExternalLink className="h-4 w-4" />
           </button>
-          <button type="button" onClick={onToggleExpanded} className="rounded-2xl border border-white/10 bg-black/20 p-2 text-white/45 transition hover:text-white/85" title={expanded ? 'Collapse dock' : 'Expand dock'}>
+          <button type="button" onClick={onToggleExpanded} className="rounded-2xl border border-border-primary bg-bg-secondary p-2 text-text-secondary transition hover:text-foreground" title={expanded ? 'Collapse dock' : 'Expand dock'}>
             {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 bg-[#090d13] p-2">
-        <div ref={terminalRef} className="h-full w-full rounded-2xl border border-white/5 bg-[#0a0f15]" />
+      <div className="min-h-0 flex-1 bg-bg-primary p-2">
+        <div
+          ref={terminalRef}
+          onClick={focus}
+          className="h-full w-full rounded-2xl border border-border-primary bg-[var(--bg-primary)]"
+        />
       </div>
     </div>
   );
