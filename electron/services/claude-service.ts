@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
+import { execFileSync } from 'child_process';
 import { decodeProjectPath } from '../utils/decode-project-path';
 
 // Type definitions for Claude data structures
@@ -27,6 +28,10 @@ export interface ClaudePlugin {
 export interface SkillMetadata {
   name: string;
   description?: string;
+  version?: string;
+  repositoryUrl?: string;
+  gitBranch?: string;
+  gitCommit?: string;
 }
 
 export interface ClaudeSkill {
@@ -35,6 +40,10 @@ export interface ClaudeSkill {
   path: string;
   description?: string;
   projectName?: string;
+  version?: string;
+  repositoryUrl?: string;
+  gitBranch?: string;
+  gitCommit?: string;
 }
 
 export interface ClaudeHistoryEntry {
@@ -155,14 +164,172 @@ export async function getClaudePlugins(): Promise<ClaudePlugin[]> {
  */
 export function readSkillMetadata(skillPath: string): SkillMetadata | null {
   try {
-    const metadataPath = path.join(skillPath, '.claude-plugin', 'plugin.json');
-    if (fs.existsSync(metadataPath)) {
-      const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
-      return { name: metadata.name || path.basename(skillPath), description: metadata.description };
+    const realPath = fs.realpathSync(skillPath);
+    const baseName = path.basename(realPath);
+
+    const metadata: SkillMetadata = {
+      name: baseName,
+    };
+
+    const marketplaceMetadataPath = path.join(realPath, '.claude-plugin', 'marketplace.json');
+    if (fs.existsSync(marketplaceMetadataPath)) {
+      try {
+        const marketplace = JSON.parse(fs.readFileSync(marketplaceMetadataPath, 'utf-8'));
+        metadata.name = marketplace.name || metadata.name;
+        metadata.description = marketplace.metadata?.description || marketplace.plugins?.[0]?.description || metadata.description;
+        metadata.version = marketplace.metadata?.version || metadata.version;
+        metadata.repositoryUrl = normalizeGitHubUrl(marketplace.metadata?.repository) || metadata.repositoryUrl;
+      } catch {
+        // Ignore invalid marketplace metadata
+      }
     }
-    return { name: path.basename(skillPath) };
+
+    for (const metadataPath of [
+      path.join(realPath, '.claude-plugin', 'plugin.json'),
+      path.join(realPath, 'plugin.json'),
+    ]) {
+      if (!fs.existsSync(metadataPath)) continue;
+      try {
+        const pluginMetadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+        metadata.name = pluginMetadata.name || metadata.name;
+        metadata.description = pluginMetadata.description || metadata.description;
+        metadata.version = pluginMetadata.version || metadata.version;
+        metadata.repositoryUrl = normalizeGitHubUrl(pluginMetadata.repository || pluginMetadata.homepage) || metadata.repositoryUrl;
+      } catch {
+        // Ignore invalid plugin metadata
+      }
+    }
+
+    const skillMarkdownPath = path.join(realPath, 'SKILL.md');
+    if (fs.existsSync(skillMarkdownPath)) {
+      try {
+        const content = fs.readFileSync(skillMarkdownPath, 'utf-8');
+        const frontmatter = parseFrontmatter(content);
+        const commentVersion = content.match(/<!--\s*Version:\s*([^\s]+)\s*-->/i)?.[1];
+
+        metadata.name = frontmatter.topLevel.name || metadata.name;
+        metadata.description = frontmatter.topLevel.description || metadata.description;
+        metadata.version = frontmatter.metadata.version || frontmatter.topLevel.version || commentVersion || metadata.version;
+        metadata.repositoryUrl =
+          normalizeGitHubUrl(
+            frontmatter.metadata.repository ||
+            frontmatter.metadata.homepage ||
+            frontmatter.topLevel.repository ||
+            frontmatter.topLevel.homepage
+          ) || metadata.repositoryUrl;
+      } catch {
+        // Ignore unreadable skill markdown
+      }
+    }
+
+    const gitMetadata = readGitMetadata(realPath);
+    metadata.repositoryUrl = metadata.repositoryUrl || gitMetadata.repositoryUrl;
+    metadata.gitBranch = gitMetadata.gitBranch;
+    metadata.gitCommit = gitMetadata.gitCommit;
+
+    return metadata;
   } catch {
     return { name: path.basename(skillPath) };
+  }
+}
+
+function parseFrontmatter(content: string): {
+  topLevel: Record<string, string>;
+  metadata: Record<string, string>;
+} {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) {
+    return { topLevel: {}, metadata: {} };
+  }
+
+  const topLevel: Record<string, string> = {};
+  const metadata: Record<string, string> = {};
+  let section: 'topLevel' | 'metadata' = 'topLevel';
+
+  for (const rawLine of match[1].split(/\r?\n/)) {
+    const trimmed = rawLine.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+
+    const isIndented = /^[ \t]/.test(rawLine);
+    if (!isIndented) section = 'topLevel';
+    if (!isIndented && trimmed === 'metadata:') {
+      section = 'metadata';
+      continue;
+    }
+
+    const line = rawLine.replace(/^\s+/, '');
+    const valueMatch = line.match(/^([A-Za-z0-9_-]+):\s*(.+?)\s*$/);
+    if (!valueMatch) continue;
+
+    const [, key, value] = valueMatch;
+    if (value === '|' || value === '>') continue;
+
+    const normalizedValue = stripQuotes(value);
+    if (section === 'metadata') {
+      metadata[key] = normalizedValue;
+    } else {
+      topLevel[key] = normalizedValue;
+    }
+  }
+
+  return { topLevel, metadata };
+}
+
+function stripQuotes(value: string): string {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith('\'') && value.endsWith('\''))
+  ) {
+    return value.slice(1, -1);
+  }
+
+  return value;
+}
+
+function normalizeGitHubUrl(rawUrl?: string): string | undefined {
+  if (!rawUrl) return undefined;
+
+  const trimmed = rawUrl.trim();
+  const sshMatch = trimmed.match(/^git@github\.com:(.+?)(?:\.git)?\/?$/i);
+  if (sshMatch) {
+    return `https://github.com/${sshMatch[1].replace(/\.git$/i, '')}`;
+  }
+
+  const sshProtocolMatch = trimmed.match(/^ssh:\/\/git@github\.com\/(.+?)(?:\.git)?\/?$/i);
+  if (sshProtocolMatch) {
+    return `https://github.com/${sshProtocolMatch[1].replace(/\.git$/i, '')}`;
+  }
+
+  const httpsMatch = trimmed.match(/^https?:\/\/github\.com\/(.+?)(?:\.git)?\/?$/i);
+  if (httpsMatch) {
+    return `https://github.com/${httpsMatch[1].replace(/\.git$/i, '')}`;
+  }
+
+  return undefined;
+}
+
+function readGitMetadata(skillPath: string): Pick<SkillMetadata, 'repositoryUrl' | 'gitBranch' | 'gitCommit'> {
+  try {
+    const repositoryUrl = normalizeGitHubUrl(
+      execFileSync('git', ['-C', skillPath, 'config', '--get', 'remote.origin.url'], {
+        encoding: 'utf-8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim()
+    );
+
+    const gitBranch = execFileSync('git', ['-C', skillPath, 'branch', '--show-current'], {
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim() || undefined;
+
+    const gitCommit = execFileSync('git', ['-C', skillPath, 'rev-parse', '--short', 'HEAD'], {
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim() || undefined;
+
+    return { repositoryUrl, gitBranch, gitCommit };
+  } catch {
+    return {};
   }
 }
 
@@ -172,6 +339,42 @@ export function readSkillMetadata(skillPath: string): SkillMetadata | null {
  */
 export async function getClaudeSkills(): Promise<ClaudeSkill[]> {
   const skills: ClaudeSkill[] = [];
+
+  // Project skills from known Claude projects
+  try {
+    const projects = await getClaudeProjects();
+
+    for (const project of projects) {
+      const projectSkillsDir = path.join(project.path, '.claude', 'skills');
+      if (!fs.existsSync(projectSkillsDir)) continue;
+
+      const entries = fs.readdirSync(projectSkillsDir);
+      for (const entry of entries) {
+        const entryPath = path.join(projectSkillsDir, entry);
+        try {
+          const realPath = fs.realpathSync(entryPath);
+          const metadata = readSkillMetadata(realPath);
+          if (metadata) {
+            skills.push({
+              name: metadata.name,
+              source: 'project',
+              path: realPath,
+              description: metadata.description,
+              projectName: project.name,
+              version: metadata.version,
+              repositoryUrl: metadata.repositoryUrl,
+              gitBranch: metadata.gitBranch,
+              gitCommit: metadata.gitCommit,
+            });
+          }
+        } catch {
+          // Skip broken symlinks
+        }
+      }
+    }
+  } catch {
+    // Ignore project skill read errors
+  }
 
   // User skills from ~/.claude/skills
   const userSkillsDir = path.join(os.homedir(), '.claude', 'skills');
@@ -188,6 +391,10 @@ export async function getClaudeSkills(): Promise<ClaudeSkill[]> {
             source: 'user',
             path: realPath,
             description: metadata.description,
+            version: metadata.version,
+            repositoryUrl: metadata.repositoryUrl,
+            gitBranch: metadata.gitBranch,
+            gitCommit: metadata.gitCommit,
           });
         }
       } catch {
@@ -214,6 +421,10 @@ export async function getClaudeSkills(): Promise<ClaudeSkill[]> {
               source: 'user',
               path: realPath,
               description: metadata.description,
+              version: metadata.version,
+              repositoryUrl: metadata.repositoryUrl,
+              gitBranch: metadata.gitBranch,
+              gitCommit: metadata.gitCommit,
             });
           }
         }

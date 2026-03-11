@@ -22,6 +22,10 @@ export interface Skill {
   path: string;
   description?: string;
   projectName?: string;
+  version?: string;
+  repositoryUrl?: string;
+  gitBranch?: string;
+  gitCommit?: string;
 }
 
 export interface CLIPaths {

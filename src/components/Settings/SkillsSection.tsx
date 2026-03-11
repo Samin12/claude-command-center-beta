@@ -11,7 +11,7 @@ export const SkillsSection = ({ skills }: SkillsSectionProps) => {
   const projectSkills = skills.filter(s => s.source === 'project');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold mb-1">Skills & Plugins</h2>

@@ -180,7 +180,7 @@ function SettingsPageInner() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-7rem)] lg:h-[calc(100vh-3rem)] pt-4 lg:pt-6 overflow-hidden">
+    <div className="flex flex-col min-h-[calc(100vh-7rem)] lg:min-h-[calc(100vh-3rem)] pt-4 lg:pt-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 shrink-0">
         <div>
@@ -227,7 +227,7 @@ function SettingsPageInner() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex gap-6 overflow-hidden min-h-0">
+      <div className="flex-1 flex gap-6 min-h-0">
         <SettingsSidebar
           activeSection={activeSection}
           onSectionChange={setActiveSection}
@@ -239,7 +239,7 @@ function SettingsPageInner() {
           initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.15 }}
-          className="flex-1 overflow-y-auto pr-2"
+          className="flex-1 min-w-0 pr-2"
         >
           {renderContent()}
         </motion.div>
