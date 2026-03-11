@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useCallback, useDeferredValue, useMemo, useRef } from 'react';
+import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef } from 'react';
 import {
   Bold,
   Code,
-  Eye,
   FileCode,
   Heading1,
   Heading2,
@@ -14,7 +13,6 @@ import {
   List,
   ListOrdered,
   Minus,
-  Pencil,
   Quote,
 } from 'lucide-react';
 import { SimpleMarkdown } from '@/components/VaultView/components/MarkdownRenderer';
@@ -49,11 +47,17 @@ interface MarkdownFileViewerProps {
   content: string;
   mode: 'edit' | 'preview';
   onChange: (content: string) => void;
+  onModeChange?: (mode: 'edit' | 'preview') => void;
 }
 
-export default function MarkdownFileViewer({ content, mode, onChange }: MarkdownFileViewerProps) {
+export default function MarkdownFileViewer({ content, mode, onChange, onModeChange }: MarkdownFileViewerProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previewContent = useDeferredValue(content);
+
+  useEffect(() => {
+    if (mode !== 'edit') return;
+    textareaRef.current?.focus();
+  }, [mode]);
 
   const applyFormatting = useCallback((action: ToolbarAction) => {
     const textarea = textareaRef.current;
@@ -125,7 +129,23 @@ export default function MarkdownFileViewer({ content, mode, onChange }: Markdown
 
   if (mode === 'preview') {
     return (
-      <div className="h-full overflow-auto bg-bg-primary px-6 py-5">
+      <div
+        className="h-full overflow-auto bg-bg-primary px-6 py-5"
+        onDoubleClick={() => onModeChange?.('edit')}
+      >
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-border-primary bg-card/75 px-4 py-3">
+          <div>
+            <p className="text-sm font-medium text-foreground">Preview mode</p>
+            <p className="text-xs text-text-secondary">Double-click anywhere in the preview to jump back into editing.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onModeChange?.('edit')}
+            className="rounded-xl border border-border-primary bg-bg-secondary px-3 py-2 text-xs font-medium text-foreground transition hover:border-primary/20 hover:bg-secondary active:scale-[0.98] active:bg-primary/10"
+          >
+            Edit markdown
+          </button>
+        </div>
         {previewPane}
       </div>
     );
@@ -133,25 +153,14 @@ export default function MarkdownFileViewer({ content, mode, onChange }: Markdown
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-bg-primary">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-primary bg-card px-4 py-3">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            <Pencil className="h-3.5 w-3.5" />
-            Live edit
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-bg-secondary px-3 py-1 text-xs font-medium text-text-secondary">
-            <Eye className="h-3.5 w-3.5" />
-            Live preview
-          </span>
-        </div>
-
+      <div className="flex flex-wrap items-center justify-end gap-1 border-b border-border-primary bg-card px-4 py-3">
         <div className="flex flex-wrap items-center gap-1">
           {INLINE_ACTIONS.map((action) => (
             <button
               key={action.label}
               type="button"
               onClick={() => applyFormatting(action)}
-              className="rounded-lg p-2 text-text-secondary transition hover:bg-secondary hover:text-foreground"
+              className="rounded-lg p-2 text-text-secondary transition hover:bg-secondary hover:text-foreground active:scale-[0.98] active:bg-primary/10"
               title={action.label}
             >
               <action.icon className="h-3.5 w-3.5" />
@@ -163,7 +172,7 @@ export default function MarkdownFileViewer({ content, mode, onChange }: Markdown
               key={action.label}
               type="button"
               onClick={() => applyFormatting(action)}
-              className="rounded-lg p-2 text-text-secondary transition hover:bg-secondary hover:text-foreground"
+              className="rounded-lg p-2 text-text-secondary transition hover:bg-secondary hover:text-foreground active:scale-[0.98] active:bg-primary/10"
               title={action.label}
             >
               <action.icon className="h-3.5 w-3.5" />
@@ -172,22 +181,14 @@ export default function MarkdownFileViewer({ content, mode, onChange }: Markdown
         </div>
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 xl:grid-cols-[minmax(0,0.95fr)_minmax(320px,0.85fr)]">
-        <div className="min-h-0 border-b border-border-primary xl:border-b-0 xl:border-r">
-          <textarea
-            ref={textareaRef}
-            value={content}
-            onChange={(event) => onChange(event.target.value)}
-            onKeyDown={handleKeyDown}
-            spellCheck={false}
-            className="h-full w-full resize-none border-none bg-transparent p-5 font-mono text-sm leading-7 text-foreground outline-none"
-          />
-        </div>
-
-        <div className="min-h-0 overflow-auto bg-card px-6 py-5">
-          {previewPane}
-        </div>
-      </div>
+      <textarea
+        ref={textareaRef}
+        value={content}
+        onChange={(event) => onChange(event.target.value)}
+        onKeyDown={handleKeyDown}
+        spellCheck={false}
+        className="h-full w-full resize-none border-none bg-transparent p-5 font-mono text-sm leading-7 text-foreground outline-none"
+      />
     </div>
   );
 }

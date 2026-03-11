@@ -55,7 +55,17 @@ export function useXtermTerminal(
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+  const onDataRef = useRef(options.onData);
+  const onResizeRef = useRef(options.onResize);
   const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    onDataRef.current = options.onData;
+  }, [options.onData]);
+
+  useEffect(() => {
+    onResizeRef.current = options.onResize;
+  }, [options.onResize]);
 
   // Initialize terminal
   useEffect(() => {
@@ -105,7 +115,7 @@ export function useXtermTerminal(
         const fitAndNotify = () => {
           try {
             fitAddon.fit();
-            options.onResize?.(term.cols, term.rows);
+            onResizeRef.current?.(term.cols, term.rows);
           } catch (e) {
             console.warn('Failed to fit terminal:', e);
           }
@@ -120,9 +130,7 @@ export function useXtermTerminal(
         }, 350);
 
         // Handle user input
-        if (options.onData) {
-          term.onData(options.onData);
-        }
+        term.onData((data) => onDataRef.current?.(data));
 
         setIsReady(true);
 
@@ -153,7 +161,7 @@ export function useXtermTerminal(
       if (fitAddonRef.current && terminalRef.current) {
         try {
           fitAddonRef.current.fit();
-          options.onResize?.(terminalRef.current.cols, terminalRef.current.rows);
+          onResizeRef.current?.(terminalRef.current.cols, terminalRef.current.rows);
         } catch (e) {
           console.warn('Failed to fit terminal:', e);
         }
@@ -164,7 +172,7 @@ export function useXtermTerminal(
     resizeObserver.observe(containerRef.current);
 
     return () => resizeObserver.disconnect();
-  }, [isReady, options.onResize]);
+  }, [isReady]);
 
   const write = useCallback((data: string) => {
     terminalRef.current?.write(data);

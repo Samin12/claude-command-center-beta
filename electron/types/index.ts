@@ -89,6 +89,16 @@ export interface WorkspaceActionResult {
   error?: string;
 }
 
+export interface WorkspaceCreateEntryParams {
+  parentPath: string;
+  type: 'file' | 'directory';
+  name: string;
+}
+
+export interface WorkspaceCreateEntryResult extends WorkspaceActionResult {
+  path?: string;
+}
+
 export interface AppSettings {
   notificationsEnabled: boolean;
   notifyOnWaiting: boolean;

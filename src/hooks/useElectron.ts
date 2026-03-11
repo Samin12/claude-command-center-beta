@@ -6,6 +6,8 @@ import type {
   AgentEvent,
   AgentCharacter,
   AgentProvider,
+  WorkspaceCreateEntryParams,
+  WorkspaceCreateEntryResult,
   WorkspaceRoot,
   WorkspaceNode,
   WorkspaceFile,
@@ -361,6 +363,20 @@ export function useElectronWorkspace() {
     return window.electronAPI!.workspace!.writeFile({ filePath, content });
   }, []);
 
+  const createEntry = useCallback(async (params: WorkspaceCreateEntryParams) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.createEntry(params) as Promise<WorkspaceCreateEntryResult>;
+  }, []);
+
+  const deleteEntry = useCallback(async (targetPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.deleteEntry(targetPath) as Promise<WorkspaceActionResult>;
+  }, []);
+
   const getFileMeta = useCallback(async (filePath: string) => {
     if (!isElectron()) {
       throw new Error('Electron API not available');
@@ -402,6 +418,8 @@ export function useElectronWorkspace() {
     getTree,
     readFile,
     writeFile,
+    createEntry,
+    deleteEntry,
     getFileMeta,
     openPath,
     revealPath,

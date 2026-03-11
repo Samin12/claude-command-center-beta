@@ -1,6 +1,6 @@
 'use client';
 
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import type { RefObject } from 'react';
 import {
   ChevronDown,
@@ -10,17 +10,21 @@ import {
   FileType2,
   Folder,
   FolderOpen,
+  FolderPlus,
   Image as ImageIcon,
   Loader2,
   Music,
+  Plus,
   Presentation,
   Search,
+  Trash2,
   Video,
 } from 'lucide-react';
 import type { WorkspaceNode } from '@/types/electron';
 import { filterWorkspaceNodes } from './utils';
 
 interface FileExplorerProps {
+  rootPath: string | null;
   tree: WorkspaceNode[];
   loading: boolean;
   selectedFilePath: string | null;
@@ -28,7 +32,18 @@ interface FileExplorerProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
   onSelectFile: (path: string) => void;
+  onCreateEntry: (parentPath: string, type: 'file' | 'directory', name: string) => void;
+  onDeleteEntry: (targetPath: string) => void;
   searchInputRef?: RefObject<HTMLInputElement | null>;
+}
+
+interface ExplorerContextMenuState {
+  x: number;
+  y: number;
+  targetPath: string | null;
+  parentPath: string | null;
+  targetType: 'file' | 'directory' | 'root';
+  targetName: string;
 }
 
 function getFileIcon(extension?: string) {
@@ -67,6 +82,7 @@ function getFileIcon(extension?: string) {
 }
 
 export default function FileExplorer({
+  rootPath,
   tree,
   loading,
   selectedFilePath,
@@ -74,14 +90,38 @@ export default function FileExplorer({
   searchQuery,
   onSearchChange,
   onSelectFile,
+  onCreateEntry,
+  onDeleteEntry,
   searchInputRef,
 }: FileExplorerProps) {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(() => (
     new Set(tree.filter((node) => node.type === 'directory').map((node) => node.path))
   ));
+  const [contextMenu, setContextMenu] = useState<ExplorerContextMenuState | null>(null);
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const filteredTree = useMemo(() => filterWorkspaceNodes(tree, deferredSearchQuery), [deferredSearchQuery, tree]);
+
+  useEffect(() => {
+    if (!contextMenu) return;
+
+    const closeMenu = () => setContextMenu(null);
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setContextMenu(null);
+      }
+    };
+
+    window.addEventListener('click', closeMenu);
+    window.addEventListener('contextmenu', closeMenu);
+    window.addEventListener('keydown', handleEscape);
+
+    return () => {
+      window.removeEventListener('click', closeMenu);
+      window.removeEventListener('contextmenu', closeMenu);
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [contextMenu]);
 
   const togglePath = (nodePath: string) => {
     setExpandedPaths((current) => {
@@ -92,7 +132,41 @@ export default function FileExplorer({
     });
   };
 
-  const renderNode = (node: WorkspaceNode, depth = 0): React.ReactNode => {
+  const openContextMenu = (
+    event: React.MouseEvent,
+    targetType: 'file' | 'directory' | 'root',
+    targetPath: string | null,
+    parentPath: string | null,
+    targetName: string
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setContextMenu({
+      x: event.clientX,
+      y: event.clientY,
+      targetPath,
+      parentPath,
+      targetType,
+      targetName,
+    });
+  };
+
+  const requestCreateEntry = (parentPath: string, type: 'file' | 'directory') => {
+    const suggestedName = type === 'file' ? 'untitled.md' : 'new-folder';
+    const response = window.prompt(type === 'file' ? 'New file name' : 'New folder name', suggestedName);
+    setContextMenu(null);
+    if (!response) return;
+    onCreateEntry(parentPath, type, response);
+  };
+
+  const requestDeleteEntry = (targetPath: string, targetName: string, targetType: 'file' | 'directory') => {
+    const confirmed = window.confirm(`Delete ${targetType} "${targetName}"?`);
+    setContextMenu(null);
+    if (!confirmed) return;
+    onDeleteEntry(targetPath);
+  };
+
+  const renderNode = (node: WorkspaceNode, depth = 0, parentPath: string | null = rootPath): React.ReactNode => {
     const isExpanded = expandedPaths.has(node.path);
     const isSelected = node.path === selectedFilePath;
     const isDirty = node.path === dirtyFilePath;
@@ -103,8 +177,9 @@ export default function FileExplorer({
           <button
             type="button"
             onClick={() => togglePath(node.path)}
-            className={`flex w-full items-center gap-2 rounded-xl border border-transparent px-2 py-1.5 text-left text-sm transition ${
-              isSelected ? 'border-primary/20 bg-primary/8 text-foreground' : 'text-text-secondary hover:bg-secondary hover:text-foreground'
+            onContextMenu={(event) => openContextMenu(event, 'directory', node.path, node.path, node.name)}
+            className={`flex w-full items-center gap-2 rounded-xl border border-transparent px-2 py-1.5 text-left text-sm transition active:scale-[0.995] ${
+              isSelected ? 'border-primary/20 bg-primary/10 text-foreground shadow-sm' : 'text-text-secondary hover:bg-secondary hover:text-foreground active:bg-primary/8'
             }`}
             style={{ paddingLeft: `${depth * 14 + 10}px` }}
           >
@@ -112,7 +187,7 @@ export default function FileExplorer({
             {isExpanded ? <FolderOpen className="h-4 w-4 text-primary" /> : <Folder className="h-4 w-4 text-primary" />}
             <span className="truncate">{node.name}</span>
           </button>
-          {isExpanded && (node.children || []).map((child) => renderNode(child, depth + 1))}
+          {isExpanded && (node.children || []).map((child) => renderNode(child, depth + 1, node.path))}
         </div>
       );
     }
@@ -123,10 +198,11 @@ export default function FileExplorer({
         key={node.path}
         type="button"
         onClick={() => onSelectFile(node.path)}
-        className={`flex w-full items-center gap-2 rounded-xl border px-2 py-1.5 text-left text-sm transition ${
+        onContextMenu={(event) => openContextMenu(event, 'file', node.path, parentPath, node.name)}
+        className={`flex w-full items-center gap-2 rounded-xl border px-2 py-1.5 text-left text-sm transition active:scale-[0.995] ${
           isSelected
             ? 'border-primary/20 bg-primary/10 text-foreground shadow-sm'
-            : 'border-transparent text-text-secondary hover:border-primary/10 hover:bg-secondary hover:text-foreground'
+            : 'border-transparent text-text-secondary hover:border-primary/10 hover:bg-secondary hover:text-foreground active:bg-primary/8'
         }`}
         style={{ paddingLeft: `${depth * 14 + 30}px` }}
       >
@@ -157,7 +233,13 @@ export default function FileExplorer({
         </label>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto p-3">
+      <div
+        className="relative min-h-0 flex-1 overflow-auto p-3"
+        onContextMenu={(event) => {
+          if (!rootPath) return;
+          openContextMenu(event, 'root', rootPath, rootPath, 'Workspace root');
+        }}
+      >
         {loading ? (
           <div className="flex h-full items-center justify-center text-text-muted">
             <Loader2 className="h-5 w-5 animate-spin" />
@@ -168,6 +250,49 @@ export default function FileExplorer({
           </div>
         ) : (
           filteredTree.map((node) => renderNode(node))
+        )}
+
+        {contextMenu?.parentPath && (
+          <div
+            className="fixed z-30 min-w-[220px] rounded-2xl border border-border-primary bg-card p-2 shadow-2xl"
+            style={{ left: contextMenu.x, top: contextMenu.y }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => requestCreateEntry(contextMenu.parentPath!, 'file')}
+              className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-foreground transition hover:bg-secondary active:bg-primary/10"
+            >
+              <Plus className="h-4 w-4 text-primary" />
+              New file
+            </button>
+            <button
+              type="button"
+              onClick={() => requestCreateEntry(contextMenu.parentPath!, 'directory')}
+              className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-foreground transition hover:bg-secondary active:bg-primary/10"
+            >
+              <FolderPlus className="h-4 w-4 text-primary" />
+              New folder
+            </button>
+
+            {contextMenu.targetPath && contextMenu.targetType !== 'root' && (
+              <>
+                <div className="my-2 h-px bg-border-primary" />
+                <button
+                  type="button"
+                  onClick={() => requestDeleteEntry(
+                    contextMenu.targetPath!,
+                    contextMenu.targetName,
+                    contextMenu.targetType === 'file' ? 'file' : 'directory'
+                  )}
+                  className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-destructive transition hover:bg-destructive/8 active:bg-destructive/12"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Delete {contextMenu.targetType}
+                </button>
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>

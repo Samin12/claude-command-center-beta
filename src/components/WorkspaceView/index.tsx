@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AlertCircle, Loader2 } from 'lucide-react';
-import type { WorkspaceFile, WorkspaceNode } from '@/types/electron';
+import type { WorkspaceFile, WorkspaceNode, WorkspaceRoot } from '@/types/electron';
 import { isElectron, useElectronWorkspace } from '@/hooks/useElectron';
 import ProjectSwitcher from './ProjectSwitcher';
 import FileExplorer from './FileExplorer';
@@ -15,6 +15,22 @@ function confirmDiscardChanges(): boolean {
   return window.confirm('You have unsaved changes. Discard them?');
 }
 
+interface PersistedWorkspaceState {
+  openRootPaths: string[];
+  selectedRootPath: string | null;
+  activeFilePathsByRoot: Record<string, string>;
+}
+
+const OPEN_WORKSPACE_TABS_KEY = 'workspace-open-tabs';
+const WORKSPACE_STATE_KEY = 'workspace-layout-state';
+
+function hasWorkspaceFilePath(nodes: WorkspaceNode[], filePath: string): boolean {
+  return nodes.some((node) => {
+    if (node.type === 'file') return node.path === filePath;
+    return hasWorkspaceFilePath(node.children || [], filePath);
+  });
+}
+
 export default function WorkspaceView() {
   const {
     roots,
@@ -24,6 +40,8 @@ export default function WorkspaceView() {
     getTree,
     readFile,
     writeFile,
+    createEntry,
+    deleteEntry,
     openPath,
     revealPath,
     openInVsCode,
@@ -42,19 +60,94 @@ export default function WorkspaceView() {
   const [terminalExpanded, setTerminalExpanded] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [openRootPaths, setOpenRootPaths] = useState<string[]>([]);
+  const [activeFilePathsByRoot, setActiveFilePathsByRoot] = useState<Record<string, string>>({});
+  const [workspaceStateLoaded, setWorkspaceStateLoaded] = useState(false);
+  const [hasPersistedWorkspaceState, setHasPersistedWorkspaceState] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const isDirty = activeFile?.writable ? draftContent !== savedContent : false;
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const stored = window.localStorage.getItem(WORKSPACE_STATE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as Partial<PersistedWorkspaceState>;
+        const nextOpenRootPaths = Array.isArray(parsed.openRootPaths)
+          ? parsed.openRootPaths.filter((value): value is string => typeof value === 'string')
+          : [];
+        const nextSelectedRootPath = typeof parsed.selectedRootPath === 'string' ? parsed.selectedRootPath : null;
+        const nextActiveFilePathsByRoot = parsed.activeFilePathsByRoot && typeof parsed.activeFilePathsByRoot === 'object'
+          ? Object.fromEntries(
+            Object.entries(parsed.activeFilePathsByRoot).filter(
+              (entry): entry is [string, string] => typeof entry[0] === 'string' && typeof entry[1] === 'string'
+            )
+          )
+          : {};
+
+        setOpenRootPaths(nextOpenRootPaths);
+        setSelectedRootPath(nextSelectedRootPath);
+        setActiveFilePathsByRoot(nextActiveFilePathsByRoot);
+        setHasPersistedWorkspaceState(true);
+        return;
+      }
+
+      const legacyStored = window.localStorage.getItem(OPEN_WORKSPACE_TABS_KEY);
+      if (!legacyStored) return;
+      const parsedLegacy = JSON.parse(legacyStored);
+      if (Array.isArray(parsedLegacy)) {
+        const nextOpenRootPaths = parsedLegacy.filter((value): value is string => typeof value === 'string');
+        setOpenRootPaths(nextOpenRootPaths);
+        setSelectedRootPath(nextOpenRootPaths[0] || null);
+        setHasPersistedWorkspaceState(true);
+      }
+    } catch (storageError) {
+      console.error('Failed to load workspace state:', storageError);
+    } finally {
+      setWorkspaceStateLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !workspaceStateLoaded) return;
+    const nextState: PersistedWorkspaceState = {
+      openRootPaths,
+      selectedRootPath,
+      activeFilePathsByRoot,
+    };
+    window.localStorage.setItem(WORKSPACE_STATE_KEY, JSON.stringify(nextState));
+    window.localStorage.removeItem(OPEN_WORKSPACE_TABS_KEY);
+  }, [activeFilePathsByRoot, openRootPaths, selectedRootPath, workspaceStateLoaded]);
+
+  useEffect(() => {
+    if (!workspaceStateLoaded) return;
+
     if (!roots.length) {
       setSelectedRootPath(null);
+      setOpenRootPaths([]);
       return;
     }
-    if (!selectedRootPath || !roots.some((root) => root.path === selectedRootPath)) {
-      setSelectedRootPath(roots[0].path);
+
+    const validPaths = new Set(roots.map((root) => root.path));
+    const filteredOpenRootPaths = openRootPaths.filter((rootPath) => validPaths.has(rootPath));
+    const fallbackPath = filteredOpenRootPaths[0] || (!hasPersistedWorkspaceState ? roots[0].path : null);
+    const nextSelectedPath = selectedRootPath && filteredOpenRootPaths.includes(selectedRootPath)
+      ? selectedRootPath
+      : fallbackPath;
+
+    const nextOpenRootPaths = filteredOpenRootPaths.length > 0
+      ? filteredOpenRootPaths
+      : (fallbackPath ? [fallbackPath] : []);
+
+    if (nextOpenRootPaths.length !== openRootPaths.length || nextOpenRootPaths.some((rootPath, index) => rootPath !== openRootPaths[index])) {
+      setOpenRootPaths(nextOpenRootPaths);
     }
-  }, [roots, selectedRootPath]);
+
+    if (selectedRootPath !== nextSelectedPath) {
+      setSelectedRootPath(nextSelectedPath);
+    }
+  }, [hasPersistedWorkspaceState, openRootPaths, roots, selectedRootPath, workspaceStateLoaded]);
 
   const loadTree = useCallback(async (rootPath: string) => {
     setTreeLoading(true);
@@ -96,19 +189,27 @@ export default function WorkspaceView() {
       setActiveFilePath(filePath);
       setDraftContent(result.file.content || '');
       setSavedContent(result.file.content || '');
+      if (selectedRootPath) {
+        setActiveFilePathsByRoot((current) => (
+          current[selectedRootPath] === filePath ? current : { ...current, [selectedRootPath]: filePath }
+        ));
+      }
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : 'Failed to load file');
     } finally {
       setFileLoading(false);
     }
-  }, [activeFilePath, isDirty, readFile]);
+  }, [activeFilePath, isDirty, readFile, selectedRootPath]);
 
   useEffect(() => {
     if (!selectedRootPath || treeLoading || fileLoading || activeFilePath) return;
-    const initialFilePath = pickInitialWorkspaceFilePath(tree);
+    const restoredFilePath = activeFilePathsByRoot[selectedRootPath];
+    const initialFilePath = restoredFilePath && hasWorkspaceFilePath(tree, restoredFilePath)
+      ? restoredFilePath
+      : pickInitialWorkspaceFilePath(tree);
     if (!initialFilePath) return;
     void openFile(initialFilePath);
-  }, [activeFilePath, fileLoading, openFile, selectedRootPath, tree, treeLoading]);
+  }, [activeFilePath, activeFilePathsByRoot, fileLoading, openFile, selectedRootPath, tree, treeLoading]);
 
   const saveActiveFile = useCallback(async () => {
     if (!activeFile?.writable || !activeFilePath || !isDirty) return;
@@ -141,6 +242,8 @@ export default function WorkspaceView() {
   const handleSelectRoot = useCallback((rootPath: string) => {
     if (rootPath === selectedRootPath) return;
     if (isDirty && !confirmDiscardChanges()) return;
+    setHasPersistedWorkspaceState(true);
+    setOpenRootPaths((current) => (current.includes(rootPath) ? current : [...current, rootPath]));
     setSelectedRootPath(rootPath);
     setActiveFile(null);
     setActiveFilePath(null);
@@ -159,6 +262,8 @@ export default function WorkspaceView() {
         return;
       }
       if (result.root?.path) {
+        setHasPersistedWorkspaceState(true);
+        setOpenRootPaths((current) => (current.includes(result.root!.path) ? current : [...current, result.root!.path]));
         setSelectedRootPath(result.root.path);
       } else {
         await refreshRoots();
@@ -175,13 +280,99 @@ export default function WorkspaceView() {
       setError(result.error || 'Failed to remove folder');
       return;
     }
+    setHasPersistedWorkspaceState(true);
+    setOpenRootPaths((current) => current.filter((path) => path !== rootPath));
     if (selectedRootPath === rootPath) {
       setActiveFile(null);
       setActiveFilePath(null);
       setDraftContent('');
       setSavedContent('');
     }
+    setActiveFilePathsByRoot((current) => {
+      const next = { ...current };
+      delete next[rootPath];
+      return next;
+    });
   }, [isDirty, removeRoot, selectedRootPath]);
+
+  const handleCloseRootTab = useCallback((rootPath: string) => {
+    if (selectedRootPath === rootPath && isDirty && !confirmDiscardChanges()) return;
+
+    setHasPersistedWorkspaceState(true);
+    setOpenRootPaths((current) => {
+      const next = current.filter((path) => path !== rootPath);
+      if (selectedRootPath === rootPath) {
+        const fallbackPath = next[0] || null;
+        setSelectedRootPath(fallbackPath);
+        setActiveFile(null);
+        setActiveFilePath(null);
+        setDraftContent('');
+        setSavedContent('');
+      }
+      return next;
+    });
+  }, [isDirty, selectedRootPath]);
+
+  const handleCreateEntry = useCallback(async (parentPath: string, type: 'file' | 'directory', name: string) => {
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
+
+    try {
+      const result = await createEntry({ parentPath, type, name: trimmedName });
+      if (result.error || result.success === false) {
+        setError(result.error || 'Failed to create workspace entry');
+        return;
+      }
+
+      if (selectedRootPath) {
+        await loadTree(selectedRootPath);
+      }
+
+      if (type === 'file' && result.path) {
+        await openFile(result.path);
+      }
+    } catch (createError) {
+      setError(createError instanceof Error ? createError.message : 'Failed to create workspace entry');
+    }
+  }, [createEntry, loadTree, openFile, selectedRootPath]);
+
+  const handleDeleteEntry = useCallback(async (targetPath: string) => {
+    const isActiveTarget = !!activeFilePath && (
+      activeFilePath === targetPath ||
+      activeFilePath.startsWith(`${targetPath}/`) ||
+      activeFilePath.startsWith(`${targetPath}\\`)
+    );
+    if (isActiveTarget && isDirty && !confirmDiscardChanges()) return;
+
+    try {
+      const result = await deleteEntry(targetPath);
+      if (result.error || result.success === false) {
+        setError(result.error || 'Failed to delete workspace entry');
+        return;
+      }
+
+      if (isActiveTarget) {
+        setActiveFile(null);
+        setActiveFilePath(null);
+        setDraftContent('');
+        setSavedContent('');
+        if (selectedRootPath) {
+          setActiveFilePathsByRoot((current) => {
+            if (!current[selectedRootPath]) return current;
+            const next = { ...current };
+            delete next[selectedRootPath];
+            return next;
+          });
+        }
+      }
+
+      if (selectedRootPath) {
+        await loadTree(selectedRootPath);
+      }
+    } catch (deleteError) {
+      setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete workspace entry');
+    }
+  }, [activeFilePath, deleteEntry, isDirty, loadTree, selectedRootPath]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -241,6 +432,13 @@ export default function WorkspaceView() {
     [isDirty, selectedRootPath]
   );
 
+  const openRoots = useMemo(() => {
+    const rootMap = new Map(roots.map((root) => [root.path, root]));
+    return openRootPaths
+      .map((rootPath) => rootMap.get(rootPath))
+      .filter((root): root is WorkspaceRoot => Boolean(root));
+  }, [openRootPaths, roots]);
+
   const currentSession = terminalManager.getSession(selectedRootPath);
   const projectName = selectedRootPath ? getProjectName(selectedRootPath) : 'No project selected';
 
@@ -261,10 +459,13 @@ export default function WorkspaceView() {
       <div className="flex min-h-0 flex-1 flex-col gap-4">
         <ProjectSwitcher
           roots={roots}
+          openRoots={openRoots}
           selectedRootPath={selectedRootPath}
           dirtyRootPaths={dirtyRootPaths}
           activeTerminalRoots={activeTerminalRoots}
           onSelect={handleSelectRoot}
+          onOpenRoot={handleSelectRoot}
+          onCloseRootTab={handleCloseRootTab}
           onAddFolder={handleAddFolder}
           onRemoveRoot={handleRemoveRoot}
           onOpenInVsCode={() => {
@@ -307,6 +508,7 @@ export default function WorkspaceView() {
           <div className="min-h-0">
             <FileExplorer
               key={`${selectedRootPath || 'empty'}:${tree.length}`}
+              rootPath={selectedRootPath}
               tree={tree}
               loading={treeLoading || rootsLoading}
               selectedFilePath={activeFilePath}
@@ -315,6 +517,12 @@ export default function WorkspaceView() {
               onSearchChange={setFileSearch}
               onSelectFile={(filePath) => {
                 void openFile(filePath);
+              }}
+              onCreateEntry={(parentPath, type, name) => {
+                void handleCreateEntry(parentPath, type, name);
+              }}
+              onDeleteEntry={(targetPath) => {
+                void handleDeleteEntry(targetPath);
               }}
               searchInputRef={searchInputRef}
             />

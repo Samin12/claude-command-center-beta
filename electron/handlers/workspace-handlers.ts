@@ -3,7 +3,9 @@ import * as path from 'path';
 import type { AppSettings } from '../types';
 import {
   buildWorkspaceTree,
+  createWorkspaceEntry,
   createWorkspaceRoot,
+  deleteWorkspaceEntry,
   getWorkspaceFileMeta,
   getWorkspaceRoots,
   readWorkspaceFile,
@@ -83,6 +85,24 @@ export function registerWorkspaceHandlers(deps: WorkspaceHandlerDeps): void {
       return { success: true };
     } catch (error) {
       return { success: false, error: error instanceof Error ? error.message : 'Failed to save file' };
+    }
+  });
+
+  ipcMain.handle('workspace:createEntry', async (_event, params: { parentPath: string; type: 'file' | 'directory'; name: string }) => {
+    try {
+      const createdPath = createWorkspaceEntry(params, getAppSettings());
+      return { success: true, path: createdPath };
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to create workspace entry' };
+    }
+  });
+
+  ipcMain.handle('workspace:deleteEntry', async (_event, targetPath: string) => {
+    try {
+      deleteWorkspaceEntry(targetPath, getAppSettings());
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error instanceof Error ? error.message : 'Failed to delete workspace entry' };
     }
   });
 

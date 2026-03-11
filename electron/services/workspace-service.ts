@@ -3,7 +3,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { MIME_TYPES } from '../constants';
 import { decodeProjectPath } from '../utils/decode-project-path';
-import type { AppSettings, WorkspaceFile, WorkspaceFileKind, WorkspaceFileMeta, WorkspaceNode, WorkspaceRoot } from '../types';
+import type { AppSettings, WorkspaceCreateEntryParams, WorkspaceFile, WorkspaceFileKind, WorkspaceFileMeta, WorkspaceNode, WorkspaceRoot } from '../types';
 
 const EXCLUDED_DIRS = new Set(['node_modules', '.git', '.next', 'dist', 'build', 'coverage', '__pycache__']);
 const EDITABLE_EXTENSIONS = new Set([
@@ -28,6 +28,20 @@ function safeRealPath(targetPath: string): string | null {
 
 function isWithinRoot(targetPath: string, rootPath: string): boolean {
   return targetPath === rootPath || targetPath.startsWith(`${rootPath}${path.sep}`);
+}
+
+function sanitizeEntryName(name: string): string {
+  const trimmed = name.trim();
+  if (!trimmed) {
+    throw new Error('Name is required');
+  }
+  if (trimmed === '.' || trimmed === '..') {
+    throw new Error('Invalid name');
+  }
+  if (trimmed.includes('/') || trimmed.includes('\\')) {
+    throw new Error('Nested paths are not allowed');
+  }
+  return trimmed;
 }
 
 function sortRoots(roots: WorkspaceRoot[]): WorkspaceRoot[] {
@@ -251,4 +265,55 @@ export function writeWorkspaceFile(filePath: string, content: string, settings: 
   if (!isWritable(approved.resolvedPath)) throw new Error('File type is read-only');
 
   fs.writeFileSync(approved.resolvedPath, content, 'utf-8');
+}
+
+export function createWorkspaceEntry(params: WorkspaceCreateEntryParams, settings: AppSettings): string {
+  const approved = resolveApprovedWorkspacePath(params.parentPath, settings);
+  if (!approved) throw new Error('Access denied');
+
+  const parentStat = fs.statSync(approved.resolvedPath);
+  if (!parentStat.isDirectory()) throw new Error('Parent path is not a directory');
+
+  const safeName = sanitizeEntryName(params.name);
+  const targetPath = path.resolve(approved.resolvedPath, safeName);
+  if (!isWithinRoot(targetPath, approved.root.path)) {
+    throw new Error('Access denied');
+  }
+  if (fs.existsSync(targetPath)) {
+    throw new Error('An entry with that name already exists');
+  }
+
+  if (params.type === 'directory') {
+    fs.mkdirSync(targetPath, { recursive: false });
+  } else {
+    fs.writeFileSync(targetPath, '', 'utf-8');
+  }
+
+  const resolvedCreatedPath = safeRealPath(targetPath);
+  if (!resolvedCreatedPath || !isWithinRoot(resolvedCreatedPath, approved.root.path)) {
+    throw new Error('Failed to create workspace entry');
+  }
+
+  return resolvedCreatedPath;
+}
+
+export function deleteWorkspaceEntry(targetPath: string, settings: AppSettings): void {
+  const approved = resolveApprovedWorkspacePath(targetPath, settings);
+  if (!approved) throw new Error('Access denied');
+  if (approved.resolvedPath === approved.root.path) {
+    throw new Error('Cannot delete the workspace root');
+  }
+
+  const stat = fs.statSync(approved.resolvedPath);
+  if (stat.isDirectory()) {
+    fs.rmSync(approved.resolvedPath, { recursive: true, force: false });
+    return;
+  }
+
+  if (stat.isFile()) {
+    fs.unlinkSync(approved.resolvedPath);
+    return;
+  }
+
+  throw new Error('Unsupported entry type');
 }

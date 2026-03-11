@@ -185,6 +185,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.invoke('workspace:readFile', filePath),
     writeFile: (params: { filePath: string; content: string }) =>
       ipcRenderer.invoke('workspace:writeFile', params),
+    createEntry: (params: { parentPath: string; type: 'file' | 'directory'; name: string }) =>
+      ipcRenderer.invoke('workspace:createEntry', params),
+    deleteEntry: (targetPath: string) =>
+      ipcRenderer.invoke('workspace:deleteEntry', targetPath),
     getFileMeta: (filePath: string) =>
       ipcRenderer.invoke('workspace:getFileMeta', filePath),
     openPath: (targetPath: string) =>

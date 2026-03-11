@@ -30,7 +30,9 @@ vi.mock('../../../electron/utils/decode-project-path', () => ({
 }));
 
 import {
+  createWorkspaceEntry,
   createWorkspaceRoot,
+  deleteWorkspaceEntry,
   getClaudeWorkspaceRoots,
   getWorkspaceRoots,
   readWorkspaceFile,
@@ -108,5 +110,29 @@ describe('workspace-service', () => {
 
     writeWorkspaceFile(filePath, '# Updated', settings);
     expect(fs.readFileSync(filePath, 'utf-8')).toBe('# Updated');
+  });
+
+  it('creates new workspace files and folders inside an approved root', () => {
+    const settings = { workspaceRoots: [workspaceDir] } as AppSettings;
+
+    const folderPath = createWorkspaceEntry({ parentPath: workspaceDir, type: 'directory', name: 'notes' }, settings);
+    const filePath = createWorkspaceEntry({ parentPath: folderPath, type: 'file', name: 'todo.md' }, settings);
+
+    expect(fs.statSync(folderPath).isDirectory()).toBe(true);
+    expect(fs.statSync(filePath).isFile()).toBe(true);
+  });
+
+  it('deletes workspace files and folders inside an approved root', () => {
+    const nestedDir = path.join(workspaceDir, 'archive');
+    const filePath = path.join(nestedDir, 'draft.md');
+    fs.mkdirSync(nestedDir, { recursive: true });
+    fs.writeFileSync(filePath, 'draft', 'utf-8');
+    const settings = { workspaceRoots: [workspaceDir] } as AppSettings;
+
+    deleteWorkspaceEntry(filePath, settings);
+    expect(fs.existsSync(filePath)).toBe(false);
+
+    deleteWorkspaceEntry(nestedDir, settings);
+    expect(fs.existsSync(nestedDir)).toBe(false);
   });
 });

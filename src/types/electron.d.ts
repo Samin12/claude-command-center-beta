@@ -139,6 +139,16 @@ export interface WorkspaceActionResult {
   error?: string;
 }
 
+export interface WorkspaceCreateEntryParams {
+  parentPath: string;
+  type: 'file' | 'directory';
+  name: string;
+}
+
+export interface WorkspaceCreateEntryResult extends WorkspaceActionResult {
+  path?: string;
+}
+
 export interface ImportPreview {
   name: string;
   description: string;
@@ -281,6 +291,8 @@ export interface ElectronAPI {
     getTree: (rootPath: string) => Promise<{ tree: WorkspaceNode[]; error?: string }>;
     readFile: (filePath: string) => Promise<{ file?: WorkspaceFile; error?: string }>;
     writeFile: (params: { filePath: string; content: string }) => Promise<{ success: boolean; error?: string }>;
+    createEntry: (params: WorkspaceCreateEntryParams) => Promise<WorkspaceCreateEntryResult>;
+    deleteEntry: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
     getFileMeta: (filePath: string) => Promise<{ file?: WorkspaceFileMeta; error?: string }>;
     openPath: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
     revealPath: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
@@ -294,7 +306,17 @@ export interface ElectronAPI {
       stats: unknown;
       projects: unknown[];
       plugins: unknown[];
-      skills: Array<{ name: string; source: 'project' | 'user' | 'plugin'; path: string; description?: string; projectName?: string }>;
+      skills: Array<{
+        name: string;
+        source: 'project' | 'user' | 'plugin';
+        path: string;
+        description?: string;
+        projectName?: string;
+        version?: string;
+        repositoryUrl?: string;
+        gitBranch?: string;
+        gitCommit?: string;
+      }>;
       history: Array<{ display: string; timestamp: number; project?: string }>;
       activeSessions: string[];
     } | null>;
