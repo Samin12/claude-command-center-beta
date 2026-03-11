@@ -6,6 +6,7 @@ import type {
   AgentEvent,
   AgentCharacter,
   AgentProvider,
+  AgentSource,
   WorkspaceCreateEntryParams,
   WorkspaceCreateEntryResult,
   WorkspaceRoot,
@@ -69,6 +70,8 @@ export function useElectronAgents() {
     provider?: AgentProvider;
     localModel?: string;
     obsidianVaultPaths?: string[];
+    source?: AgentSource;
+    workspaceRootPath?: string;
   }) => {
     if (!isElectron()) {
       throw new Error('Electron API not available');

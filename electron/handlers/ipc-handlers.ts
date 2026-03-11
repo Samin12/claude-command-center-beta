@@ -13,7 +13,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { App as SlackApp, LogLevel } from '@slack/bolt';
 
 // Import types
-import type { AgentStatus, WorktreeConfig, AgentCharacter, AppSettings, AgentProvider } from '../types';
+import type { AgentStatus, WorktreeConfig, AgentCharacter, AppSettings, AgentProvider, AgentSource } from '../types';
 import { buildFullPath } from '../utils/path-builder';
 import { decodeProjectPath } from '../utils/decode-project-path';
 import { getProvider, getAllProviders } from '../providers';
@@ -179,9 +179,11 @@ function registerAgentHandlers(deps: IpcHandlerDependencies): void {
     name?: string;
     secondaryProjectPath?: string;
     skipPermissions?: boolean;
-    provider?: 'claude' | 'local';
+    provider?: AgentProvider;
     localModel?: string;
     obsidianVaultPaths?: string[];
+    source?: AgentSource;
+    workspaceRootPath?: string;
   }) => {
     const id = uuidv4();
     const shell = '/bin/bash';
@@ -322,6 +324,8 @@ function registerAgentHandlers(deps: IpcHandlerDependencies): void {
       provider: config.provider || 'claude',
       localModel: config.localModel,
       obsidianVaultPaths: config.obsidianVaultPaths || [],
+      source: config.source || 'manual',
+      workspaceRootPath: config.workspaceRootPath,
     };
     agents.set(id, status);
 

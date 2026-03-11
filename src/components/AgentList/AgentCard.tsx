@@ -118,6 +118,11 @@ export function AgentCard({ agent, isSelected, onSelect, onEdit }: AgentCardProp
             >
               {projectName}
             </span>
+            {agent.source === 'workspace' && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded font-medium bg-primary/10 text-primary">
+                Workspace
+              </span>
+            )}
             {agent.provider === 'local' && (
               <span className="text-[10px] px-1.5 py-0.5 rounded font-medium bg-accent-green/20 text-accent-green">
                 {agent.localModel || 'Local'}

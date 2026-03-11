@@ -50,9 +50,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
       name?: string;
       secondaryProjectPath?: string;
       skipPermissions?: boolean;
-      provider?: 'claude' | 'local';
+      provider?: 'claude' | 'codex' | 'gemini' | 'local';
       localModel?: string;
       obsidianVaultPaths?: string[];
+      source?: 'manual' | 'workspace';
+      workspaceRootPath?: string;
     }) => ipcRenderer.invoke('agent:create', config),
     update: (params: {
       id: string;

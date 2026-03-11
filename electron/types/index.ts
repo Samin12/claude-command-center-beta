@@ -6,6 +6,7 @@ export interface WorktreeConfig {
 export type AgentCharacter = 'robot' | 'ninja' | 'wizard' | 'astronaut' | 'knight' | 'pirate' | 'alien' | 'viking';
 
 export type AgentProvider = 'claude' | 'codex' | 'gemini' | 'local';
+export type AgentSource = 'manual' | 'workspace';
 
 export interface AgentStatus {
   id: string;
@@ -30,6 +31,8 @@ export interface AgentStatus {
   provider?: AgentProvider;   // 'claude' (default) or 'local' (Tasmania)
   localModel?: string;        // Tasmania model name when provider is 'local'
   obsidianVaultPaths?: string[]; // Obsidian vault paths to mount via --add-dir (read-only)
+  source?: AgentSource;
+  workspaceRootPath?: string;
 }
 
 export interface CLIPaths {
