@@ -93,6 +93,47 @@ export interface ObsidianFolder {
   children: (ObsidianFolder | { type: 'file'; name: string; relativePath: string })[];
 }
 
+export type WorkspaceFileKind =
+  | 'text'
+  | 'markdown'
+  | 'image'
+  | 'video'
+  | 'audio'
+  | 'pdf'
+  | 'document'
+  | 'spreadsheet'
+  | 'binary';
+
+export interface WorkspaceRoot {
+  path: string;
+  name: string;
+  source: 'claude' | 'custom';
+}
+
+export interface WorkspaceNode {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  children?: WorkspaceNode[];
+  extension?: string;
+  size?: number;
+}
+
+export interface WorkspaceFileMeta {
+  path: string;
+  name: string;
+  extension: string;
+  mimeType: string;
+  kind: WorkspaceFileKind;
+  size: number;
+  lastModified: string;
+  writable: boolean;
+}
+
+export interface WorkspaceFile extends WorkspaceFileMeta {
+  content?: string;
+}
+
 export interface ImportPreview {
   name: string;
   description: string;
@@ -228,6 +269,18 @@ export interface ElectronAPI {
     listProjects: () => Promise<{ path: string; name: string; lastModified: string }[]>;
   };
 
+  workspace?: {
+    listRoots: () => Promise<{ roots: WorkspaceRoot[] }>;
+    addRoot: (path: string) => Promise<{ success: boolean; root?: WorkspaceRoot; error?: string }>;
+    removeRoot: (path: string) => Promise<{ success: boolean; error?: string }>;
+    getTree: (rootPath: string) => Promise<{ tree: WorkspaceNode[]; error?: string }>;
+    readFile: (filePath: string) => Promise<{ file?: WorkspaceFile; error?: string }>;
+    writeFile: (params: { filePath: string; content: string }) => Promise<{ success: boolean; error?: string }>;
+    getFileMeta: (filePath: string) => Promise<{ file?: WorkspaceFileMeta; error?: string }>;
+    openPath: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
+    revealPath: (targetPath: string) => Promise<{ success: boolean; error?: string }>;
+  };
+
   // Claude data
   claude: {
     getData: () => Promise<{
@@ -295,6 +348,7 @@ export interface ElectronAPI {
       tasmaniaEnabled: boolean;
       tasmaniaServerPath: string;
       defaultProvider?: string;
+      workspaceRoots?: string[];
       terminalFontSize?: number;
       terminalTheme?: 'dark' | 'light';
       cliPaths?: {
@@ -333,6 +387,7 @@ export interface ElectronAPI {
       tasmaniaEnabled?: boolean;
       tasmaniaServerPath?: string;
       defaultProvider?: string;
+      workspaceRoots?: string[];
       terminalFontSize?: number;
       terminalTheme?: 'dark' | 'light';
       cliPaths?: {

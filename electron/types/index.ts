@@ -43,6 +43,47 @@ export interface CLIPaths {
   additionalPaths: string[];
 }
 
+export type WorkspaceFileKind =
+  | 'text'
+  | 'markdown'
+  | 'image'
+  | 'video'
+  | 'audio'
+  | 'pdf'
+  | 'document'
+  | 'spreadsheet'
+  | 'binary';
+
+export interface WorkspaceRoot {
+  path: string;
+  name: string;
+  source: 'claude' | 'custom';
+}
+
+export interface WorkspaceNode {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  children?: WorkspaceNode[];
+  extension?: string;
+  size?: number;
+}
+
+export interface WorkspaceFileMeta {
+  path: string;
+  name: string;
+  extension: string;
+  mimeType: string;
+  kind: WorkspaceFileKind;
+  size: number;
+  lastModified: string;
+  writable: boolean;
+}
+
+export interface WorkspaceFile extends WorkspaceFileMeta {
+  content?: string;
+}
+
 export interface AppSettings {
   notificationsEnabled: boolean;
   notifyOnWaiting: boolean;
@@ -79,6 +120,7 @@ export interface AppSettings {
   cliPaths: CLIPaths;
   defaultProvider?: AgentProvider;
   obsidianVaultPaths?: string[];
+  workspaceRoots?: string[];
   terminalFontSize?: number;
   terminalTheme?: 'dark' | 'light';
 }

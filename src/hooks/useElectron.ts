@@ -1,7 +1,16 @@
 'use client';
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import type { AgentStatus, AgentEvent, ElectronAPI, AgentCharacter, AgentProvider } from '@/types/electron';
+import type {
+  AgentStatus,
+  AgentEvent,
+  AgentCharacter,
+  AgentProvider,
+  WorkspaceRoot,
+  WorkspaceNode,
+  WorkspaceFile,
+  WorkspaceFileMeta,
+} from '@/types/electron';
 
 // Check if we're running in Electron
 export const isElectron = (): boolean => {
@@ -289,6 +298,106 @@ export function useElectronFS() {
     isElectron: isElectron(),
     openFolderDialog,
     refresh: fetchProjects,
+  };
+}
+
+export function useElectronWorkspace() {
+  const [roots, setRoots] = useState<WorkspaceRoot[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchRoots = useCallback(async () => {
+    if (!isElectron()) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const result = await window.electronAPI!.workspace!.listRoots();
+      setRoots(result.roots);
+    } catch (error) {
+      console.error('Failed to fetch workspace roots:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const addRoot = useCallback(async (rootPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    const result = await window.electronAPI!.workspace!.addRoot(rootPath);
+    await fetchRoots();
+    return result;
+  }, [fetchRoots]);
+
+  const removeRoot = useCallback(async (rootPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    const result = await window.electronAPI!.workspace!.removeRoot(rootPath);
+    await fetchRoots();
+    return result;
+  }, [fetchRoots]);
+
+  const getTree = useCallback(async (rootPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.getTree(rootPath) as Promise<{ tree: WorkspaceNode[]; error?: string }>;
+  }, []);
+
+  const readFile = useCallback(async (filePath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.readFile(filePath) as Promise<{ file?: WorkspaceFile; error?: string }>;
+  }, []);
+
+  const writeFile = useCallback(async (filePath: string, content: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.writeFile({ filePath, content });
+  }, []);
+
+  const getFileMeta = useCallback(async (filePath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.getFileMeta(filePath) as Promise<{ file?: WorkspaceFileMeta; error?: string }>;
+  }, []);
+
+  const openPath = useCallback(async (targetPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.openPath(targetPath);
+  }, []);
+
+  const revealPath = useCallback(async (targetPath: string) => {
+    if (!isElectron()) {
+      throw new Error('Electron API not available');
+    }
+    return window.electronAPI!.workspace!.revealPath(targetPath);
+  }, []);
+
+  useEffect(() => {
+    fetchRoots();
+  }, [fetchRoots]);
+
+  return {
+    roots,
+    isLoading,
+    isElectron: isElectron(),
+    addRoot,
+    removeRoot,
+    getTree,
+    readFile,
+    writeFile,
+    getFileMeta,
+    openPath,
+    revealPath,
+    refresh: fetchRoots,
   };
 }
 

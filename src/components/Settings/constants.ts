@@ -69,6 +69,7 @@ export const DEFAULT_APP_SETTINGS = {
   autoCheckUpdates: true,
   defaultProvider: 'claude',
   obsidianVaultPaths: [] as string[],
+  workspaceRoots: [] as string[],
   terminalFontSize: 11,
   terminalTheme: 'dark' as const,
   cliPaths: {

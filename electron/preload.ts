@@ -172,6 +172,27 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.invoke('fs:list-projects'),
   },
 
+  workspace: {
+    listRoots: () =>
+      ipcRenderer.invoke('workspace:listRoots'),
+    addRoot: (path: string) =>
+      ipcRenderer.invoke('workspace:addRoot', path),
+    removeRoot: (path: string) =>
+      ipcRenderer.invoke('workspace:removeRoot', path),
+    getTree: (rootPath: string) =>
+      ipcRenderer.invoke('workspace:getTree', rootPath),
+    readFile: (filePath: string) =>
+      ipcRenderer.invoke('workspace:readFile', filePath),
+    writeFile: (params: { filePath: string; content: string }) =>
+      ipcRenderer.invoke('workspace:writeFile', params),
+    getFileMeta: (filePath: string) =>
+      ipcRenderer.invoke('workspace:getFileMeta', filePath),
+    openPath: (targetPath: string) =>
+      ipcRenderer.invoke('workspace:openPath', targetPath),
+    revealPath: (targetPath: string) =>
+      ipcRenderer.invoke('workspace:revealPath', targetPath),
+  },
+
   // Claude data
   claude: {
     getData: () =>
@@ -213,6 +234,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
       slackChannelId?: string;
       socialDataEnabled?: boolean;
       socialDataApiKey?: string;
+      workspaceRoots?: string[];
     }) =>
       ipcRenderer.invoke('app:saveSettings', settings),
     onUpdated: (callback: (settings: unknown) => void) => {

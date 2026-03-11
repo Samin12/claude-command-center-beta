@@ -3,6 +3,7 @@ import { checkForUpdates, downloadUpdate, quitAndInstall } from '../services/upd
 import { registerMemoryHandlers } from './memory-handlers';
 import { registerObsidianHandlers } from './obsidian-handlers';
 import { registerGwsHandlers } from './gws-handlers';
+import { registerWorkspaceHandlers } from './workspace-handlers';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -73,6 +74,7 @@ export function registerIpcHandlers(deps: IpcHandlerDependencies): void {
   registerMemoryHandlers();
   registerObsidianHandlers({ getAppSettings: deps.getAppSettings, setAppSettings: deps.setAppSettings, saveAppSettings: deps.saveAppSettings });
   registerGwsHandlers({ getAppSettings: deps.getAppSettings, setAppSettings: deps.setAppSettings, saveAppSettings: deps.saveAppSettings });
+  registerWorkspaceHandlers({ getAppSettings: deps.getAppSettings, setAppSettings: deps.setAppSettings, saveAppSettings: deps.saveAppSettings });
   registerApiTokenHandler();
 }
 

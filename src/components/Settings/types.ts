@@ -71,6 +71,7 @@ export interface AppSettings {
   cliPaths: CLIPaths;
   defaultProvider?: string;
   obsidianVaultPaths?: string[];
+  workspaceRoots?: string[];
   terminalFontSize?: number;
   terminalTheme?: 'dark' | 'light';
 }

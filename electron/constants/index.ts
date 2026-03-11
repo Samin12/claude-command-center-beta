@@ -20,6 +20,7 @@ export const MIME_TYPES: { [key: string]: string } = {
   '.js': 'application/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
+  '.pdf': 'application/pdf',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -39,8 +40,10 @@ export const MIME_TYPES: { [key: string]: string } = {
   '.tif': 'image/tiff',
   '.bmp': 'image/bmp',
   '.mp4': 'video/mp4',
+  '.mov': 'video/quicktime',
   '.webm': 'video/webm',
   '.mp3': 'audio/mpeg',
+  '.m4a': 'audio/mp4',
   '.wav': 'audio/wav',
 };
 
