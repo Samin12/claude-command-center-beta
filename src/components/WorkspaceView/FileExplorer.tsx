@@ -19,6 +19,7 @@ import {
   Search,
   Trash2,
   Video,
+  X,
 } from 'lucide-react';
 import type { WorkspaceNode } from '@/types/electron';
 import { filterWorkspaceNodes } from './utils';
@@ -44,6 +45,17 @@ interface ExplorerContextMenuState {
   parentPath: string | null;
   targetType: 'file' | 'directory' | 'root';
   targetName: string;
+}
+
+interface CreateEntryDialogState {
+  parentPath: string;
+  type: 'file' | 'directory';
+}
+
+interface DeleteEntryDialogState {
+  targetPath: string;
+  targetName: string;
+  targetType: 'file' | 'directory';
 }
 
 function getFileIcon(extension?: string) {
@@ -98,6 +110,9 @@ export default function FileExplorer({
     new Set(tree.filter((node) => node.type === 'directory').map((node) => node.path))
   ));
   const [contextMenu, setContextMenu] = useState<ExplorerContextMenuState | null>(null);
+  const [createDialog, setCreateDialog] = useState<CreateEntryDialogState | null>(null);
+  const [deleteDialog, setDeleteDialog] = useState<DeleteEntryDialogState | null>(null);
+  const [entryName, setEntryName] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const filteredTree = useMemo(() => filterWorkspaceNodes(tree, deferredSearchQuery), [deferredSearchQuery, tree]);
@@ -152,18 +167,29 @@ export default function FileExplorer({
   };
 
   const requestCreateEntry = (parentPath: string, type: 'file' | 'directory') => {
-    const suggestedName = type === 'file' ? 'untitled.md' : 'new-folder';
-    const response = window.prompt(type === 'file' ? 'New file name' : 'New folder name', suggestedName);
     setContextMenu(null);
-    if (!response) return;
-    onCreateEntry(parentPath, type, response);
+    setEntryName(type === 'file' ? 'untitled.md' : 'new-folder');
+    setCreateDialog({ parentPath, type });
   };
 
   const requestDeleteEntry = (targetPath: string, targetName: string, targetType: 'file' | 'directory') => {
-    const confirmed = window.confirm(`Delete ${targetType} "${targetName}"?`);
     setContextMenu(null);
-    if (!confirmed) return;
-    onDeleteEntry(targetPath);
+    setDeleteDialog({ targetPath, targetName, targetType });
+  };
+
+  const handleConfirmCreate = () => {
+    if (!createDialog) return;
+    const trimmedName = entryName.trim();
+    if (!trimmedName) return;
+    onCreateEntry(createDialog.parentPath, createDialog.type, trimmedName);
+    setCreateDialog(null);
+    setEntryName('');
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteDialog) return;
+    onDeleteEntry(deleteDialog.targetPath);
+    setDeleteDialog(null);
   };
 
   const renderNode = (node: WorkspaceNode, depth = 0, parentPath: string | null = rootPath): React.ReactNode => {
@@ -295,6 +321,118 @@ export default function FileExplorer({
           </div>
         )}
       </div>
+
+      {createDialog && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-[24px] border border-border-primary bg-card p-5 shadow-2xl">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-base font-semibold text-foreground">
+                  {createDialog.type === 'file' ? 'Create New File' : 'Create New Folder'}
+                </h3>
+                <p className="mt-1 text-sm text-text-secondary">
+                  {createDialog.type === 'file'
+                    ? 'Add a file to the selected location in this project.'
+                    : 'Add a folder to the selected location in this project.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setCreateDialog(null);
+                  setEntryName('');
+                }}
+                className="rounded-full p-2 text-text-muted transition hover:bg-secondary hover:text-foreground active:scale-[0.96]"
+                title="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                handleConfirmCreate();
+              }}
+              className="space-y-4"
+            >
+              <label className="block">
+                <span className="mb-2 block text-sm font-medium text-foreground">Name</span>
+                <input
+                  autoFocus
+                  type="text"
+                  value={entryName}
+                  onChange={(event) => setEntryName(event.target.value)}
+                  placeholder={createDialog.type === 'file' ? 'untitled.md' : 'new-folder'}
+                  className="w-full rounded-2xl border border-border-primary bg-input px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
+                />
+              </label>
+
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCreateDialog(null);
+                    setEntryName('');
+                  }}
+                  className="rounded-2xl border border-border-primary bg-bg-secondary px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary active:scale-[0.98]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={!entryName.trim()}
+                  className="rounded-2xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {createDialog.type === 'file' ? 'Create File' : 'Create Folder'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {deleteDialog && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-[24px] border border-border-primary bg-card p-5 shadow-2xl">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-base font-semibold text-foreground">
+                  Delete {deleteDialog.targetType}
+                </h3>
+                <p className="mt-1 text-sm text-text-secondary">
+                  This will permanently remove <span className="font-medium text-foreground">{deleteDialog.targetName}</span>.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDeleteDialog(null)}
+                className="rounded-full p-2 text-text-muted transition hover:bg-secondary hover:text-foreground active:scale-[0.96]"
+                title="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setDeleteDialog(null)}
+                className="rounded-2xl border border-border-primary bg-bg-secondary px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary active:scale-[0.98]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="rounded-2xl bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground transition hover:opacity-90 active:scale-[0.98]"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
