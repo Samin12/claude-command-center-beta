@@ -7,6 +7,7 @@ import {
   MessageSquare,
   X,
   Loader2,
+  Code2,
   ExternalLink,
   Terminal,
   FolderOpen,
@@ -126,6 +127,14 @@ export default function ProjectsPage() {
     } finally {
       setGitLoading(false);
     }
+  }, []);
+
+  const openProjectInEditor = useCallback((scheme: 'cursor' | 'vscode', projectPath: string) => {
+    if (typeof window === 'undefined' || !projectPath) return;
+
+    const normalizedPath = projectPath.startsWith('/') ? projectPath : `/${projectPath}`;
+    const projectUri = `${scheme}://file${encodeURI(normalizedPath.endsWith('/') ? normalizedPath : `${normalizedPath}/`)}`;
+    window.open(projectUri, '_blank', 'noopener,noreferrer');
   }, []);
 
   // Load git branch when project is selected
@@ -690,16 +699,23 @@ export default function ProjectsPage() {
                 {/* Quick Actions */}
                 <div className="flex gap-2">
                   <button
-                    onClick={() => window.open(`cursor://file${selectedProject.path}`, '_blank')}
-                    className="flex-1 px-4 py-2.5 border border-border bg-secondary text-sm flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
+                    onClick={() => openProjectInEditor('cursor', selectedProject.path)}
+                    className="flex-1 min-w-0 px-4 py-2.5 border border-border bg-secondary text-sm flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Open in Cursor
                   </button>
+                  <button
+                    onClick={() => openProjectInEditor('vscode', selectedProject.path)}
+                    className="flex-1 min-w-0 px-4 py-2.5 border border-border bg-secondary text-sm flex items-center justify-center gap-2 hover:bg-white/5 transition-colors"
+                  >
+                    <Code2 className="w-4 h-4" />
+                    Open in VS Code
+                  </button>
                   {hasElectron && (
                     <button
                       onClick={() => setShowAgentDialog(true)}
-                      className="flex-1 px-4 py-2.5 bg-foreground text-background text-sm font-medium flex items-center justify-center gap-2 hover:bg-foreground/90 transition-colors"
+                      className="flex-1 min-w-0 px-4 py-2.5 bg-foreground text-background text-sm font-medium flex items-center justify-center gap-2 hover:bg-foreground/90 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                       Launch Agent
