@@ -122,6 +122,7 @@ export default function WorkspaceView() {
 
   useEffect(() => {
     if (!workspaceStateLoaded) return;
+    if (rootsLoading) return;
 
     if (!roots.length) {
       setSelectedRootPath(null);
@@ -147,7 +148,7 @@ export default function WorkspaceView() {
     if (selectedRootPath !== nextSelectedPath) {
       setSelectedRootPath(nextSelectedPath);
     }
-  }, [hasPersistedWorkspaceState, openRootPaths, roots, selectedRootPath, workspaceStateLoaded]);
+  }, [hasPersistedWorkspaceState, openRootPaths, roots, rootsLoading, selectedRootPath, workspaceStateLoaded]);
 
   const loadTree = useCallback(async (rootPath: string) => {
     setTreeLoading(true);
