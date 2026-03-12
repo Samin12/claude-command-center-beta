@@ -50,6 +50,8 @@ export interface AppSettings {
   telegramAuthToken: string; // Secret token for authentication
   telegramAuthorizedChatIds: string[]; // List of authorized chat IDs
   telegramRequireMention: boolean; // Only respond when bot is @mentioned in groups
+  telegramCurrentResponseChatId?: string;
+  telegramCurrentResponseMessageThreadId?: number | null;
   slackEnabled: boolean;
   slackBotToken: string;
   slackAppToken: string;

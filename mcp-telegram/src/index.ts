@@ -19,6 +19,8 @@ interface AppSettings {
   telegramBotToken?: string;
   telegramChatId?: string;
   telegramAuthorizedChatIds?: string[];
+  telegramCurrentResponseChatId?: string;
+  telegramCurrentResponseMessageThreadId?: number | null;
 }
 
 function loadSettings(): AppSettings {
@@ -176,14 +178,20 @@ server.tool(
       if (!targetChatId) {
         throw new Error("No chat_id provided and no default chat ID configured");
       }
+      const targetMessageThreadId =
+        message_thread_id !== undefined
+          ? message_thread_id
+          : settings.telegramCurrentResponseChatId === targetChatId
+            ? settings.telegramCurrentResponseMessageThreadId ?? undefined
+            : undefined;
 
       const apiParams: Record<string, string | number> = {
         chat_id: targetChatId,
         text: `👑 ${message}`,
         parse_mode: "Markdown",
       };
-      if (message_thread_id !== undefined) {
-        apiParams.message_thread_id = message_thread_id;
+      if (targetMessageThreadId !== undefined) {
+        apiParams.message_thread_id = targetMessageThreadId;
       }
 
       await telegramApiRequest(settings.telegramBotToken, "sendMessage", apiParams);
@@ -236,6 +244,12 @@ server.tool(
       if (!targetChatId) {
         throw new Error("No chat_id provided and no default chat ID configured");
       }
+      const targetMessageThreadId =
+        message_thread_id !== undefined
+          ? message_thread_id
+          : settings.telegramCurrentResponseChatId === targetChatId
+            ? settings.telegramCurrentResponseMessageThreadId ?? undefined
+            : undefined;
 
       await sendFile(
         settings.telegramBotToken,
@@ -244,7 +258,7 @@ server.tool(
         photo_path,
         "photo",
         caption,
-        message_thread_id
+        targetMessageThreadId
       );
 
       return {
@@ -295,6 +309,12 @@ server.tool(
       if (!targetChatId) {
         throw new Error("No chat_id provided and no default chat ID configured");
       }
+      const targetMessageThreadId =
+        message_thread_id !== undefined
+          ? message_thread_id
+          : settings.telegramCurrentResponseChatId === targetChatId
+            ? settings.telegramCurrentResponseMessageThreadId ?? undefined
+            : undefined;
 
       await sendFile(
         settings.telegramBotToken,
@@ -303,7 +323,7 @@ server.tool(
         video_path,
         "video",
         caption,
-        message_thread_id
+        targetMessageThreadId
       );
 
       return {
@@ -354,6 +374,12 @@ server.tool(
       if (!targetChatId) {
         throw new Error("No chat_id provided and no default chat ID configured");
       }
+      const targetMessageThreadId =
+        message_thread_id !== undefined
+          ? message_thread_id
+          : settings.telegramCurrentResponseChatId === targetChatId
+            ? settings.telegramCurrentResponseMessageThreadId ?? undefined
+            : undefined;
 
       await sendFile(
         settings.telegramBotToken,
@@ -362,7 +388,7 @@ server.tool(
         document_path,
         "document",
         caption,
-        message_thread_id
+        targetMessageThreadId
       );
 
       return {

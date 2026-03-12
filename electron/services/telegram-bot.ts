@@ -1194,6 +1194,9 @@ export async function sendToSuperAgent(
   // Track which chat to respond to - this is crucial for multi-chat support
   currentResponseChatId = chatId;
   currentResponseMessageThreadId = messageThreadId ?? null;
+  appSettings.telegramCurrentResponseChatId = chatId;
+  appSettings.telegramCurrentResponseMessageThreadId = messageThreadId ?? null;
+  saveAppSettings(appSettings);
   console.log(`Telegram: Setting response chat ID to ${chatId}${threadContext}`);
 
   // Build message with file information if files are attached

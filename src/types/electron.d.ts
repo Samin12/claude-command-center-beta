@@ -367,6 +367,8 @@ export interface ElectronAPI {
       telegramAuthToken: string;
       telegramAuthorizedChatIds: string[];
       telegramRequireMention: boolean;
+      telegramCurrentResponseChatId?: string;
+      telegramCurrentResponseMessageThreadId?: number | null;
       slackEnabled: boolean;
       slackBotToken: string;
       slackAppToken: string;
@@ -406,6 +408,8 @@ export interface ElectronAPI {
       telegramAuthToken?: string;
       telegramAuthorizedChatIds?: string[];
       telegramRequireMention?: boolean;
+      telegramCurrentResponseChatId?: string;
+      telegramCurrentResponseMessageThreadId?: number | null;
       slackEnabled?: boolean;
       slackBotToken?: string;
       slackAppToken?: string;
