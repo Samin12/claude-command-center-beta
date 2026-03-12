@@ -22,6 +22,39 @@ export class ClaudeProvider implements CLIProvider {
   readonly binaryName = 'claude';
   readonly configDir = path.join(os.homedir(), '.claude');
 
+  private getRegisteredUserMcpServerPath(name: string): string | null {
+    try {
+      const output = execSync(`claude mcp get ${name}`, {
+        encoding: 'utf-8',
+        stdio: 'pipe',
+        timeout: 5000,
+      });
+      const argsLine = output
+        .split('\n')
+        .find((line) => line.trim().startsWith('Args:'));
+
+      if (!argsLine) return null;
+      const argsValue = argsLine.replace(/^\s*Args:\s*/, '').trim();
+      return argsValue || null;
+    } catch {
+      return null;
+    }
+  }
+
+  private getRegisteredFileMcpServerPath(name: string): string | null {
+    const mcpConfigPath = path.join(this.configDir, 'mcp.json');
+    if (!fs.existsSync(mcpConfigPath)) return null;
+
+    try {
+      const mcpConfig = JSON.parse(fs.readFileSync(mcpConfigPath, 'utf-8'));
+      const existing = mcpConfig?.mcpServers?.[name];
+      if (!existing?.args?.length) return null;
+      return existing.args[existing.args.length - 1];
+    } catch {
+      return null;
+    }
+  }
+
   getModels(): ProviderModel[] {
     return [
       { id: 'default', name: 'Default', description: 'Recommended' },
@@ -236,6 +269,22 @@ export class ClaudeProvider implements CLIProvider {
   }
 
   async registerMcpServer(name: string, command: string, args: string[]): Promise<void> {
+    const expectedServerPath = args[args.length - 1];
+    const registeredUserPath = this.getRegisteredUserMcpServerPath(name);
+
+    if (registeredUserPath && registeredUserPath !== expectedServerPath) {
+      try {
+        execSync(`claude mcp remove -s user ${name}`, {
+          encoding: 'utf-8',
+          stdio: 'pipe',
+          timeout: 5000,
+        });
+        console.log(`[claude] Removed stale user-scoped MCP server ${name} at ${registeredUserPath}`);
+      } catch (err) {
+        console.warn(`[claude] Failed to remove stale user-scoped MCP server ${name}:`, err);
+      }
+    }
+
     // Try claude mcp add -s user first
     try {
       const argsStr = args.map(a => `"${a}"`).join(' ');
@@ -296,16 +345,13 @@ export class ClaudeProvider implements CLIProvider {
   }
 
   isMcpServerRegistered(name: string, expectedServerPath: string): boolean {
-    const mcpConfigPath = path.join(this.configDir, 'mcp.json');
-    if (!fs.existsSync(mcpConfigPath)) return false;
-    try {
-      const mcpConfig = JSON.parse(fs.readFileSync(mcpConfigPath, 'utf-8'));
-      const existing = mcpConfig?.mcpServers?.[name];
-      if (!existing?.args) return false;
-      return existing.args[existing.args.length - 1] === expectedServerPath;
-    } catch {
-      return false;
+    const registeredUserPath = this.getRegisteredUserMcpServerPath(name);
+    if (registeredUserPath !== null) {
+      return registeredUserPath === expectedServerPath;
     }
+
+    const registeredFilePath = this.getRegisteredFileMcpServerPath(name);
+    return registeredFilePath === expectedServerPath;
   }
 
   getMcpConfigStrategy(): 'flag' | 'config-file' {
