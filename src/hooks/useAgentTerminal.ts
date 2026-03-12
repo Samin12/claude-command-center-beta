@@ -35,13 +35,34 @@ function stripCursorSequences(data: string): string {
     .replace(/\x1b\[\?1049[hl]/g, '');
 }
 
+function isTerminalAtBottom(term: import('xterm').Terminal): boolean {
+  return term.buffer.active.viewportY >= term.buffer.active.baseY;
+}
+
 export function useAgentTerminal({ selectedAgentId, terminalRef, provider, terminalTheme = 'dark', terminalFontSize = 13, onReady }: UseAgentTerminalProps) {
   const xtermRef = useRef<import('xterm').Terminal | null>(null);
   const fitAddonRef = useRef<import('xterm-addon-fit').FitAddon | null>(null);
   const [terminalReady, setTerminalReady] = useState(false);
   const selectedAgentIdRef = useRef<string | null>(null);
+  const shouldAutoFollowRef = useRef(true);
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
+
+  const writeWithAutoFollow = useCallback((data: string, options?: { forceFollow?: boolean }) => {
+    const term = xtermRef.current;
+    if (!term) return;
+
+    const followAfterWrite = options?.forceFollow ?? shouldAutoFollowRef.current;
+    term.write(data, () => {
+      if (!followAfterWrite || xtermRef.current !== term) return;
+      term.scrollToBottom();
+      shouldAutoFollowRef.current = true;
+    });
+  }, []);
+
+  const writeLineWithAutoFollow = useCallback((data = '', options?: { forceFollow?: boolean }) => {
+    writeWithAutoFollow(`${data}\r\n`, options);
+  }, [writeWithAutoFollow]);
 
   // Keep track of selected agent ID for event handling
   useEffect(() => {
@@ -58,10 +79,12 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
       xtermRef.current = null;
       fitAddonRef.current = null;
     }
+    shouldAutoFollowRef.current = true;
 
     // Abort flag prevents the async initTerminal from completing after cleanup
     let cancelled = false;
     let resizeObserver: ResizeObserver | null = null;
+    let scrollDisposable: { dispose(): void } | null = null;
     let clickContainer: HTMLElement | null = null;
     let clickHandler: (() => void) | null = null;
 
@@ -100,6 +123,7 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
 
       xtermRef.current = term;
       fitAddonRef.current = fitAddon;
+      shouldAutoFollowRef.current = true;
 
       // Fit after a short delay to ensure proper sizing
       setTimeout(() => {
@@ -120,6 +144,9 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
       clickContainer = container;
       clickHandler = () => term.focus();
       container.addEventListener('click', clickHandler);
+      scrollDisposable = term.onScroll(() => {
+        shouldAutoFollowRef.current = isTerminalAtBottom(term);
+      });
 
       // Handle user input - send to agent PTY
       // Filter out terminal query responses that xterm.js emits automatically.
@@ -170,8 +197,7 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
       onReadyRef.current?.(selectedAgentId);
 
       // Write a welcome message
-      term.writeln('\x1b[36m● Terminal connected to agent\x1b[0m');
-      term.writeln('');
+      writeWithAutoFollow('\x1b[36m● Terminal connected to agent\x1b[0m\r\n\r\n', { forceFollow: true });
 
       if (cancelled) return;
 
@@ -183,43 +209,38 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
           if (cancelled) return;
 
           if (latestAgent && latestAgent.output && latestAgent.output.length > 0) {
-            term.writeln(`\x1b[33m--- Replaying ${latestAgent.output.length} previous output chunks ---\x1b[0m`);
-            if (isGemini) {
-              // Gemini CLI uses Ink which emits cursor movement sequences for
-              // in-place updates. These don't replay correctly — strip them and
-              // only keep text content with colors.
-              latestAgent.output.forEach(line => {
-                term.write(stripCursorSequences(line));
-              });
-            } else {
-              latestAgent.output.forEach(line => {
-                term.write(line);
-              });
-            }
-            // Ensure terminal scrolls to bottom after replaying output
-            term.scrollToBottom();
+            const replayOutput = isGemini
+              ? latestAgent.output.map((line) => stripCursorSequences(line)).join('')
+              : latestAgent.output.join('');
+            writeWithAutoFollow(
+              `\x1b[33m--- Replaying ${latestAgent.output.length} previous output chunks ---\x1b[0m\r\n${replayOutput}`,
+              { forceFollow: true }
+            );
           } else {
-            term.writeln('\x1b[90m(No previous output)\x1b[0m');
+            writeLineWithAutoFollow('\x1b[90m(No previous output)\x1b[0m', { forceFollow: true });
           }
         } catch (err) {
           console.error('Failed to fetch agent data:', err);
           if (!cancelled) {
-            term.writeln(`\x1b[31mFailed to fetch agent data: ${err}\x1b[0m`);
+            writeLineWithAutoFollow(`\x1b[31mFailed to fetch agent data: ${err}\x1b[0m`, { forceFollow: true });
           }
         }
       } else if (!cancelled) {
-        term.writeln('\x1b[31mElectron API not available\x1b[0m');
+        writeLineWithAutoFollow('\x1b[31mElectron API not available\x1b[0m', { forceFollow: true });
       }
+
     };
 
-    initTerminal();
+    void initTerminal();
 
     return () => {
       cancelled = true;
       resizeObserver?.disconnect();
+      scrollDisposable?.dispose();
       if (clickContainer && clickHandler) {
         clickContainer.removeEventListener('click', clickHandler);
       }
+      shouldAutoFollowRef.current = true;
       if (xtermRef.current) {
         xtermRef.current.dispose();
         xtermRef.current = null;
@@ -227,7 +248,7 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
       }
       setTerminalReady(false);
     };
-  }, [selectedAgentId, terminalRef, provider, terminalTheme, terminalFontSize]);
+  }, [selectedAgentId, terminalRef, provider, terminalTheme, terminalFontSize, writeLineWithAutoFollow, writeWithAutoFollow]);
 
   // Listen for agent output events
   useEffect(() => {
@@ -240,12 +261,12 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
     const unsubscribe = window.electronAPI.agent.onOutput((event) => {
      
       if (event.agentId === selectedAgentIdRef.current && xtermRef.current) {
-        xtermRef.current.write(event.data);
+        writeWithAutoFollow(event.data);
       } 
     });
 
     return unsubscribe;
-  }, []);
+  }, [writeWithAutoFollow]);
 
   // Listen for agent error events
   useEffect(() => {
@@ -253,14 +274,15 @@ export function useAgentTerminal({ selectedAgentId, terminalRef, provider, termi
 
     const unsubscribe = window.electronAPI.agent.onError((event) => {
       if (event.agentId === selectedAgentIdRef.current && xtermRef.current) {
-        xtermRef.current.write(`\x1b[31m${event.data}\x1b[0m`);
+        writeWithAutoFollow(`\x1b[31m${event.data}\x1b[0m`);
       }
     });
 
     return unsubscribe;
-  }, []);
+  }, [writeWithAutoFollow]);
 
   const clearTerminal = useCallback(() => {
+    shouldAutoFollowRef.current = true;
     if (xtermRef.current) {
       xtermRef.current.clear();
     }
