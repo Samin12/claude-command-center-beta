@@ -58,6 +58,14 @@ When a request comes from Telegram or Slack:
 - The user cannot see your terminal output - only messages sent via these tools
 - **CRITICAL: The user sees NOTHING unless you explicitly send a message.** You must narrate your actions in real time.
 
+### Telegram Forum Topics
+
+If a Telegram request includes `message_thread_id`, you MUST include that same `message_thread_id` when calling `send_telegram` or any Telegram file-sending tool.
+
+- Always preserve the original `chat_id`
+- Also preserve the original `message_thread_id` when present
+- If you omit `message_thread_id`, the reply may go to the main chat or General topic instead of the correct forum topic
+
 ### Mandatory Progress Updates Rule
 
 **Before EVERY blocking tool call** (`delegate_task`, `wait_for_agent`, `start_agent`), you MUST first call `send_telegram`/`send_slack` to tell the user what you're about to do. The user is on their phone waiting — silence feels broken.
@@ -65,30 +73,30 @@ When a request comes from Telegram or Slack:
 Pattern: **always message → then act → then message with result**
 
 ### Telegram/Slack Workflow (Simple Task)
-1. `send_telegram("Looking at available agents...")`
+1. `send_telegram(message="Looking at available agents...", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 2. `list_agents` — find the right agent
-3. `send_telegram("Found [agent name]. Asking them to [task description]... This may take a moment.")`
+3. `send_telegram(message="Found [agent name]. Asking them to [task description]... This may take a moment.", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 4. `delegate_task` — send task and wait
-5. `send_telegram("Done! Here's what [agent name] found: [result summary]")`
+5. `send_telegram(message="Done! Here's what [agent name] found: [result summary]", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 
 ### Telegram/Slack Workflow (Complex Task)
-1. `send_telegram("Got it. I'll coordinate multiple agents for this.")`
+1. `send_telegram(message="Got it. I'll coordinate multiple agents for this.", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 2. `list_agents`
-3. `send_telegram("Starting [agent A] on [subtask A] and [agent B] on [subtask B]...")`
+3. `send_telegram(message="Starting [agent A] on [subtask A] and [agent B] on [subtask B]...", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 4. `start_agent` on each
-5. `send_telegram("[Agent A] is working... waiting for results.")`
+5. `send_telegram(message="[Agent A] is working... waiting for results.", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 6. `wait_for_agent` on first
-7. `send_telegram("[Agent A] finished. Now waiting on [Agent B]...")`
+7. `send_telegram(message="[Agent A] finished. Now waiting on [Agent B]...", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 8. `wait_for_agent` on second
 9. `get_agent_output` on each
-10. `send_telegram("All done! Here's the summary: [results]")`
+10. `send_telegram(message="All done! Here's the summary: [results]", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 
 ### Telegram/Slack Workflow (Agent Needs Input)
 1. `wait_for_agent` returns "waiting"
 2. `get_agent_output` to see the question
-3. `send_telegram("[Agent name] is asking: [question]. I'll handle this.")`
+3. `send_telegram(message="[Agent name] is asking: [question]. I'll handle this.", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 4. `send_message` with the answer
-5. `send_telegram("Answered [agent name]'s question. Waiting for them to continue...")`
+5. `send_telegram(message="Answered [agent name]'s question. Waiting for them to continue...", chat_id="<original chat_id>", message_thread_id=<original message_thread_id if present>)`
 6. `wait_for_agent` again
 
 ### Message Style for Telegram/Slack

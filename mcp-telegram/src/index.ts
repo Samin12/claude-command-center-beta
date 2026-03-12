@@ -72,7 +72,8 @@ async function sendFile(
   method: string,
   filePath: string,
   fileField: string,
-  caption?: string
+  caption?: string,
+  messageThreadId?: number
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     // Check if file exists
@@ -89,6 +90,11 @@ async function sendFile(
     let body = "";
     body += `--${boundary}\r\n`;
     body += `Content-Disposition: form-data; name="chat_id"\r\n\r\n${chatId}\r\n`;
+
+    if (messageThreadId !== undefined) {
+      body += `--${boundary}\r\n`;
+      body += `Content-Disposition: form-data; name="message_thread_id"\r\n\r\n${messageThreadId}\r\n`;
+    }
 
     if (caption) {
       body += `--${boundary}\r\n`;
@@ -151,8 +157,14 @@ server.tool(
   {
     message: z.string().describe("The message to send to Telegram"),
     chat_id: z.coerce.string().optional().describe("The chat ID to send to. REQUIRED when responding to a specific Telegram chat. Use the chat_id from the incoming Telegram message."),
+    message_thread_id: z.coerce
+      .number()
+      .optional()
+      .describe(
+        "Optional message thread ID for forum topic support. Use the message_thread_id from the incoming Telegram message to reply in the same topic."
+      ),
   },
-  async ({ message, chat_id }) => {
+  async ({ message, chat_id, message_thread_id }) => {
     try {
       const settings = loadSettings();
       if (!settings.telegramBotToken) {
@@ -165,11 +177,16 @@ server.tool(
         throw new Error("No chat_id provided and no default chat ID configured");
       }
 
-      await telegramApiRequest(settings.telegramBotToken, "sendMessage", {
+      const apiParams: Record<string, string | number> = {
         chat_id: targetChatId,
         text: `👑 ${message}`,
         parse_mode: "Markdown",
-      });
+      };
+      if (message_thread_id !== undefined) {
+        apiParams.message_thread_id = message_thread_id;
+      }
+
+      await telegramApiRequest(settings.telegramBotToken, "sendMessage", apiParams);
 
       return {
         content: [
@@ -201,8 +218,14 @@ server.tool(
     photo_path: z.string().describe("The absolute file path to the photo/image to send (e.g., /Users/name/image.png)"),
     caption: z.string().optional().describe("Optional caption text to include with the photo"),
     chat_id: z.coerce.string().optional().describe("The chat ID to send to. Use the chat_id from the incoming Telegram message."),
+    message_thread_id: z.coerce
+      .number()
+      .optional()
+      .describe(
+        "Optional message thread ID for forum topic support. Use the message_thread_id from the incoming Telegram message to reply in the same topic."
+      ),
   },
-  async ({ photo_path, caption, chat_id }) => {
+  async ({ photo_path, caption, chat_id, message_thread_id }) => {
     try {
       const settings = loadSettings();
       if (!settings.telegramBotToken) {
@@ -220,7 +243,8 @@ server.tool(
         "sendPhoto",
         photo_path,
         "photo",
-        caption
+        caption,
+        message_thread_id
       );
 
       return {
@@ -253,8 +277,14 @@ server.tool(
     video_path: z.string().describe("The absolute file path to the video to send (e.g., /Users/name/video.mp4)"),
     caption: z.string().optional().describe("Optional caption text to include with the video"),
     chat_id: z.coerce.string().optional().describe("The chat ID to send to. Use the chat_id from the incoming Telegram message."),
+    message_thread_id: z.coerce
+      .number()
+      .optional()
+      .describe(
+        "Optional message thread ID for forum topic support. Use the message_thread_id from the incoming Telegram message to reply in the same topic."
+      ),
   },
-  async ({ video_path, caption, chat_id }) => {
+  async ({ video_path, caption, chat_id, message_thread_id }) => {
     try {
       const settings = loadSettings();
       if (!settings.telegramBotToken) {
@@ -272,7 +302,8 @@ server.tool(
         "sendVideo",
         video_path,
         "video",
-        caption
+        caption,
+        message_thread_id
       );
 
       return {
@@ -305,8 +336,14 @@ server.tool(
     document_path: z.string().describe("The absolute file path to the document to send (e.g., /Users/name/report.pdf)"),
     caption: z.string().optional().describe("Optional caption text to include with the document"),
     chat_id: z.coerce.string().optional().describe("The chat ID to send to. Use the chat_id from the incoming Telegram message."),
+    message_thread_id: z.coerce
+      .number()
+      .optional()
+      .describe(
+        "Optional message thread ID for forum topic support. Use the message_thread_id from the incoming Telegram message to reply in the same topic."
+      ),
   },
-  async ({ document_path, caption, chat_id }) => {
+  async ({ document_path, caption, chat_id, message_thread_id }) => {
     try {
       const settings = loadSettings();
       if (!settings.telegramBotToken) {
@@ -324,7 +361,8 @@ server.tool(
         "sendDocument",
         document_path,
         "document",
-        caption
+        caption,
+        message_thread_id
       );
 
       return {

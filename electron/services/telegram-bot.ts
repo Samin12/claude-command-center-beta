@@ -16,6 +16,7 @@ let superAgentTelegramTask = false;
 let superAgentOutputBuffer: string[] = [];
 let botUsername: string | null = null; // Cached bot username for mention detection
 let currentResponseChatId: string | null = null; // Track which chat to respond to
+let currentResponseMessageThreadId: number | null = null; // Track which forum topic to respond to
 
 // References to external state (will be injected)
 let agents: Map<string, AgentStatus>;
@@ -61,7 +62,12 @@ export function initTelegramBotService(
  * @param parseMode - Markdown or HTML
  * @param targetChatId - Specific chat ID to send to (if not provided, sends to current response chat or all authorized)
  */
-export function sendTelegramMessage(text: string, parseMode: 'Markdown' | 'HTML' = 'Markdown', targetChatId?: string) {
+export function sendTelegramMessage(
+  text: string,
+  parseMode: 'Markdown' | 'HTML' = 'Markdown',
+  targetChatId?: string,
+  messageThreadId?: number
+) {
   if (!telegramBot) return;
 
   // Telegram has a 4096 char limit, truncate if needed
@@ -70,13 +76,13 @@ export function sendTelegramMessage(text: string, parseMode: 'Markdown' | 'HTML'
 
   // If specific target provided, send only to that chat
   if (targetChatId) {
-    sendToChat(targetChatId, truncated, parseMode, text);
+    sendToChat(targetChatId, truncated, parseMode, text, messageThreadId);
     return;
   }
 
   // If we have a current response chat (from an active Telegram task), send there
   if (currentResponseChatId) {
-    sendToChat(currentResponseChatId, truncated, parseMode, text);
+    sendToChat(currentResponseChatId, truncated, parseMode, text, currentResponseMessageThreadId ?? undefined);
     return;
   }
 
@@ -95,15 +101,29 @@ export function sendTelegramMessage(text: string, parseMode: 'Markdown' | 'HTML'
 /**
  * Helper to send to a specific chat with error handling
  */
-function sendToChat(chatId: string, truncated: string, parseMode: 'Markdown' | 'HTML', originalText: string) {
+function sendToChat(
+  chatId: string,
+  truncated: string,
+  parseMode: 'Markdown' | 'HTML',
+  originalText: string,
+  messageThreadId?: number
+) {
   if (!telegramBot) return;
+  const options: TelegramBot.SendMessageOptions = { parse_mode: parseMode };
+  if (messageThreadId !== undefined) {
+    options.message_thread_id = messageThreadId;
+  }
   try {
-    telegramBot.sendMessage(chatId, truncated, { parse_mode: parseMode });
+    telegramBot.sendMessage(chatId, truncated, options);
   } catch (err) {
     console.error(`Failed to send Telegram message to ${chatId}:`, err);
     // Try without markdown if it fails (in case of formatting issues)
     try {
-      telegramBot.sendMessage(chatId, originalText.replace(/[*_`\[\]]/g, ''));
+      const fallbackOptions: TelegramBot.SendMessageOptions = {};
+      if (messageThreadId !== undefined) {
+        fallbackOptions.message_thread_id = messageThreadId;
+      }
+      telegramBot.sendMessage(chatId, originalText.replace(/[*_`\[\]]/g, ''), fallbackOptions);
     } catch {
       // Give up
     }
@@ -907,6 +927,7 @@ export function initTelegramBot() {
     // Handle /ask command (send to Super Agent)
     telegramBot.onText(/\/ask\s+(.+)/, async (msg, match) => {
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
       if (!isAuthorized(chatId)) {
         sendUnauthorizedMessage(chatId);
         return;
@@ -914,12 +935,14 @@ export function initTelegramBot() {
 
       if (!match) return;
       const message = match[1].trim();
-      await sendToSuperAgent(chatId, message);
+      await sendToSuperAgent(chatId, message, undefined, messageThreadId);
     });
 
     // Handle photo messages
     telegramBot.on('photo', async (msg) => {
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
+      const threadOptions = messageThreadId !== undefined ? { message_thread_id: messageThreadId } : undefined;
       if (!isAuthorized(chatId)) {
         sendUnauthorizedMessage(chatId);
         return;
@@ -936,7 +959,7 @@ export function initTelegramBot() {
         if (!photos || photos.length === 0) return;
         const photo = photos[photos.length - 1];
 
-        telegramBot?.sendMessage(chatId, '📥 Downloading image...');
+        telegramBot?.sendMessage(chatId, '📥 Downloading image...', threadOptions);
 
         const fileName = `photo_${msg.message_id}.jpg`;
         const localPath = await downloadTelegramFile(photo.file_id, fileName);
@@ -946,16 +969,18 @@ export function initTelegramBot() {
           ? `[FILE ATTACHED - ${getFileTypeDescription(undefined, fileName)} saved to: ${localPath}] ${caption}`
           : `[FILE ATTACHED - ${getFileTypeDescription(undefined, fileName)} saved to: ${localPath}] Please analyze or use this image as needed.`;
 
-        await sendToSuperAgent(chatId, message, [localPath]);
+        await sendToSuperAgent(chatId, message, [localPath], messageThreadId);
       } catch (err) {
         console.error('Failed to download photo:', err);
-        telegramBot?.sendMessage(chatId, `❌ Failed to download image: ${err}`);
+        telegramBot?.sendMessage(chatId, `❌ Failed to download image: ${err}`, threadOptions);
       }
     });
 
     // Handle document messages (PDFs, files, etc.)
     telegramBot.on('document', async (msg) => {
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
+      const threadOptions = messageThreadId !== undefined ? { message_thread_id: messageThreadId } : undefined;
       if (!isAuthorized(chatId)) {
         sendUnauthorizedMessage(chatId);
         return;
@@ -970,7 +995,7 @@ export function initTelegramBot() {
         const doc = msg.document;
         if (!doc) return;
 
-        telegramBot?.sendMessage(chatId, `📥 Downloading ${doc.file_name || 'document'}...`);
+        telegramBot?.sendMessage(chatId, `📥 Downloading ${doc.file_name || 'document'}...`, threadOptions);
 
         const fileName = doc.file_name || `document_${msg.message_id}`;
         const localPath = await downloadTelegramFile(doc.file_id, fileName);
@@ -981,16 +1006,18 @@ export function initTelegramBot() {
           ? `[FILE ATTACHED - ${fileType} "${fileName}" saved to: ${localPath}] ${caption}`
           : `[FILE ATTACHED - ${fileType} "${fileName}" saved to: ${localPath}] Please analyze or use this file as needed.`;
 
-        await sendToSuperAgent(chatId, message, [localPath]);
+        await sendToSuperAgent(chatId, message, [localPath], messageThreadId);
       } catch (err) {
         console.error('Failed to download document:', err);
-        telegramBot?.sendMessage(chatId, `❌ Failed to download document: ${err}`);
+        telegramBot?.sendMessage(chatId, `❌ Failed to download document: ${err}`, threadOptions);
       }
     });
 
     // Handle video messages
     telegramBot.on('video', async (msg) => {
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
+      const threadOptions = messageThreadId !== undefined ? { message_thread_id: messageThreadId } : undefined;
       if (!isAuthorized(chatId)) {
         sendUnauthorizedMessage(chatId);
         return;
@@ -1005,7 +1032,7 @@ export function initTelegramBot() {
         const video = msg.video;
         if (!video) return;
 
-        telegramBot?.sendMessage(chatId, '📥 Downloading video...');
+        telegramBot?.sendMessage(chatId, '📥 Downloading video...', threadOptions);
 
         const fileName = (video as any).file_name || `video_${msg.message_id}.mp4`;
         const localPath = await downloadTelegramFile(video.file_id, fileName);
@@ -1015,16 +1042,18 @@ export function initTelegramBot() {
           ? `[FILE ATTACHED - video "${fileName}" saved to: ${localPath}] ${caption}`
           : `[FILE ATTACHED - video "${fileName}" saved to: ${localPath}] A video file has been downloaded for reference.`;
 
-        await sendToSuperAgent(chatId, message, [localPath]);
+        await sendToSuperAgent(chatId, message, [localPath], messageThreadId);
       } catch (err) {
         console.error('Failed to download video:', err);
-        telegramBot?.sendMessage(chatId, `❌ Failed to download video: ${err}`);
+        telegramBot?.sendMessage(chatId, `❌ Failed to download video: ${err}`, threadOptions);
       }
     });
 
     // Handle audio/voice messages
     telegramBot.on('audio', async (msg) => {
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
+      const threadOptions = messageThreadId !== undefined ? { message_thread_id: messageThreadId } : undefined;
       if (!isAuthorized(chatId)) {
         sendUnauthorizedMessage(chatId);
         return;
@@ -1039,7 +1068,7 @@ export function initTelegramBot() {
         const audio = msg.audio;
         if (!audio) return;
 
-        telegramBot?.sendMessage(chatId, '📥 Downloading audio...');
+        telegramBot?.sendMessage(chatId, '📥 Downloading audio...', threadOptions);
 
         const fileName = (audio as any).file_name || `audio_${msg.message_id}.mp3`;
         const localPath = await downloadTelegramFile(audio.file_id, fileName);
@@ -1049,16 +1078,18 @@ export function initTelegramBot() {
           ? `[FILE ATTACHED - audio "${fileName}" saved to: ${localPath}] ${caption}`
           : `[FILE ATTACHED - audio "${fileName}" saved to: ${localPath}] An audio file has been downloaded for reference.`;
 
-        await sendToSuperAgent(chatId, message, [localPath]);
+        await sendToSuperAgent(chatId, message, [localPath], messageThreadId);
       } catch (err) {
         console.error('Failed to download audio:', err);
-        telegramBot?.sendMessage(chatId, `❌ Failed to download audio: ${err}`);
+        telegramBot?.sendMessage(chatId, `❌ Failed to download audio: ${err}`, threadOptions);
       }
     });
 
     // Handle voice messages
     telegramBot.on('voice', async (msg) => {
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
+      const threadOptions = messageThreadId !== undefined ? { message_thread_id: messageThreadId } : undefined;
       if (!isAuthorized(chatId)) {
         sendUnauthorizedMessage(chatId);
         return;
@@ -1075,17 +1106,17 @@ export function initTelegramBot() {
         const voice = msg.voice;
         if (!voice) return;
 
-        telegramBot?.sendMessage(chatId, '📥 Downloading voice message...');
+        telegramBot?.sendMessage(chatId, '📥 Downloading voice message...', threadOptions);
 
         const fileName = `voice_${msg.message_id}.ogg`;
         const localPath = await downloadTelegramFile(voice.file_id, fileName);
 
         const message = `[FILE ATTACHED - voice message saved to: ${localPath}] A voice message has been downloaded. Note: You may need to transcribe this audio file to understand its content.`;
 
-        await sendToSuperAgent(chatId, message, [localPath]);
+        await sendToSuperAgent(chatId, message, [localPath], messageThreadId);
       } catch (err) {
         console.error('Failed to download voice:', err);
-        telegramBot?.sendMessage(chatId, `❌ Failed to download voice message: ${err}`);
+        telegramBot?.sendMessage(chatId, `❌ Failed to download voice message: ${err}`, threadOptions);
       }
     });
 
@@ -1098,6 +1129,7 @@ export function initTelegramBot() {
       if (!msg.text) return;
 
       const chatId = msg.chat.id.toString();
+      const messageThreadId = msg.message_thread_id;
 
       // Check authorization
       if (!isAuthorized(chatId)) {
@@ -1114,7 +1146,7 @@ export function initTelegramBot() {
       const cleanedText = removeBotMention(msg.text);
       if (!cleanedText) return; // Don't process if message was just the mention
 
-      await sendToSuperAgent(chatId, cleanedText);
+      await sendToSuperAgent(chatId, cleanedText, undefined, messageThreadId);
     });
 
     // Handle polling errors
@@ -1133,20 +1165,36 @@ export function initTelegramBot() {
  * @param message - Message text
  * @param attachedFiles - Optional array of local file paths that were downloaded
  */
-export async function sendToSuperAgent(chatId: string, message: string, attachedFiles?: string[]) {
+export async function sendToSuperAgent(
+  chatId: string,
+  message: string,
+  attachedFiles?: string[],
+  messageThreadId?: number
+) {
   const superAgent = getSuperAgent();
+  const sendOptions: TelegramBot.SendMessageOptions | undefined = messageThreadId !== undefined
+    ? { message_thread_id: messageThreadId }
+    : undefined;
+  const threadContext = messageThreadId !== undefined ? ` message_thread_id=${messageThreadId}` : '';
+  const toolRoutingInstruction = `Use send_telegram MCP tool with chat_id="${chatId}"${
+    messageThreadId !== undefined ? ` and message_thread_id=${messageThreadId}` : ''
+  } to respond!`;
 
   if (!superAgent) {
     telegramBot?.sendMessage(chatId,
       '👑 No Super Agent found.\n\nCreate one in Samins Command Center first, or use /start\\_agent to start a specific agent.',
-      { parse_mode: 'Markdown' }
+      {
+        parse_mode: 'Markdown',
+        ...(sendOptions || {}),
+      }
     );
     return;
   }
 
   // Track which chat to respond to - this is crucial for multi-chat support
   currentResponseChatId = chatId;
-  console.log(`Telegram: Setting response chat ID to ${chatId}`);
+  currentResponseMessageThreadId = messageThreadId ?? null;
+  console.log(`Telegram: Setting response chat ID to ${chatId}${threadContext}`);
 
   // Build message with file information if files are attached
   let fullMessage = message;
@@ -1167,7 +1215,7 @@ export async function sendToSuperAgent(chatId: string, message: string, attached
 
     const ptyProcess = ptyProcesses.get(superAgent.ptyId);
     if (!ptyProcess) {
-      telegramBot?.sendMessage(chatId, '❌ Failed to connect to Super Agent terminal.');
+      telegramBot?.sendMessage(chatId, '❌ Failed to connect to Super Agent terminal.', sendOptions);
       return;
     }
 
@@ -1182,11 +1230,11 @@ export async function sendToSuperAgent(chatId: string, message: string, attached
       saveAgents();
 
       // Include Telegram context in the message with the chat ID for proper routing
-      const telegramMessage = `[FROM TELEGRAM chat_id=${chatId} - Use send_telegram MCP tool with chat_id="${chatId}" to respond!] ${sanitizedMessage}`;
+      const telegramMessage = `[FROM TELEGRAM chat_id=${chatId}${threadContext} - ${toolRoutingInstruction}] ${sanitizedMessage}`;
 
       writeProgrammaticInput(ptyProcess, telegramMessage);
 
-      telegramBot?.sendMessage(chatId, `👑 Super Agent is processing...`);
+      telegramBot?.sendMessage(chatId, '👑 Super Agent is processing...', sendOptions);
     } else if (superAgent.status === 'idle' || superAgent.status === 'completed' || superAgent.status === 'error') {
       // No active session, start a new one
       const workingPath = (superAgent.worktreePath || superAgent.projectPath).replace(/'/g, "'\\''");
@@ -1218,7 +1266,7 @@ export async function sendToSuperAgent(chatId: string, message: string, attached
       if (superAgent.skipPermissions) command += ' --dangerously-skip-permissions';
 
       // Simple prompt with Telegram context including chat ID for proper routing
-      const userPrompt = `[FROM TELEGRAM chat_id=${chatId} - Use send_telegram MCP tool with chat_id="${chatId}" to respond!] ${sanitizedMessage}`;
+      const userPrompt = `[FROM TELEGRAM chat_id=${chatId}${threadContext} - ${toolRoutingInstruction}] ${sanitizedMessage}`;
       command += ` '${userPrompt.replace(/'/g, "'\\''")}'`;
 
       superAgent.status = 'running';
@@ -1233,15 +1281,16 @@ export async function sendToSuperAgent(chatId: string, message: string, attached
       writeProgrammaticInput(ptyProcess, `cd '${workingPath}' && ${command}`);
       saveAgents();
 
-      telegramBot?.sendMessage(chatId, `👑 Super Agent is processing your request...`);
+      telegramBot?.sendMessage(chatId, '👑 Super Agent is processing your request...', sendOptions);
     } else {
       telegramBot?.sendMessage(chatId,
-        `👑 Super Agent is in ${superAgent.status} state. Try again in a moment.`
+        `👑 Super Agent is in ${superAgent.status} state. Try again in a moment.`,
+        sendOptions
       );
     }
   } catch (err) {
     console.error('Failed to send to Super Agent:', err);
-    telegramBot?.sendMessage(chatId, `❌ Error: ${err}`);
+    telegramBot?.sendMessage(chatId, `❌ Error: ${err}`, sendOptions);
   }
 }
 
